@@ -8,6 +8,7 @@ def landing(request):
 
 def advViewer(request,userName):
     print(userName)
+    #TODO check if user exists. Return error otherwise.
     if request.user.is_authenticated():
         return render(request,"advViewerSession.html")
     return render(request,"advViewer.html")

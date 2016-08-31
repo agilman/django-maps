@@ -1,1 +1,11 @@
 {% extends "profileBase.html" %}
+
+{% block ng-app %} ng-app="myApp" {% endblock %}
+
+{% block content %}
+This is list of adventures, but you are not logged in.
+{% endblock %}
+
+{% block additionalJS %}
+<script src="/static/js/advViewer.js"></script>
+{% endblock %}

@@ -1,1 +1,17 @@
 {% extends "profileBaseSession.html" %}
+
+{% block ng-app %}ng-app="myApp"{% endblock %}
+
+{% block content %}
+<ng-controller ng-controller="advSelection">
+<div class="row">
+	<div class="col-lg-12">
+		TEST
+	</div>
+</div>
+</ng-controller>
+{% endblock %}
+
+{% block additionalJS %}
+<script src="/static/js/advViewer.js"></script>
+{% endblock %}
