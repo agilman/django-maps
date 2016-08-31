@@ -21,5 +21,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$',views.landing),
     
-    url(r'^auth/', include("registration.backends.simple.urls"))
+    url(r'^auth/', include("registration.backends.simple.urls")),
+    
+    url(r'^users/(?P<userName>[\w\-]+)/adventures/$',views.advViewer),
 ]
