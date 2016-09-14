@@ -5,7 +5,7 @@ from rest_framework import serializers
 class AdventureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adventures
-        fields= {'id','owner','name'}
+        fields= ['id','name']
     
     """
     def create(self, validated_data):

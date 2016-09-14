@@ -5,26 +5,32 @@ from django.http import JsonResponse
 ###REST 
 #from django.shortcuts import render
 #from django.http import HttpResponse
-from django.http import HttpRequest
-from rest_framework.renderers import JSONRenderer
-#from rest_framework.parsers import JSONParser
+#from django.http import HttpRequest
+#from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 
-class JSONResponse(HttpRequest):
-    """
-    Copy + Paste from tutorial
-    An HttpResponse that renders its content into JSON.
-    """
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
-
+from rest_framework.response import Response
         
 @csrf_exempt
-def adventures(request):
+@api_view(['GET','POST'])
+def adventures(request,userId=None):
     if request.method == 'GET':
-        #adv = Adventures.objects.all()
-        #serializer = AdventureSerializer(adv, many=True)
-        return JsonResponse({'a':1})
-    
+        adventures = Adventures.objects.filter(owner_id=userId)
+        serializer = AdventureSerializer(adventures,many=True)
+
+        return Response(serializer.data)
+        #return JsonResponse(serializer.data,safe=False)
+
+    elif request.method == 'POST':
+        #this needs testing
+        data = JSONParser().parse(request)
+        serializer = AdventureSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data,safe=False)#
+            #return JSONResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors,status=400)    
+        #return JSONResponse(serializer.errors, status=400)
+        
