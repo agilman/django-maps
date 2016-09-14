@@ -5,11 +5,14 @@
 {% block ng-mainController %}ng-controller="appController"{% endblock %}
 
 {% block content %}
-
 <div class="row">
   <div class="col-lg-12">
     <div ng-controller="advSelectionController" >
-		TEST
+		<ul class="list-group">
+			<li class="list-group-item adventure" ng-repeat="adventure in adventures">
+				{% verbatim %} {{ adventure.name }}{% endverbatim %}
+			</li>
+		</ul>
     </div>
   </div>
 </div>
