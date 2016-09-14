@@ -1,4 +1,11 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
+#from django.template import Context
+
+def getUserIdFromUserName(userName):
+    user = User.objects.get(username=userName)
+    #TODO error handling...
+    return user.pk
 
 # Create your views here.
 def landing(request):
@@ -7,8 +14,9 @@ def landing(request):
     return render(request,"landing.html")
 
 def advViewer(request,userName):
-    print(userName)
+    userId = getUserIdFromUserName(userName)
+
     #TODO check if user exists. Return error otherwise.
     if request.user.is_authenticated():
-        return render(request,"advViewerSession.html")
-    return render(request,"advViewer.html")
+        return render(request,"advViewerSession.html",context={'userId':userId,'userName':userName})
+    return render(request,"advViewer.html",context={'userId':userId,'userName':userName})
