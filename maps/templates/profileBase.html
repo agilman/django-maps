@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" {% block ng-app %}{% endblock %}>
 
 <head>
 
@@ -30,7 +30,7 @@
 
 </head>
 
-<body {% block ng-app %}{% endblock %} style="padding-top:51px"> <!-- is there a better solution?-->
+<body {% block ng-mainController %}{% endblock %} style="padding-top:51px"> <!-- is there a better solution?-->
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
         <div class="container topnav">

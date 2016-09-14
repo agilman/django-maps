@@ -1,14 +1,21 @@
 (function(angular){
 angular.module('myApp', [])
-.controller('advSelection', ['$scope','$http', function($scope,$http) {
+.controller('appController', ['$scope','$http', function($scope,$http) {
     var userId = document.getElementById("userId").value;
     $scope.userId = userId;
     
     //TODO check proper way of handling rest
     $http.get('/api/rest/adventures/' + userId).then(function(data){ 
-		$scope.toDoLists = data.data.lists;
+		$scope.adventures = data.data;
+		
+		$scope.selectedAdventure = 0;
+		$scope.$broadcast('adventureChangeBroadcast',$scope.selectedAdventure);
 	});
-			
-	//alert("hi");
+	
+}])
+.controller('advSelectionController',['$scope',function($scope){
+	$scope.$on("adventureChangeBroadcast",function(event,data){
+		alert('got adv change');
+	});
 }]);
 })(window.angular);

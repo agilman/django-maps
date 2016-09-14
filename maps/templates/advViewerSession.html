@@ -2,16 +2,21 @@
 
 {% block ng-app %}ng-app="myApp"{% endblock %}
 
+{% block ng-mainController %}ng-controller="appController"{% endblock %}
+
 {% block content %}
-<ng-controller ng-controller="advSelection">
+
 <div class="row">
-	<div class="col-lg-12">
+  <div class="col-lg-12">
+    <div ng-controller="advSelectionController" >
 		TEST
-	</div>
+    </div>
+  </div>
 </div>
-</ng-controller>
+
 {% endblock %}
 
 {% block additionalJS %}
 <script src="/static/js/advViewer.js"></script>
 {% endblock %}
+
