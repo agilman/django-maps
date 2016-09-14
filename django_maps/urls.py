@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from maps import views
+from maps import api
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -24,4 +25,6 @@ urlpatterns = [
     url(r'^auth/', include("registration.backends.simple.urls")),
     
     url(r'^users/(?P<userName>[\w\-]+)/adventures/$',views.advViewer),
+    
+    url(r'^api/rest/adventures/$', api.adventures)
 ]
