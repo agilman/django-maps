@@ -1,23 +1,24 @@
 (function(angular){
 angular.module('myApp', [])
-.controller('appController', ['$scope','$http', '$log', function($scope,$http,$log) {
+.controller('appController', ['$scope','$http', function($scope,$http) {
     var userId = document.getElementById("userId").value;
     $scope.userId = userId;
     
+    //init map
+    L.mapbox.accessToken = 'pk.eyJ1IjoiYWdpbG1hbiIsImEiOiI3a05GVF9vIn0.c5pOjAXGeRPbv35PRmK90A';
+    var map = L.mapbox.map('map', 'agilman.l3lp6544')
+        .setView([45.5, -122.50], 6);
+    
     //TODO check proper way of handling rest
     $http.get('/api/rest/adventures/' + userId).then(function(data){ 
-    	$log.log(data.data);
-		//$scope.adventures = [{'name':'adv1'},{'name':'adv2'}];
-		$scope.adventures = data.data;
-		
-		$scope.selectedAdventure = 0;
-		$scope.$broadcast('adventureChangeBroadcast',$scope.selectedAdventure);
+		$scope.adventures = data.data;	
 	});
-	
 }])
-.controller('advSelectionController',['$scope',function($scope){
-	$scope.$on("adventureChangeBroadcast",function(event,data){
-		//alert('got adv change');
-	});
+.controller('advSelectionController',['$scope','$window',function($scope, $window){
+	$scope.goToAdv = function(uindx){
+		var userName = document.getElementById("userName").value;
+		var gotoAddress = "/users/"+userName+"/"+uindx;
+		$window.location.href = gotoAddress;
+	};
 }]);
 })(window.angular);

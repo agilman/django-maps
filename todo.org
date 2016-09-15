@@ -1,0 +1,6 @@
+
+* Bugs[/]
+  - [ ] Display erro on 'user not found', ie /users/notFound/adventure
+
+* tasks[0/1]
+  - [ ] Refactor mapId and mapName away from js into settings.py

@@ -1,5 +1,9 @@
 {% extends "profileBase.html" %}
 
+{% block additionalCSS %}
+<link href="https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css" rel="stylesheet">
+{% endblock %}
+
 {% block ng-app %} ng-app="myApp" {% endblock %}
 
 {% block ng-mainController %}ng-app="appController"{% endblock %}
@@ -20,5 +24,6 @@
 {% endblock %}
 
 {% block additionalJS %}
+<script src="https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js"></script>
 <script src="/static/js/advViewer.js"></script>
 {% endblock %}
