@@ -1,9 +1,15 @@
 {% extends "profileBase.html" %}
 
-{% block nav-left %}
-                <ul class="nav navbar-nav navbar-right">
+{% block navbar-right%}
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a href="/users/{{ user }}/adventures">Logged in as {{ user }} </a>
+					</li>
                     <li>
                         <a href="/auth/logout">Logout</a>
+                    </li>
+                    <li>
+                    	<a href="/editor" id="editorLink">Editor</a>
                     </li>
                 </ul>
 {% endblock %}

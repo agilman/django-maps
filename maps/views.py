@@ -20,3 +20,7 @@ def advViewer(request,userName):
     if request.user.is_authenticated():
         return render(request,"advViewerSession.html",context={'userId':userId,'userName':userName})
     return render(request,"advViewer.html",context={'userId':userId,'userName':userName})
+
+
+def advEditorViewer(request):
+    return render(request,"advEditor.html")

@@ -4,3 +4,4 @@
 
 * tasks[0/1]
   - [ ] Refactor mapId and mapName away from js into settings.py
+  - [ ] Change redirect after login.

@@ -26,5 +26,10 @@ urlpatterns = [
     
     url(r'^users/(?P<userName>[\w\-]+)/adventures/$',views.advViewer),
     
-    url(r'^api/rest/adventures/(?P<userId>\d+)$', api.adventures)
+    #Editor URLs
+    url(r'^editor$', views.advEditorViewer),
+    
+    
+    #API URLs
+    url(r'^api/rest/adventures/(?P<userId>\d+)$', api.adventures),
 ]
