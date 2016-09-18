@@ -11,15 +11,15 @@ angular.module('myApp', [])
 }])
 .controller('advSelectionController', ['$scope','$http','$log', function($scope,$http,$log) {
 	$scope.createAdv = function(){
+		var advName = document.getElementById("newAdvName").value;
 		//prepare json to pass                                                                                                                                       
-        var newAdv = {'owner':$scope.userId,'name':'test'};
+        var newAdv = {'owner':$scope.userId,'name':advName};
 
         $http.post('/api/rest/adventures/'+$scope.userId,JSON.stringify(newAdv)).then(function(data){
-            var rList = data.data.newList;
-            rList["items"]=[];
-            $scope.adventures.push({"name":"test","id":5});
-
-	})};
-	
+            $scope.adventures.push(data.data);
+            
+            //clear field
+            document.getElementById("newAdvName").value="";
+	})};	
 }]);
 })(window.angular);
