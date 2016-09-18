@@ -82,8 +82,8 @@
     {% endblock %}
     
     {% block hiddenvars %}
-	<input type="hidden" id='userId' value={{ userId }} />
-    <input type="hidden" id='userName' value={{ userName }} />
+	<input type="hidden" id='userId' value={{ user.pk }} />
+    <input type="hidden" id='userName' value={{ user.get_username }} />
     {% endblock %}
 
 </body>

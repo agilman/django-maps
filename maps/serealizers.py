@@ -7,17 +7,3 @@ class AdventureSerializer(serializers.ModelSerializer):
         model = Adventures
         fields= ['id','name']
     
-    """
-    def create(self, validated_data):
-        
-        
-        return Adventures.objects.create(**validated_data)
-    
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get('name',instance.name)
-        instance.save()
-        return instance
-    """
-            
-        
-    

@@ -2,6 +2,6 @@
 * Bugs[/]
   - [ ] Display erro on 'user not found', ie /users/notFound/adventure
 
-* tasks[0/1]
+* tasks[1/2]
   - [ ] Refactor mapId and mapName away from js into settings.py
-  - [ ] Change redirect after login.
+  - [X] Change redirect after login.

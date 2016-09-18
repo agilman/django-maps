@@ -2,24 +2,35 @@
 
 {% block ng-app %} ng-app="myApp" {% endblock %}
 
-{% block ng-mainController %}ng-app="appController"{% endblock %}
+{% block ng-mainController %}ng-controller="appController"{% endblock %}
 
-{% block content %}
-<div class="row">
-  <div class="col-lg-12">
-    <!--div ng-controller="advSelectionController" >
-		<ul class="list-group">
-			<li class="list-group-item adventure" ng-repeat="adventure in adventures">
-				{% verbatim %} {{ adventure.name }}{% endverbatim %}
-			</li>
-		</ul>
-    </div-->
-    Hello
-  </div>
-</div>
+{% block content %}	
+	<div class="row">
+  		<div class="col-lg-4">
+    		<div ng-controller="advSelectionController" >
+				<ul class="list-group">
+					<li class="list-group-item adventure" ng-repeat="adventure in adventures">
+					{% verbatim %} {{ adventure.name }}{% endverbatim %}
+					</li>
+				</ul>
+    		
+    		
+    			<br>
+    			<input class="form-control" placeholder="New adventure name" id="newAdvName" type="text">
+    			<br>
+      			<select class="form-control" id="advType">
+					<option value="1">Bicycle Touring</option>
+					<option value="2">Backpacking</option>
+					<option value="3">Motorcycling</option>
+					<option value="4">Other</option>
+      			</select>
+      			<br>
+      			<button class="btn btn-primary" id="addAdventureButton" ng-click="createAdv()">Create Adventure</button>
+      		</div>
+  		</div>
+	</div>
 {% endblock %}
 
 {% block additionalJS %}
-
-<script src="/static/js/advViewer.js"></script>
+<script src="/static/js/advEditor.js"></script>
 {% endblock %}
