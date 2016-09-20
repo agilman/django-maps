@@ -9,11 +9,13 @@
   		<div class="col-lg-4">
     		<div ng-controller="advSelectionController" >
 				<ul class="list-group">
-					<li class="list-group-item adventure" ng-repeat="adventure in adventures">
+					<li class="list-group-item clearfix adventure" ng-repeat="adventure in adventures">
 					{% verbatim %} {{ adventure.name }}{% endverbatim %}
+					<span class="pull-right">	
+						<button class="btn" ng-click="removeAdvClick($index)"><span class="glyphicon glyphicon-remove"></span></button>
+					</span>
 					</li>
-				</ul>
-    		
+				</ul>    		
     		
     			<br>
     			<input class="form-control" placeholder="New adventure name" id="newAdvName" type="text">

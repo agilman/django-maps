@@ -1,7 +1,22 @@
 
-* Bugs[/]
+* Bugs[0/1]
   - [ ] Display erro on 'user not found', ie /users/notFound/adventure
-
-* tasks[1/2]
+    
+* UI[0/1]
+  - [ ] Adventure select list items should have mouse pointer change on hover.
+    
+* tasks[2/3]
   - [ ] Refactor mapId and mapName away from js into settings.py
   - [X] Change redirect after login.
+  - [X] Add delete adventure buttons.
+
+* Pages[0/4]
+  - [ ] User bio page.
+  - [ ] Map page.
+  - [ ] Blog page.
+  - [ ] Gear list.
+
+* Long term learning[0/3]
+  - [ ] SPA design patterns.
+  - [ ] Form validation patterns.
+  - [ ] Test driven development.

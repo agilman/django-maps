@@ -8,8 +8,16 @@ angular.module('myApp', [])
     $http.get('/api/rest/adventures/' + userId).then(function(data){ 
 		$scope.adventures = data.data;	
 	});
+    
+    $scope.$on('removeAdvEvent',function(event,index){
+    	var advId = $scope.adventures[index].id;
+    	$http.delete('/api/rest/adventures/'+advId).then(function(resp){
+    		//clear entry from list
+    		$scope.adventures.splice(index,1);
+    	});
+    });
 }])
-.controller('advSelectionController', ['$scope','$http','$log', function($scope,$http,$log) {
+.controller('advSelectionController', ['$scope','$http', function($scope,$http) {
 	$scope.createAdv = function(){
 		var advName = document.getElementById("newAdvName").value;
 		//prepare json to pass                                                                                                                                       
@@ -20,6 +28,11 @@ angular.module('myApp', [])
             
             //clear field
             document.getElementById("newAdvName").value="";
-	})};	
+        })
+	};
+	$scope.removeAdvClick = function(index){
+		$scope.$emit('removeAdvEvent',index);
+	};
 }]);
+	
 })(window.angular);

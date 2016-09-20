@@ -30,3 +30,12 @@ def adventures(request,userId=None):
 
         serialized = AdventureSerializer(adv)
         return JsonResponse(serialized.data,safe=False)
+        
+    elif request.method == "DELETE":
+        advId = userId #This is because of the url mapping...
+        advToDel = Adventures.objects.get(pk=advId)
+        advToDel.delete()
+        serialized = AdventureSerializer(advToDel)
+
+        #TODO Probably should return success code instead of object...
+        return JsonResponse(serialized.data,safe=False)
