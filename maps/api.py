@@ -22,7 +22,7 @@ def adventures(request,userId=None):
 
         return JsonResponse(serializer.data, safe=False)
 
-    elif request.method == 'POST':        
+    elif request.method == 'POST':
         data = JSONParser().parse(request)
         user = User.objects.get(pk=int(data["owner"]))
         adv = Adventures(name=data["name"],owner=user)
