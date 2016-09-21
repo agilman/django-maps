@@ -13,14 +13,21 @@ def landing(request):
         return render(request, "landingSession.html")
     return render(request,"landing.html")
 
-def advViewer(request,userName):
+def advSelectionViewer(request,userName):
     userId = getUserIdFromUserName(userName)
 
     #TODO check if user exists. Return error otherwise.
     if request.user.is_authenticated():
-        return render(request,"advViewerSession.html",context={'userId':userId,'userName':userName})
-    return render(request,"advViewer.html",context={'userId':userId,'userName':userName})
+        return render(request,"advSelectionViewer-session.html",context={'userId':userId,'userName':userName})
+    return render(request,"advSelectionViewer.html",context={'userId':userId,'userName':userName})
 
+
+def advViewer(request,userName,advId):
+    userId = getUserIdFromUserName(userName)
+    print("hello")
+    if request.user.is_authenticated():
+        return render(request,"advViewer-session.html",context={'userId':userId,'advId':advId})
+    return render(request,"advViewer.html",context={'userId':userId,'advId':advId})
 
 def advEditorViewer(request):
     return render(request,"advEditor.html")
