@@ -24,7 +24,6 @@ def advSelectionViewer(request,userName):
 
 def advViewer(request,userName,advId):
     userId = getUserIdFromUserName(userName)
-    print("hello")
     if request.user.is_authenticated():
         return render(request,"advViewer-session.html",context={'userId':userId,'advId':advId})
     return render(request,"advViewer.html",context={'userId':userId,'advId':advId})

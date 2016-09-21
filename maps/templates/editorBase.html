@@ -20,8 +20,8 @@
     <link href="/static/landing/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
-	{% block additionalCSS %}
-	{% endblock %}
+    {% block additionalCSS %}
+    {% endblock %}
 	
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -64,10 +64,24 @@
         <!-- /.container -->
     </nav>
 
-	<div style="clear:both"></div>	
-	<div class="container">
-	{% block content %}{% endblock %}
+    <div class="navbar navbar-default navbar-static-top">
+      <div class="container">
+	<div class="collapse navbar-collapse main-nav">
+	  <ul class="nav navbar-nav">
+	    
+	    <li><a href="/editor/mapsEditor">Maps Editor</a></li>
+	    <li><a href="/editor/blogEditor">Blog Editor</a></li>
+	    <li><a href="/editor/gearEditor">Gear List Editor</a></li>
+	    
+	  </ul>
 	</div>
+      </div>
+    </div>
+    
+    <div style="clear:both"></div>	
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
 
     <!-- jQuery -->
     <script src="/static/landing/js/jquery.js"></script>
@@ -82,7 +96,7 @@
     {% endblock %}
     
     {% block hiddenvars %}
-	<input type="hidden" id='userId' value={{ user.pk }} />
+    <input type="hidden" id='userId' value={{ user.pk }} />
     <input type="hidden" id='userName' value={{ user.get_username }} />
     {% endblock %}
 

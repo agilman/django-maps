@@ -35,5 +35,4 @@ angular.module('myApp', [])
 		$scope.$emit('removeAdvEvent',index);
 	};
 }]);
-	
 })(window.angular);
