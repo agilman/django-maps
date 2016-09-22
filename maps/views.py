@@ -16,6 +16,7 @@ def landing(request):
         return render(request, "landingSession.html")
     return render(request,"landing.html")
 
+#Main entry to SPA
 def advSelectionViewer(request,userName):
     userId = getUserIdFromUserName(userName)
 
@@ -23,7 +24,6 @@ def advSelectionViewer(request,userName):
     if request.user.is_authenticated():
         return render(request,"advSelectionViewer-session.html",context={'userId':userId,'userName':userName})
     return render(request,"advSelectionViewer.html",context={'userId':userId,'userName':userName})
-
 
 def advViewer(request,userName,advId):
     userId = getUserIdFromUserName(userName)
@@ -33,12 +33,30 @@ def advViewer(request,userName,advId):
 
 def mapsView(request,userName,advId=None):
     userId = getUserIdFromUserName(userName)
-    print(advId)
-    advId = getLatestAdv(userId)
+    if type(advId)==type(None):
+        advId = getLatestAdv(userId)
     if request.user.is_authenticated():
         return render(request,"mapsView-session.html",context={'userId':userId,'advId':advId})
     return render(request,"mapsView.html",context={'userId':userId,'advId':advId})
 
+def blogsView(request,userName,advId=None):
+    userId = getUserIdFromUserName(userName)
+    if type(advId)==type(None):
+        advId = getLatestAdv(userId)
+        
+    if request.user.is_authenticated():
+        return render(request,"blogsView-session.html",contest={'userId':userId,'advId':advId})
+    return render(request,"blogsView.html",contest={'userId':userId,'advId':advId})
+    
+def gearListView(request,userName,advId=None):
+    userId = getUserIdFromUserName(userName)
+    if type(advId)==type(None):
+        advId = getLatestAdv(userId)
+            
+    if request.user.is_authenticated():
+        return render(request,"gearListView-session.html",contest={'userId':userId,'advId':advId})
+    return render(request,"gearListView.html",contest={'userId':userId,'advId':advId})
+    
+
 def advEditorViewer(request):
     return render(request,"advEditor.html")
-
