@@ -59,4 +59,4 @@ def gearListView(request,userName,advId=None):
     
 
 def advEditorViewer(request):
-    return render(request,"advEditor.html")
+    return render(request,"editor-base.html")

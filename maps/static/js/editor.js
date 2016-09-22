@@ -2,9 +2,21 @@
 angular.module('myApp', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
 		$routeProvider
-		.when("/maps", {
-			templateUrl: "/static/partials/map-editor.html",
-			controller: "mapEditorController"
+		.when("/",{
+			templateUrl:"/static/partials/adv-editor.html",
+			controller:"advEditorController"
+		})
+		.when("/maps",{
+			templateUrl:"/static/partials/maps-editor.html",
+			controller:"advEditorController"
+		})
+		.when("/blogs",{
+			templateUrl:"/static/partials/blogs-editor.html",
+			controller:"advEditorController"
+		})
+		.when("/gear", {
+			templateUrl: "/static/partials/gear-editor.html",
+			controller: "gearEditorController"
 		});
 }])
 .controller("mapEditorController",['$scope','$http','$log',function($scope,$http,$log){

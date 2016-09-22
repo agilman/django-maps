@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Landing Page - Start Bootstrap Theme</title>
+    <title>Editor</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/static/landing/css/bootstrap.min.css" rel="stylesheet">
@@ -46,16 +46,20 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            {% block navbar-right %}
-            	<ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/users/{{ user }}/adventures">View Profile</a>
-                    </li>
-                    <li>
-                        <a href="/auth/logout">Logout</a>
-                    </li>
-                </ul>
-            {% endblock %}
+	      <ul class="nav navbar-nav">
+		<li><a href="#/">Adventure Editor</a></li>
+		<li><p class="navbar-text" id="advName">[adv name]</p></li>
+	      </ul>
+              
+              <ul class="nav navbar-nav navbar-right">
+                <li>
+                  <a href="/users/{{ user }}/adventures">View Profile</a>
+                </li>
+                <li>
+                  <a href="/auth/logout">Logout</a>
+                </li>
+              </ul>
+	      
             </div>
             <!-- /.navbar-collapse -->
         </div>
@@ -65,11 +69,12 @@
     <div class="navbar navbar-default navbar-static-top">
       <div class="container">
 	<div class="collapse navbar-collapse main-nav">
+	  
 	  <ul class="nav navbar-nav">
-	    
-	    <li><a href="/editor/mapsEditor">Maps Editor</a></li>
-	    <li><a href="/editor/blogEditor">Blog Editor</a></li>
-	    <li><a href="/editor/gearEditor">Gear List Editor</a></li>
+    
+	    <li><a href="#/maps">Maps Editor</a></li>
+	    <li><a href="#/blogs">Blog Editor</a></li>
+	    <li><a href="#/gear">Gear Editor</a></li>
 	    
 	  </ul>
 	</div>
@@ -90,7 +95,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
     <script src="https://code.angularjs.org/1.5.8/angular-route.min.js"></script>
     
-    <script src="/static/js/advEditor.js"></script>
+    <script src="/static/js/editor.js"></script>
     
     <input type="hidden" id='userId' value={{ user.pk }} />
     <input type="hidden" id='userName' value={{ user.get_username }} />
