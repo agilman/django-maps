@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 #from django.template import Context
 
+def getLatestAdv(userId):
+    return 1
+
 def getUserIdFromUserName(userName):
     user = User.objects.get(username=userName)
     #TODO error handling...
@@ -28,5 +31,14 @@ def advViewer(request,userName,advId):
         return render(request,"advViewer-session.html",context={'userId':userId,'advId':advId})
     return render(request,"advViewer.html",context={'userId':userId,'advId':advId})
 
+def mapsView(request,userName,advId=None):
+    userId = getUserIdFromUserName(userName)
+    print(advId)
+    advId = getLatestAdv(userId)
+    if request.user.is_authenticated():
+        return render(request,"mapsView-session.html",context={'userId':userId,'advId':advId})
+    return render(request,"mapsView.html",context={'userId':userId,'advId':advId})
+
 def advEditorViewer(request):
     return render(request,"advEditor.html")
+

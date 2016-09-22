@@ -64,10 +64,27 @@
         <!-- /.container -->
     </nav>
 
-	<div style="clear:both"></div>	
-	<div class="container">
-	{% block content %}{% endblock %}
+    {% block secondNavbar %}
+    <div class="navbar navbar-default navbar-static-top">
+      <div class="container">
+	<div class="collapse navbar-collapse main-nav">
+	  <ul class="nav navbar-nav">
+
+	    <li><a href="#" >Maps</a></li>
+	    <li><a href="#">Blogs</a></li>
+	    <li><a href="#">Gear</a></li>
+
+	  </ul>
 	</div>
+      </div>
+    </div>
+    {% endblock %}
+    
+
+    <div style="clear:both"></div>	
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
 
     <!-- jQuery -->
     <script src="/static/landing/js/jquery.js"></script>

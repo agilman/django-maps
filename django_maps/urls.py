@@ -25,7 +25,8 @@ urlpatterns = [
     url(r'^auth/', include("registration.backends.simple.urls")),
     
     url(r'^users/(?P<userName>[\w\-]+)/adventures/$',views.advSelectionViewer),
-    url(r'^users/(?P<userName>[\w\-]+)/adventures/(?P<advId>\d+)/$', views.advViewer),
+    url(r'^users/(?P<userName>[\w\-]+)/adventures/(?P<advId>\d+)/$', views.mapsView),
+    url(r'^users/(?P<userName>[\w\-]+)/adventures/maps/$',views.mapsView),
     
     #Editor URLs
     url(r'^editor$', views.advEditorViewer),

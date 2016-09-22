@@ -8,25 +8,29 @@
 
 {% block ng-mainController %}ng-controller="appController"{% endblock %}
 
+{% block secondNavbar %}
+{% endblock %}
+
 {% block content %}
 <div class="row">
   <div class="col-lg-4">
     <div ng-controller="advSelectionController" >
-		<ul class="list-group">
-			<li class="list-group-item adventure" ng-repeat="adventure in adventures" ng-click="goToAdv(adventure.id);">
-				{% verbatim %} {{ adventure.name }}{% endverbatim %}
-			</li>
-		</ul>
+      <ul class="list-group">
+	<li class="list-group-item adventure" ng-repeat="adventure in adventures" ng-click="goToAdv(adventure.id);">
+	  {% verbatim %} {{ adventure.name }}{% endverbatim %}
+	</li>
+      </ul>
     </div>
   </div>
   
   <div class="col-lg-8">
-  	<div style="width:800px;height:400px;" id='map'></div>	
+    <div style="width:800px;height:400px;" id='map'></div>	
   </div>
   
 </div>
-
 {% endblock %}
+
+
 
 {% block additionalJS %}
 <script src="https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js"></script>
