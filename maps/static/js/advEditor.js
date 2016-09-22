@@ -1,5 +1,15 @@
 (function(angular){
-angular.module('myApp', [])
+angular.module('myApp', ['ngRoute'])
+.config(['$routeProvider', function ($routeProvider) {
+		$routeProvider
+		.when("/maps", {
+			templateUrl: "/static/partials/map-editor.html",
+			controller: "mapEditorController"
+		});
+}])
+.controller("mapEditorController",['$scope','$http','$log',function($scope,$http,$log){
+	$log.log("hi");
+}])
 .controller('appController', ['$scope','$http', function($scope,$http) {
     var userId = document.getElementById("userId").value;
     $scope.userId = userId;
