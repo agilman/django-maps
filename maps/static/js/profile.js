@@ -4,7 +4,7 @@ angular.module('myApp', ['ngRoute'])
 		$routeProvider
 		.when("/",{
 			templateUrl:"/static/partials/profile-adventures.html",
-			controller:"advSelController"
+			controller:"advController"
 		})
 		.when("/maps",{
 			templateUrl:"/static/partials/profile-maps.html",
@@ -12,20 +12,29 @@ angular.module('myApp', ['ngRoute'])
 		})
 		.when("/blogs",{
 			templateUrl:"/static/partials/profile-blogs.html",
-			controller:"advSelController"
+			controller:"blogsController"
 		})
 		.when("/gear",{
 			templateUrl:"/static/partials/profile-gear.html",
-			controller:"advSelController"
-		})
-		;
-	
+			controller:"gearController"
+		});	
 }])
-.controller('badController', ['$scope','$http','$log', function($scope,$http,$log) {
-	$log.log("Hi");
+.controller('mainController',['$scope','$window','$log',function($scope,$window,$log){
+	$log.log("Hello from main controller");
 }])
-.controller('mainController',['$scope','$window','$log',function($scope, $window,$log){
-	$log.log("hi");
-	
+.controller('advController',['$scope','$window','$log',function($scope,$window,$log){
+    L.mapbox.accessToken = 'pk.eyJ1IjoiYWdpbG1hbiIsImEiOiI3a05GVF9vIn0.c5pOjAXGeRPbv35PRmK90A';
+    var map = L.mapbox.map('map', 'agilman.l3lp6544')
+        .setView([45.5, -122.50], 6);
+	$log.log("Hello from Adv controller");
+}])
+.controller('mapsController',['$scope','$window','$log',function($scope,$window,$log){
+	$log.log("Hello from maps controller");
+}])
+.controller('blogsController',['$scope','$window','$log',function($scope,$window,$log){
+	$log.log("Hello from blogs controller");
+}])
+.controller('gearController',['$scope','$window','$log',function($scope,$window,$log){
+	$log.log("Hello from gear controller");
 }]);
 })(window.angular);

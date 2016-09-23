@@ -20,17 +20,15 @@ angular.module('myApp', ['ngRoute'])
 		});
 }])
 .controller("mainController",['$scope','$http','$log',function($scope,$http,$log){
+    var userId = document.getElementById("userId").value;
+    $scope.userId = userId;
 	$log.log("hi from main controller");
 }])
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
-	$log.log("from adv editor");
+    $scope.profilePic = "/static/img/blank-profile-picture.png";
 }])
 .controller('appController', ['$scope','$http', function($scope,$http) {
-    var userId = document.getElementById("userId").value;
-    $scope.userId = userId;
-    $scope.profilePic = "/static/img/blank-profile-picture.png";
-    
-    //TODO check proper way of handling rest
+	//TODO check proper way of handling rest
     $http.get('/api/rest/adventures/' + userId).then(function(data){ 
 		$scope.adventures = data.data;	
 	});

@@ -1,17 +1,15 @@
 
 <div class="row">
   <div class="col-lg-4">
-    <div ng-controller="advSelectionController" >
+    
       <ul class="list-group">
 	<li class="list-group-item adventure" ng-repeat="adventure in adventures" ng-click="goToAdv(adventure.id);">
 	  {% verbatim %} {{ adventure.name }}{% endverbatim %}
 	</li>
       </ul>
-    </div>
+    
   </div>
 
-  Map HERE:
-  
   <div class="col-lg-8">
     <div style="width:800px;height:400px;" id='map'></div>	
   </div>
