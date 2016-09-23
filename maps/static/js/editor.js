@@ -6,15 +6,15 @@ angular.module('myApp', ['ngRoute'])
 			templateUrl:"/static/partials/editor-adventures.html",
 			controller:"advEditorController"
 		})
-		.when("/maps",{
+		.when("/:advId/maps",{
 			templateUrl:"/static/partials/editor-maps.html",
-			controller:"advEditorController"
+			controller:"mapsEditorController",
 		})
-		.when("/blogs",{
+		.when("/:advId/blogs",{
 			templateUrl:"/static/partials/editor-blogs.html",
 			controller:"advEditorController"
 		})
-		.when("/gear", {
+		.when("/:advId/gear", {
 			templateUrl: "/static/partials/editor-gear.html",
 			controller: "advEditorController"
 		});
@@ -23,9 +23,16 @@ angular.module('myApp', ['ngRoute'])
     var userId = document.getElementById("userId").value;
     $scope.userId = userId;
     
-    $http.get('/api/rest/adventures/' + userId).then(function(data){ 
-	$scope.adventures = data.data;	
-    });    
+    $http.get('/api/rest/adventures/' + userId).then(function(data){
+    	$scope.adventures = data.data;
+    	//Get latest adv if adventureId not provided...
+    	$scope.currentAdvId  =  $scope.adventures[0].id;
+    	$scope.currentAdvName= $scope.adventures[0].name;
+    });
+}])
+.controller("mapsEditorController",['$scope','$http','$log','$routeParams',function($scope,$http,$log, $routeParams){
+	var currentAdvFromUrl  = $routeParams.advId;
+	$log.log("Current adv from url: "+ currentAdvFromUrl);
 }])
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
     $scope.profilePic = "/static/img/blank-profile-picture.png";

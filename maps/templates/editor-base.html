@@ -48,7 +48,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav">
 		<li><a href="#/">Adventure Editor</a></li>
-		<li><p class="navbar-text" id="advName">[adv name]</p></li>
+		<li><p class="navbar-text">{% verbatim %}{{ currentAdvName }}{% endverbatim %}</p></li>
 	      </ul>
               
               <ul class="nav navbar-nav navbar-right">
@@ -72,9 +72,9 @@
 	  
 	  <ul class="nav navbar-nav">
     
-	    <li><a href="#/maps">Maps Editor</a></li>
-	    <li><a href="#/blogs">Blog Editor</a></li>
-	    <li><a href="#/gear">Gear Editor</a></li>
+	    <li><a href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/maps">Maps Editor</a></li>
+	    <li><a href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/blogs">Blog Editor</a></li>
+	    <li><a href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/gear">Gear Editor</a></li>
 	    
 	  </ul>
 	</div>

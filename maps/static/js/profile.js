@@ -6,15 +6,15 @@ angular.module('myApp', ['ngRoute'])
 			templateUrl:"/static/partials/profile-adventures.html",
 			controller:"advController"
 		})
-		.when("/maps",{
+		.when("/:advId/maps",{
 			templateUrl:"/static/partials/profile-maps.html",
 			controller:"mapsController"
 		})
-		.when("/blogs",{
+		.when("/:advId/blogs",{
 			templateUrl:"/static/partials/profile-blogs.html",
 			controller:"blogsController"
 		})
-		.when("/gear",{
+		.when("/:advId/gear",{
 			templateUrl:"/static/partials/profile-gear.html",
 			controller:"gearController"
 		});	
@@ -25,10 +25,10 @@ angular.module('myApp', ['ngRoute'])
     //TODO check proper way of handling rest                                                                                                                         
     $http.get('/api/rest/adventures/' + userId).then(function(data){
                 $scope.adventures = data.data;
+                $scope.currentAdvId = $scope.adventures[0].id;
+                $scope.currentAdvName = $scope.adventures[0].name;
     });
     
-
-	$log.log("Hello from main controller");
 }])
 .controller('advController',['$scope','$window','$log',function($scope,$window,$log){
 	
