@@ -19,14 +19,31 @@ angular.module('myApp', ['ngRoute'])
 			controller:"gearController"
 		});	
 }])
-.controller('mainController',['$scope','$window','$log',function($scope,$window,$log){
+.controller('mainController',['$scope','$window','$log','$http',function($scope,$window,$log,$http){
+	//get adventure lists
+	var userId = document.getElementById("userId").value;
+    //TODO check proper way of handling rest                                                                                                                         
+    $http.get('/api/rest/adventures/' + userId).then(function(data){
+                $scope.adventures = data.data;
+    });
+    
+
 	$log.log("Hello from main controller");
 }])
 .controller('advController',['$scope','$window','$log',function($scope,$window,$log){
+	
+	//Check if user has adventures
+	//if he doesn't, show message.
+	
+	//if there are maps worth visualizing
+	//init map
     L.mapbox.accessToken = 'pk.eyJ1IjoiYWdpbG1hbiIsImEiOiI3a05GVF9vIn0.c5pOjAXGeRPbv35PRmK90A';
     var map = L.mapbox.map('map', 'agilman.l3lp6544')
-        .setView([45.5, -122.50], 6);
+    .setView([45.5, -122.50], 6);
+    
+    //visualize adventures on map
 	$log.log("Hello from Adv controller");
+	
 }])
 .controller('mapsController',['$scope','$window','$log',function($scope,$window,$log){
 	$log.log("Hello from maps controller");

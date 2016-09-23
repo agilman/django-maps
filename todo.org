@@ -18,8 +18,8 @@
   - [ ] Gear list.
 
 * Long term learning[0/3]
-  - [ ] SPA design patterns.
-    - [ ] Maps
+  - [-] SPA design patterns.
+    - [X] Maps
     - [ ] Blogs
     - [ ] Gear
   - [ ] Form validation patterns.

@@ -4,14 +4,14 @@
     
       <ul class="list-group">
 	<li class="list-group-item adventure" ng-repeat="adventure in adventures" ng-click="goToAdv(adventure.id);">
-	  {% verbatim %} {{ adventure.name }}{% endverbatim %}
+	  {{ adventure.name }}
 	</li>
       </ul>
     
   </div>
 
   <div class="col-lg-8">
-    <div style="width:800px;height:400px;" id='map'></div>	
+    <div style="width:800px;height:800px;" id='map'></div>	
   </div>
   
 </div>
