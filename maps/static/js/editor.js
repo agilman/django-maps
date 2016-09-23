@@ -3,24 +3,27 @@ angular.module('myApp', ['ngRoute'])
 .config(['$routeProvider', function ($routeProvider) {
 		$routeProvider
 		.when("/",{
-			templateUrl:"/static/partials/adv-editor.html",
+			templateUrl:"/static/partials/editor-adventures.html",
 			controller:"advEditorController"
 		})
 		.when("/maps",{
-			templateUrl:"/static/partials/maps-editor.html",
+			templateUrl:"/static/partials/editor-maps.html",
 			controller:"advEditorController"
 		})
 		.when("/blogs",{
-			templateUrl:"/static/partials/blogs-editor.html",
+			templateUrl:"/static/partials/editor-blogs.html",
 			controller:"advEditorController"
 		})
 		.when("/gear", {
-			templateUrl: "/static/partials/gear-editor.html",
-			controller: "gearEditorController"
+			templateUrl: "/static/partials/editor-gear.html",
+			controller: "advEditorController"
 		});
 }])
-.controller("mapEditorController",['$scope','$http','$log',function($scope,$http,$log){
-	$log.log("hi");
+.controller("mainController",['$scope','$http','$log',function($scope,$http,$log){
+	$log.log("hi from main controller");
+}])
+.controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
+	$log.log("from adv editor");
 }])
 .controller('appController', ['$scope','$http', function($scope,$http) {
     var userId = document.getElementById("userId").value;

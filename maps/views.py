@@ -17,46 +17,14 @@ def landing(request):
     return render(request,"landing.html")
 
 #Main entry to SPA
-def advSelectionViewer(request,userName):
+def profileViewer(request,userName):
     userId = getUserIdFromUserName(userName)
 
     #TODO check if user exists. Return error otherwise.
     if request.user.is_authenticated():
-        return render(request,"advSelectionViewer-session.html",context={'userId':userId,'userName':userName})
-    return render(request,"advSelectionViewer.html",context={'userId':userId,'userName':userName})
+        return render(request,"profile-base-session.html",context={'userId':userId,'userName':userName})
+    return render(request,"profile-base.html",context={'userId':userId,'userName':userName})
 
-def advViewer(request,userName,advId):
-    userId = getUserIdFromUserName(userName)
-    if request.user.is_authenticated():
-        return render(request,"advViewer-session.html",context={'userId':userId,'advId':advId})
-    return render(request,"advViewer.html",context={'userId':userId,'advId':advId})
 
-def mapsView(request,userName,advId=None):
-    userId = getUserIdFromUserName(userName)
-    if type(advId)==type(None):
-        advId = getLatestAdv(userId)
-    if request.user.is_authenticated():
-        return render(request,"mapsView-session.html",context={'userId':userId,'advId':advId})
-    return render(request,"mapsView.html",context={'userId':userId,'advId':advId})
-
-def blogsView(request,userName,advId=None):
-    userId = getUserIdFromUserName(userName)
-    if type(advId)==type(None):
-        advId = getLatestAdv(userId)
-        
-    if request.user.is_authenticated():
-        return render(request,"blogsView-session.html",contest={'userId':userId,'advId':advId})
-    return render(request,"blogsView.html",contest={'userId':userId,'advId':advId})
-    
-def gearListView(request,userName,advId=None):
-    userId = getUserIdFromUserName(userName)
-    if type(advId)==type(None):
-        advId = getLatestAdv(userId)
-            
-    if request.user.is_authenticated():
-        return render(request,"gearListView-session.html",contest={'userId':userId,'advId':advId})
-    return render(request,"gearListView.html",contest={'userId':userId,'advId':advId})
-    
-
-def advEditorViewer(request):
+def editorViewer(request):
     return render(request,"editor-base.html")

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" {% block ng-app %}{% endblock %}>
+<html lang="en" ng-app="myApp">
 
 <head>
     <meta charset="utf-8">
@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Landing Page - Start Bootstrap Theme</title>
+    <title>Profile</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/static/landing/css/bootstrap.min.css" rel="stylesheet">
@@ -20,9 +20,6 @@
     <link href="/static/landing/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
-	{% block additionalCSS %}
-	{% endblock %}
-	
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -32,7 +29,7 @@
 
 </head>
 
-<body {% block ng-mainController %}{% endblock %} style="padding-top:51px"> <!-- is there a better solution?-->
+<body ng-controller="mainController" style="padding-top:51px"> <!-- is there a better solution?-->
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
         <div class="container topnav">
@@ -48,42 +45,46 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            {% block navbar-right %}
-            	<ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/auth/login">Login</a>
-                    </li>
-                    <li>
-                        <a href="/auth/register">Register</a>
-                    </li>
-                </ul>
-            {% endblock %}
+	      <ul class="nav navbar-nav">
+		<li><a href="#/">Adventures</a></li>
+	      </ul>
+	      <ul class="nav navbar-nav navbar-right">
+                <li>
+                  <a href="/users/{{ user }}/adventures/">Logged in as {{ user }} </a>
+                </li>
+                <li>
+                  <a href="/auth/logout">Logout</a>
+                </li>
+		<li>
+                  <a href="/editor">Edit Profile</a>
+                </li>
+              </ul>
+            
             </div>
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
     </nav>
 
-    {% block secondNavbar %}
+    
     <div class="navbar navbar-default navbar-static-top">
       <div class="container">
 	<div class="collapse navbar-collapse main-nav">
 	  <ul class="nav navbar-nav">
 
-	    <li><a href="#" >Maps</a></li>
-	    <li><a href="#">Blogs</a></li>
-	    <li><a href="#">Gear</a></li>
+	    <li><a href="#/maps">Maps</a></li>
+	    <li><a href="#/blogs">Blogs</a></li>
+	    <li><a href="#/gear">Gear</a></li>
 
 	  </ul>
 	</div>
       </div>
-    </div>
-    {% endblock %}
-    
+    </div>    
 
     <div style="clear:both"></div>	
     <div class="container">
-      {% block content %}{% endblock %}
+      <div ng-view>
+      </div>
     </div>
 
     <!-- jQuery -->
@@ -92,17 +93,14 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="/static/landing/js/bootstrap.min.js"></script>
     
-    {% block javascript %}
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-    {% block additionalJS %}
-    {% endblock %}
-    {% endblock %}
-    
-    {% block hiddenvars %}
-	<input type="hidden" id='userId' value={{ userId }} />
-    <input type="hidden" id='userName' value={{ userName }} />
-    {% endblock %}
+    <script src="https://code.angularjs.org/1.5.8/angular-route.min.js"></script>
 
+    <script src="/static/js/profile.js"></script>
+    
+    <input type="hidden" id='userId' value={{ userId }} />
+    <input type="hidden" id='userName' value={{ userName }} />
+    
 </body>
 
 </html>

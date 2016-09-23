@@ -25,18 +25,10 @@ urlpatterns = [
     url(r'^auth/', include("registration.backends.simple.urls")),
     
     #This will be entry point to SPA
-    url(r'^users/(?P<userName>[\w\-]+)/adventures/$',views.advSelectionViewer),
-    
-    #
-    url(r'^users/(?P<userName>[\w\-]+)/adventures/(?P<advId>\d+)/$', views.mapsView),
-    url(r'^users/(?P<userName>[\w\-]+)/adventures/maps/$',views.mapsView),
-    url(r'^users/(?P<userName>[\w\-]+)/adventures/blogs/$',views.blogsView),
-    url(r'^users/(?P<userName>[\w\-]+)/adventures/(?P<advId>\d+)/blogs/$',views.blogsView),
-    url(r'^users/(?P<userName>[\w\-]+)/adventures/gearList/$',views.gearListView),
-    url(r'^users/(?P<userName>[\w\-]+)/adventures/(?P<advId>\d+)/gearList/$',views.gearListView),
+    url(r'^users/(?P<userName>[\w\-]+)/adventures/$',views.profileViewer),
     
     #Editor SPA
-    url(r'^editor$', views.advEditorViewer),
+    url(r'^editor$', views.editorViewer),
     
     #API URLs
     url(r'^api/rest/adventures/(?P<userId>\d+)$', api.adventures),

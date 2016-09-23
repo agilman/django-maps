@@ -11,7 +11,7 @@
       <h3>Adventures:</h3>
       <ul class="list-group">
 	<li class="list-group-item clearfix adventure" ng-repeat="adventure in adventures">
-	  {% verbatim %} {{ adventure.name }}{% endverbatim %}
+	  {{ adventure.name }}
 	  <span class="pull-right">	
 	    <button class="btn" ng-click="removeAdvClick($index)"><span class="glyphicon glyphicon-remove"></span></button>
 	  </span>
@@ -45,7 +45,7 @@
   <div class="col-lg-4">
     <h3>User Info:</h3>
     <div id="profilePictureDiv">
-      <img id="profileImg" ng-src="{% verbatim %}{{ profilePic }}{% endverbatim %}" style="width:360px"/>
+      <img id="profileImg" ng-src="{{ profilePic }}" style="width:360px"/>
     </div>
     
     <input type="file" id="fileSelect" name="FileSelect" style="display:none"/>
