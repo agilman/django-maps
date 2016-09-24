@@ -1,5 +1,5 @@
-from maps.models import Adventures
-from maps.serealizers import AdventureSerializer
+from maps.models import Adventure, Map
+from maps.serealizers import AdventureSerializer, MapSerializer
 from django.http import JsonResponse
 
 from django.contrib.auth.models import User
@@ -15,17 +15,19 @@ from django.views.decorators.csrf import csrf_exempt
 #from rest_framework.response import Response
         
 @csrf_exempt
-def adventures(request,userId=None):
+def userInfo(request,userId=None):
     if request.method == 'GET':
-        adventures = Adventures.objects.filter(owner_id=userId)
+        adventures = Adventure.objects.filter(owner_id=userId)
         serializer = AdventureSerializer(adventures,many=True)
 
         return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'POST':
+    
+@csrf_exempt
+def adventures(request,userId=None):
+    if request.method == 'POST':
         data = JSONParser().parse(request)
         user = User.objects.get(pk=int(data["owner"]))
-        adv = Adventures(name=data["name"],owner=user)
+        adv = Adventure(name=data["name"],owner=user)
         adv.save()
 
         serialized = AdventureSerializer(adv)
@@ -33,9 +35,16 @@ def adventures(request,userId=None):
         
     elif request.method == "DELETE":
         advId = userId #This is because of the url mapping...
-        advToDel = Adventures.objects.get(pk=advId)
+        advToDel = Adventure.objects.get(pk=advId)
         advToDel.delete()
         serialized = AdventureSerializer(advToDel)
 
         #TODO Probably should return success code instead of object...
         return JsonResponse(serialized.data,safe=False)
+
+@csrf_exempt
+def maps(request,advId=None):
+    if request.method == 'GET':
+        maps = Map.objects.filter(advId=advId)
+        serializer = MapSerializer(maps, many=True)
+        return JsonResponse(serializer.data,safe=False)

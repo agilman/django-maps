@@ -23,7 +23,7 @@ angular.module('myApp', ['ngRoute'])
     var userId = document.getElementById("userId").value;
     $scope.userId = userId;
     
-    $http.get('/api/rest/adventures/' + userId).then(function(data){
+    $http.get('/api/rest/userInfo/' + userId).then(function(data){
     	$scope.adventures = data.data;
     	//Get latest adv if adventureId not provided...
     	$scope.currentAdvId  =  $scope.adventures[0].id;

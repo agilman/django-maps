@@ -23,7 +23,7 @@ angular.module('myApp', ['ngRoute'])
 	//get adventure lists
 	var userId = document.getElementById("userId").value;
     //TODO check proper way of handling rest                                                                                                                         
-    $http.get('/api/rest/adventures/' + userId).then(function(data){
+    $http.get('/api/rest/userInfo/' + userId).then(function(data){
                 $scope.adventures = data.data;
                 $scope.currentAdvId = $scope.adventures[0].id;
                 $scope.currentAdvName = $scope.adventures[0].name;

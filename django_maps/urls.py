@@ -31,5 +31,7 @@ urlpatterns = [
     url(r'^editor$', views.editorViewer),
     
     #API URLs
+    url(r'^api/rest/userInfo/(?P<userId>\d+)$', api.userInfo),
     url(r'^api/rest/adventures/(?P<userId>\d+)$', api.adventures),
+    url(r'^api/rest/maps/(?P<advId>\d+)$', api.maps),
 ]
