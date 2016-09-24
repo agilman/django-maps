@@ -84,7 +84,7 @@
     </div>    
 
     <div style="clear:both"></div>	
-    <div class="container">
+    <div class="container-fluid">
       <div ng-view>
       </div>
     </div>
@@ -105,7 +105,8 @@
     
     <input type="hidden" id='userId' value={{ userId }} />
     <input type="hidden" id='userName' value={{ userName }} />
-    
+    <input type="hidden" id='mapboxToken' value="{{ mapboxToken }}" />
+    <input type="hidden" id='mapboxMap' value="{{ mapboxMap }}" />
 </body>
 
 </html>

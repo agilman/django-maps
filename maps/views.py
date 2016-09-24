@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 #from django.template import Context
+from maps import settings
 
 def getLatestAdv(userId):
     return 1
@@ -20,11 +21,20 @@ def landing(request):
 def profileViewer(request,userName):
     userId = getUserIdFromUserName(userName)
 
+    
     #TODO check if user exists. Return error otherwise.
     if request.user.is_authenticated():
-        return render(request,"profile-base-session.html",context={'userId':userId,'userName':userName})
-    return render(request,"profile-base.html",context={'userId':userId,'userName':userName})
+        return render(request,"profile-base-session.html",
+                      context={'userId':userId,
+                               'userName':userName,
+                               'mapboxToken':settings.mapboxToken,
+                               'mapboxMap':settings.mapboxMap})
+    
+    return render(request,"profile-base.html",context={'userId':userId,'userName':userName,'mapboxToken':settings.mapboxToken,'mapboxMap':settings.mapboxMap})
 
 
 def editorViewer(request):
-    return render(request,"editor-base.html")
+    context = {'mapboxToken':settings.mapboxToken,
+               'mapboxMap':settings.mapboxMap}
+    
+    return render(request,"editor-base.html",context=context)

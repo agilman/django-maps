@@ -36,10 +36,12 @@ angular.module('myApp', ['ngRoute'])
 	//if he doesn't, show message.
 	
 	//if there are maps worth visualizing
-	//init map
-    L.mapbox.accessToken = 'pk.eyJ1IjoiYWdpbG1hbiIsImEiOiI3a05GVF9vIn0.c5pOjAXGeRPbv35PRmK90A';
-    var map = L.mapbox.map('map', 'agilman.l3lp6544')
-    .setView([45.5, -122.50], 6);
+    //init map
+    var token = document.getElementById("mapboxToken").value;
+    var mapboxMapname = document.getElementById("mapboxMap").value;
+    
+    L.mapbox.accessToken = token; 
+    var map = L.mapbox.map('map', mapboxMapname)
     
     //visualize adventures on map	
 }])

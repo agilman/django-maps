@@ -1,0 +1,2 @@
+mapboxToken="pk.eyJ1IjoiYWdpbG1hbiIsImEiOiI3a05GVF9vIn0.c5pOjAXGeRPbv35PRmK90A"
+mapboxMap="agilman.l3lp6544"
