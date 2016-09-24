@@ -41,12 +41,11 @@ angular.module('myApp', ['ngRoute'])
     var map = L.mapbox.map('map', 'agilman.l3lp6544')
     .setView([45.5, -122.50], 6);
     
-    //visualize adventures on map
-	$log.log("Hello from Adv controller");
-	
+    //visualize adventures on map	
 }])
-.controller('mapsController',['$scope','$window','$log',function($scope,$window,$log){
-	$log.log("Hello from maps controller");
+.controller('mapsController',['$scope','$window','$log','$routeParams',function($scope,$window,$log,$routeParams){
+	var currentAdvFromUrl  = $routeParams.advId;
+	$log.log("Current adv from url: "+ currentAdvFromUrl);
 }])
 .controller('blogsController',['$scope','$window','$log',function($scope,$window,$log){
 	$log.log("Hello from blogs controller");

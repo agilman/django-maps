@@ -13,8 +13,8 @@ def getUserIdFromUserName(userName):
 # Create your views here.
 def landing(request):
     if request.user.is_authenticated():
-        return render(request, "landingSession.html")
-    return render(request,"landing.html")
+        return render(request, "landing-session.html")
+    return render(request,"landing-base.html")
 
 #Main entry to SPA
 def profileViewer(request,userName):
