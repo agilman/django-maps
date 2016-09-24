@@ -29,6 +29,11 @@ angular.module('myApp', ['ngRoute'])
     	$scope.currentAdvId  =  $scope.adventures[0].id;
     	$scope.currentAdvName= $scope.adventures[0].name;
     });
+
+    $scope.$on('advChangeEvent',function(event,data){
+	$scope.currentAdvId  =  $scope.adventures[data].id;
+    	$scope.currentAdvName= $scope.adventures[data].name;
+    });
 }])
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams',function($scope,$http,$log, $routeParams){
 	//TODO: Set $scope.currentAdvId from from routeParams
@@ -90,6 +95,11 @@ angular.module('myApp', ['ngRoute'])
     		//clear entry from list
     		$scope.adventures.splice(index,1);
     	});
-    };    
+    };
+
+    $scope.advClick = function(index){
+	$scope.$emit('advChangeEvent',index);
+    };
+
 }]);
 })(window.angular);
