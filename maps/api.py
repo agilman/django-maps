@@ -23,7 +23,7 @@ def userInfo(request,userId=None):
         return JsonResponse(serializer.data, safe=False)
     
 @csrf_exempt
-def adventures(request,userId=None):
+def adventures(request,advId=None):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         user = User.objects.get(pk=int(data["owner"]))
@@ -34,7 +34,6 @@ def adventures(request,userId=None):
         return JsonResponse(serialized.data,safe=False)
         
     elif request.method == "DELETE":
-        advId = userId #This is because of the url mapping...
         advToDel = Adventure.objects.get(pk=advId)
         advToDel.delete()
         serialized = AdventureSerializer(advToDel)
@@ -43,8 +42,32 @@ def adventures(request,userId=None):
         return JsonResponse(serialized.data,safe=False)
 
 @csrf_exempt
-def maps(request,advId=None):
+def advMaps(request,advId=None):
     if request.method == 'GET':
         maps = Map.objects.filter(advId=advId)
         serializer = MapSerializer(maps, many=True)
         return JsonResponse(serializer.data,safe=False)
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        adv = Adventure.objects.get(id=int(data["advId"]))
+        map = Map(name=data["name"],advId=adv)
+        map.save()
+        
+        serialized =  MapSerializer(map)
+        return JsonResponse(serialized.data,safe=False)
+
+@csrf_exempt
+def maps(request,mapId=None):
+    if request.method == 'GET':
+        #this returns coordinates set
+        pass
+    elif request.method == 'DELETE':
+        mapToDel = Map.objects.get(id=mapId)
+        mapToDel.delete()
+        
+        serialized = MapSerializer(mapToDel)
+        
+        return JsonResponse(serialized.data,safe=False)
+    
+
+    

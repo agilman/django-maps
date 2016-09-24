@@ -1,7 +1,25 @@
 
 <div class="row">
   <div class="col-lg-4">
-    Edit Maps
+    <h4>Maps:</h4>
+    <ul class="list-group">
+      <li class="list-group-item clearfix map" ng-repeat="map in maps">
+	{{ map.name }}
+	<span class="pull-right">
+	  <button class="btn" ng-click="deleteMap($index)"><span class="glyphicon glyphicon-remove"></span></button>
+	</span>
+      </li>
+    </ul>
+    <br>
+    <h4>New Map:</h4>
+    <input class="form-control" placeholder="New Map Name" id="newMapName" type="text">
+    <br>
+    <button class="btn btn-primary" id="addMapButton" ng-click="createMap()">Create Map</button>
   </div>
+  
+  <div class="col-lg-8">
+    <div style="width:850px;height:800px;" id='map'></div>	
+  </div>
+
 </div>
     

@@ -31,8 +31,42 @@ angular.module('myApp', ['ngRoute'])
     });
 }])
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams',function($scope,$http,$log, $routeParams){
-	var currentAdvFromUrl  = $routeParams.advId;
-	$log.log("Current adv from url: "+ currentAdvFromUrl);
+	//TODO: Set $scope.currentAdvId from from routeParams
+	var urlAdvId  = $routeParams.advId;
+	
+	//init map
+    var token = document.getElementById("mapboxToken").value;
+    var mapboxMapname = document.getElementById("mapboxMap").value;
+    
+    L.mapbox.accessToken = token; 
+    var map = L.mapbox.map('map', mapboxMapname)
+	
+	$http.get('/api/rest/advMaps/' + urlAdvId).then(function(data){
+    	$scope.maps = data.data;
+    	
+    	if($scope.maps.length>0){
+    		$scope.currentMapId  =  $scope.maps[0].id;
+    		$scope.currentMapName= $scope.maps[0].name;
+    	}
+    });
+    
+    $scope.createMap = function(){
+    	var mapName = document.getElementById("newMapName").value;
+    	//prepare json to pass
+    	var newMap = {'advId':$scope.currentAdvId,'name':mapName};
+    	$http.post('/api/rest/advMaps/'+$scope.currentAdvId,JSON.stringify(newMap)).then(function(data){
+    		$scope.maps.push(data.data);
+    		//clear field
+    		document.getElementById("newMapName").value="";
+    	})
+    };
+    $scope.deleteMap = function(index){
+    	var mapId = $scope.maps[index].id;
+    	$http.delete('/api/rest/maps/'+mapId).then(function(resp){
+    		//clear entry from list
+    		$scope.maps.splice(index,1);
+    	});
+    }
 }])
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
     $scope.profilePic = "/static/img/blank-profile-picture.png";
@@ -42,7 +76,7 @@ angular.module('myApp', ['ngRoute'])
 	//prepare json to pass                                                                                                                                       
         var newAdv = {'owner':$scope.userId,'name':advName};
 	
-        $http.post('/api/rest/adventures/'+$scope.userId,JSON.stringify(newAdv)).then(function(data){
+        $http.post('/api/rest/adventures',JSON.stringify(newAdv)).then(function(data){
             $scope.adventures.push(data.data);
             
             //clear field
@@ -50,7 +84,7 @@ angular.module('myApp', ['ngRoute'])
         })
     };
     
-    $scope.removeAdvClick = function(index){
+    $scope.deleteAdv = function(index){
 	var advId = $scope.adventures[index].id;
     	$http.delete('/api/rest/adventures/'+advId).then(function(resp){
     		//clear entry from list

@@ -1,34 +1,33 @@
 <div class="row">
   <div class="col-lg-4">
-
-      <h3>Adventures:</h3>
-      <ul class="list-group">
-	<li class="list-group-item clearfix adventure" ng-repeat="adventure in adventures">
-	  {{ adventure.name }}
-	  <span class="pull-right">	
-	    <button class="btn" ng-click="removeAdvClick($index)"><span class="glyphicon glyphicon-remove"></span></button>
-	  </span>
-	</li>
-      </ul>   		
-      <br>
-      <h4>New Adventure: </h4>
-      <input class="form-control" placeholder="New adventure name" id="newAdvName" type="text">
-      <br>		     
-      <select class="form-control" id="advType">
-	<option value="1">Bicycle Touring</option>
-	<option value="2">Backpacking</option>
-	<option value="3">Motorcycling</option>
-	<option value="4">Other</option>
-      </select>		     
-      <br>
-      <select class="form-control" id="statusSelect">
-	<option value="1">In Progress</option>
-	<option value="2">Completed</option>
-	<option value="3">Planning</option>
-      </select>
-      <br>
-      <button class="btn btn-primary" id="addAdventureButton" ng-click="createAdv()">Create Adventure</button>
-  
+    <h3>Adventures:</h3>
+    <ul class="list-group">
+      <li class="list-group-item clearfix adventure" ng-repeat="adventure in adventures">
+	{{ adventure.name }}
+	<span class="pull-right">	
+	  <button class="btn" ng-click="deleteAdv($index)"><span class="glyphicon glyphicon-remove"></span></button>
+	</span>
+      </li>
+    </ul>   		
+    <br>
+    <h4>New Adventure: </h4>
+    <input class="form-control" placeholder="New adventure name" id="newAdvName" type="text">
+    <br>		     
+    <select class="form-control" id="advType">
+      <option value="1">Bicycle Touring</option>
+      <option value="2">Backpacking</option>
+      <option value="3">Motorcycling</option>
+      <option value="4">Other</option>
+    </select>		     
+    <br>
+    <select class="form-control" id="statusSelect">
+      <option value="1">In Progress</option>
+      <option value="2">Completed</option>
+      <option value="3">Planning</option>
+    </select>
+    <br>
+    <button class="btn btn-primary" id="addAdventureButton" ng-click="createAdv()">Create Adventure</button>
+    
   </div>
   
   <div class="col-lg-1">
