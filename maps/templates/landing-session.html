@@ -12,5 +12,16 @@
 {% endblock %}
 
 {% block content %}
-HEllo, and Wlecome, valuable member!
+<h1>Welcome</h1>
+<h3>Tools for the modern nomad.</h3>
+<hr class="intro-divider">
+<ul class="list-inline intro-social-buttons">
+  <li>
+    <a href="/editor" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Edit Profile</span></a>
+  </li>
+  <li>
+    <a href="/users/{{ user }}/adventures" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">View Profile</span></a>
+  </li>
+</ul>
+
 {% endblock %}
