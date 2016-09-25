@@ -15,12 +15,54 @@
     <input class="form-control" placeholder="New Map Name" id="newMapName" type="text">
     <br>
     <button class="btn btn-primary" id="addMapButton" ng-click="createMap()">Create Map</button>
+
+    <br>
+    <br>
+    <h4>New Segment:</h4>
+    <!--- datetime pickers -->
+    <div class="dropdown form-group">
+      <label>Start Date</label>
+      <a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown">
+	<div class="input-group date">
+	  <input type="text" class="form-control" data-ng-model="dateRangeStart">
+	  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+	</div>
+      </a>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+	<datetimepicker data-ng-model="dateRangeStart"
+			data-datetimepicker-config="{ dropdownSelector: '#dropdownStart', renderOn: 'end-date-changed' }"
+			data-on-set-time="startDateOnSetTime()"
+			data-before-render="startDateBeforeRender($dates)"></datetimepicker>
+      </ul>
+    </div>
+    
+    <div class="dropdown form-group">
+      <label>End Date</label>
+      <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
+	<div class="input-group date">
+	  <input type="text" class="form-control" data-ng-model="dateRangeEnd">
+	  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+	</div>
+      </a>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+	<datetimepicker data-ng-model="dateRangeEnd"
+			data-datetimepicker-config="{ dropdownSelector: '#dropdownEnd', renderOn: 'start-date-changed' }"
+			data-on-set-time="endDateOnSetTime()"
+			data-before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"></datetimepicker>
+      </ul>
+    </div>
+
+    <button class="btn btn-primary" id="addSegmentButton" ng-click="createSegment()">Create Segment</button>
+    <!-- end datetime pickers -->
+    
   </div>
   
   <div class="col-lg-8">
     <div style="width:850px;height:800px;" id='map'></div>	
   </div>
 
+  
+  
 
 </div>
 <script src="/static/js/editor_map.js"></script>    

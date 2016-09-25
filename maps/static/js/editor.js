@@ -1,5 +1,5 @@
 (function(angular){
-angular.module('myApp', ['ngRoute'])
+angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker'])
 .config(['$routeProvider', function ($routeProvider) {
 		$routeProvider
 		.when("/",{
@@ -77,6 +77,12 @@ angular.module('myApp', ['ngRoute'])
     		document.getElementById("newMapName").value="";
     	})
     };
+
+    $scope.createSegment = function(){
+	$log.log($scope.dateRangeStart);
+	
+    };
+    
     $scope.deleteMap = function(index){
     	var mapId = $scope.maps[index].id;
     	$http.delete('/api/rest/maps/'+mapId).then(function(resp){
