@@ -24,6 +24,7 @@
       <label>Start Date</label>
       <a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown">
 	<div class="input-group date">
+	  <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker" ng-class="startSet"></i></span>
 	  <input type="text" class="form-control" data-ng-model="dateRangeStart">
 	  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 	</div>
@@ -40,8 +41,9 @@
       <label>End Date</label>
       <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
 	<div class="input-group date">
+	  <span class="input-group-addon"><i class="glyphicon glyphicon glyphicon-map-marker"></i></span>
 	  <input type="text" class="form-control" data-ng-model="dateRangeEnd">
-	  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+	  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar" ng-class="finishSet"></i></span>
 	</div>
       </a>
       <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
@@ -58,7 +60,7 @@
   </div>
   
   <div class="col-lg-8">
-    <div style="width:850px;height:800px;" id='map'></div>	
+    <leaflet style="width:850px;height:800px;" tiles="tiles" lf-center="center"></leaflet>	
   </div>
 
   

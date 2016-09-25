@@ -1,5 +1,5 @@
 (function(angular){
-angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker'])
+angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-directive'])
 .config(['$routeProvider', function ($routeProvider) {
 		$routeProvider
 		.when("/",{
@@ -36,27 +36,29 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker'])
     });
 }])
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams',function($scope,$http,$log, $routeParams){
-    //TODO: Set $scope.currentAdvId from from routeParams
-    var urlAdvId  = $routeParams.advId;
-	
     //init map
     var token = document.getElementById("mapboxToken").value;
-    var mapboxMapname = document.getElementById("mapboxMap").value;
+    var mapboxMapName = document.getElementById("mapboxMap").value;
     
-    L.mapbox.accessToken = token; 
-    var map = L.mapbox.map('map', mapboxMapname)
-    
-    latestDotLayer = new L.layerGroup();
-    latestDotLayer.addTo(map);
-    
-    map.on('click',function(e){
-	$scope.newLatLng_lat = e.latlng.lat;
-	$scope.newLatLng_lng = e.latlng.lng;
-	//emit depending on situation
-	
-	//draw circle
-	draw_circle($scope.newLatLng_lat, $scope.newLatLng_lng);
+    angular.extend($scope, {
+        center: {
+            lat: 45.510,
+            lng: -122.4832,
+            zoom: 10
+        },
+        tiles: {
+            url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}',
+            type: 'xyz',
+            options: {
+                apikey: token,
+                mapid: mapboxMapName
+            }
+        },
+        geojson: {}
     });
+
+	
+    var urlAdvId  = $routeParams.advId;
     
     $http.get('/api/rest/advMaps/' + urlAdvId).then(function(data){
     	$scope.maps = data.data;
@@ -80,7 +82,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker'])
 
     $scope.createSegment = function(){
 	$log.log($scope.dateRangeStart);
-	
     };
     
     $scope.deleteMap = function(index){
