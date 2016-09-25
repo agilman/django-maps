@@ -35,7 +35,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	$scope.currentAdvName= $scope.adventures[data].name;
     });
 }])
-.controller("mapsEditorController",['$scope','$http','$log','$routeParams',function($scope,$http,$log, $routeParams){
+.controller("mapsEditorController",['$scope','$http','$log','$routeParams','leafletData',function($scope,$http,$log, $routeParams,leafletData){
     //init map
     var token = document.getElementById("mapboxToken").value;
     var mapboxMapName = document.getElementById("mapboxMap").value;
@@ -56,8 +56,12 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
         },
         geojson: {}
     });
-
 	
+    leafletData.getMap().then(function(map){
+    	startLayer = new L.LayerGroup();
+    	startLayer.addTo(map);
+    });
+    
     var urlAdvId  = $routeParams.advId;
     
     $http.get('/api/rest/advMaps/' + urlAdvId).then(function(data){
@@ -67,6 +71,22 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    $scope.currentMapId  =  $scope.maps[0].id;
     	    $scope.currentMapName= $scope.maps[0].name;
     	}
+    });
+    
+    $scope.$on("leafletDirectiveMap.click",function(e,wrap){
+    	$scope.startSet = "red";
+    	var lat = wrap.leafletEvent.latlng.lat;
+    	var lng = wrap.leafletEvent.latlng.lng;
+    	
+        //erase previous circle
+        startLayer.clearLayers();
+
+        //draw circle
+        var circleOptions = {'color':'#FB0C00'}
+        var newLatLng = new L.latLng(lat,lng);
+        var marker = new L.circleMarker(newLatLng,circleOptions).setRadius(3);    
+        
+        marker.addTo(startLayer);
     });
     
     $scope.createMap = function(){
@@ -84,13 +104,15 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	$log.log($scope.dateRangeStart);
     };
     
+    
     $scope.deleteMap = function(index){
     	var mapId = $scope.maps[index].id;
     	$http.delete('/api/rest/maps/'+mapId).then(function(resp){
     		//clear entry from list
     		$scope.maps.splice(index,1);
     	});
-    }
+    };
+    
 }])
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
     $scope.profilePic = "/static/img/blank-profile-picture.png";
