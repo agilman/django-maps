@@ -36,22 +36,34 @@ angular.module('myApp', ['ngRoute'])
     });
 }])
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams',function($scope,$http,$log, $routeParams){
-	//TODO: Set $scope.currentAdvId from from routeParams
-	var urlAdvId  = $routeParams.advId;
+    //TODO: Set $scope.currentAdvId from from routeParams
+    var urlAdvId  = $routeParams.advId;
 	
-	//init map
+    //init map
     var token = document.getElementById("mapboxToken").value;
     var mapboxMapname = document.getElementById("mapboxMap").value;
     
     L.mapbox.accessToken = token; 
     var map = L.mapbox.map('map', mapboxMapname)
+    
+    latestDotLayer = new L.layerGroup();
+    latestDotLayer.addTo(map);
+    
+    map.on('click',function(e){
+	$scope.newLatLng_lat = e.latlng.lat;
+	$scope.newLatLng_lng = e.latlng.lng;
+	//emit depending on situation
 	
-	$http.get('/api/rest/advMaps/' + urlAdvId).then(function(data){
+	//draw circle
+	draw_circle($scope.newLatLng_lat, $scope.newLatLng_lng);
+    });
+    
+    $http.get('/api/rest/advMaps/' + urlAdvId).then(function(data){
     	$scope.maps = data.data;
     	
     	if($scope.maps.length>0){
-    		$scope.currentMapId  =  $scope.maps[0].id;
-    		$scope.currentMapName= $scope.maps[0].name;
+    	    $scope.currentMapId  =  $scope.maps[0].id;
+    	    $scope.currentMapName= $scope.maps[0].name;
     	}
     });
     
