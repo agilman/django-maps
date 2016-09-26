@@ -20,7 +20,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 		});
 }])
 .controller("mainController",['$scope','$http','$log',function($scope,$http,$log){
-    var userId = document.getElementById("userId").value;
+	var userId = document.getElementById("userId").value;
     $scope.userId = userId;
     
     $http.get('/api/rest/userInfo/' + userId).then(function(data){
@@ -36,10 +36,33 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     });
 }])
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams','leafletData',function($scope,$http,$log, $routeParams,leafletData){
-    //init map
-    var token = document.getElementById("mapboxToken").value;
-    var mapboxMapName = document.getElementById("mapboxMap").value;
+	//set map based on url...
+	var urlAdvId  = $routeParams.advId;
     
+    $scope.startSet = false;
+    startLat = null;
+    startLng = null;
+    startDatetime = null;
+    
+    $scope.finishSet = false;
+    finishLat = null;
+    finishLng = null;
+    finishDatetime = null;
+    
+    $http.get('/api/rest/advMaps/' + urlAdvId).then(function(data){
+    	$scope.maps = data.data;
+    	
+    	if($scope.maps.length>0){
+    	    $scope.currentMapId  =  $scope.maps[0].id;
+    	    $scope.currentMapName= $scope.maps[0].name;
+    	    
+    	    //set start coordinates if there is data...
+    	}
+    });
+    
+    //init map
+	var token = document.getElementById("mapboxToken").value;
+    var mapboxMapName = document.getElementById("mapboxMap").value;
     angular.extend($scope, {
         center: {
             lat: 45.510,
@@ -57,36 +80,49 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
         geojson: {}
     });
 	
+    //after leaflet loads, create layers
     leafletData.getMap().then(function(map){
     	startLayer = new L.LayerGroup();
     	startLayer.addTo(map);
-    });
-    
-    var urlAdvId  = $routeParams.advId;
-    
-    $http.get('/api/rest/advMaps/' + urlAdvId).then(function(data){
-    	$scope.maps = data.data;
     	
-    	if($scope.maps.length>0){
-    	    $scope.currentMapId  =  $scope.maps[0].id;
-    	    $scope.currentMapName= $scope.maps[0].name;
-    	}
+    	finishLayer = new L.LayerGroup();
+    	finishLayer.addTo(map);
     });
     
+    // map click
     $scope.$on("leafletDirectiveMap.click",function(e,wrap){
-    	$scope.startSet = "red";
     	var lat = wrap.leafletEvent.latlng.lat;
     	var lng = wrap.leafletEvent.latlng.lng;
     	
-        //erase previous circle
-        startLayer.clearLayers();
+    	if ($scope.startSet){
+    		//set finish
+    		startLat = lat;
+    		startLng = lng;
+    		finishLayer.clearLayers();
+    		
+    		var circleOptions = {'color':'#FB0C00'};
+            var newLatLng = new L.latLng(lat,lng);
+            var marker = new L.circleMarker(newLatLng,circleOptions).setRadius(3);
+    		
+            marker.addTo(finishLayer);
+    		$scope.finishSet = true;
+            
+    	}else{
+    		//set start point.
+    		finishLat = lat;
+    		finishLng = lng;
+    		
+            //erase previous circle
+            startLayer.clearLayers();
 
-        //draw circle
-        var circleOptions = {'color':'#FB0C00'}
-        var newLatLng = new L.latLng(lat,lng);
-        var marker = new L.circleMarker(newLatLng,circleOptions).setRadius(3);    
-        
-        marker.addTo(startLayer);
+            //draw circle
+            var circleOptions = {'color':'#551A8B'};
+            var newLatLng = new L.latLng(lat,lng);
+            var marker = new L.circleMarker(newLatLng,circleOptions).setRadius(3);
+            
+            marker.addTo(startLayer);
+    		$scope.startSet = true;
+    	}
     });
     
     $scope.createMap = function(){
@@ -104,7 +140,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	$log.log($scope.dateRangeStart);
     };
     
-    
     $scope.deleteMap = function(index){
     	var mapId = $scope.maps[index].id;
     	$http.delete('/api/rest/maps/'+mapId).then(function(resp){
@@ -112,7 +147,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     		$scope.maps.splice(index,1);
     	});
     };
-    
 }])
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
     $scope.profilePic = "/static/img/blank-profile-picture.png";
