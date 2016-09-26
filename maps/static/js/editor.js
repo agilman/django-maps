@@ -38,17 +38,22 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams','leafletData',function($scope,$http,$log, $routeParams,leafletData){
     //set map based on url...
     var urlAdvId  = $routeParams.advId;
+
+    //emit... if needed.
+    $scope.currentAdvId=urlAdvId;
     
     $scope.startSet = false;
     startLat = null;
     startLng = null;
     startDatetime = null;
     
-    $scope.finishSet = false;
-    finishLat = null;
-    finishLng = null;
+    $scope.endSet = false;
+    endLat = null;
+    endLng = null;
     finishDatetime = null;
-    
+
+    $scope.currentMapId= null;
+    $scope.currentMapName=null;
     $http.get('/api/rest/advMaps/' + urlAdvId).then(function(data){
     	$scope.maps = data.data;
     	
@@ -105,11 +110,11 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    drawStartCircle(lat,lng);
     	    $scope.startSet = true;
     	}else{
-    	    finishLat = lat;
-    	    finishLng = lng;
+    	    endLat = lat;
+    	    endLng = lng;
     	    
             drawFinishCircle(lat,lng);
-	    navInfo = getNavLine(startLat,startLng,finishLat,finishLng,"line");
+	    navInfo = getNavLine(startLat,startLng,endLat,endLng,"line");
 
 	    navLine = navInfo.navLine;
 	    distance = navInfo.distance;
@@ -121,7 +126,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    latestPathLayer.clearLayers();
 	    var polyline = L.polyline(navLine, polyline_options).addTo(latestPathLayer);
 	    
-	    $scope.finishSet = true;
+	    $scope.endSet = true;
     	}
     });
     
@@ -137,6 +142,20 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     };
 
     $scope.createSegment = function(){
+	var newSegment = {'mapId':$scope.currentMapId,
+			  'startTime':$scope.dateRangeStart,
+			  'endTime': $scope.dateRangeEnd,
+			  'startLat':startLat,
+			  'startLng':startLng,
+			  'endLat':endLat,
+			  'endLng':endLng,
+			  'distance':0
+			 };
+	$http.post('/api/rest/mapSegment',JSON.stringify(newSegment)).then(function(data){
+	    //add to scope geojson...
+	    //unset things
+	});
+	
 	$log.log($scope.dateRangeStart);
     };
     

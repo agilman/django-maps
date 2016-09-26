@@ -1,5 +1,5 @@
-from maps.models import Adventure, Map
-from maps.serealizers import AdventureSerializer, MapSerializer
+from maps.models import Adventure, Map , MapSegment
+from maps.serealizers import AdventureSerializer, MapSerializer, MapSegmentSerializer
 from django.http import JsonResponse
 
 from django.contrib.auth.models import User
@@ -60,7 +60,7 @@ def advMaps(request,advId=None):
 def maps(request,mapId=None):
     if request.method == 'GET':
         #this returns coordinates set
-        pass
+        pass        
     elif request.method == 'DELETE':
         mapToDel = Map.objects.get(id=mapId)
         mapToDel.delete()
@@ -68,6 +68,22 @@ def maps(request,mapId=None):
         serialized = MapSerializer(mapToDel)
         
         return JsonResponse(serialized.data,safe=False)
-    
 
-    
+@csrf_exempt 
+def mapSegment(request,segmentId=None):
+    if request.method=='POST':
+        data = JSONParser().parse(request)
+        map = Map.objects.get(id=int(data["mapId"]))
+        print(map)
+        
+        mapSegment = MapSegment(mapId=map,
+                                startTime=None,
+                                endTime=None,
+                                startLat=data["startLat"],
+                                startLng=data["startLng"],
+                                endLat = data["endLat"],
+                                endLng = data["endLng"],
+                                distance = None)
+        mapSegment.save()
+        serialized = MapSegmentSerializer(mapSegment)
+        return JsonResponse(serialized.data,safe=False)

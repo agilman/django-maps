@@ -1,4 +1,4 @@
-from maps.models import Adventure, Map, DaySegment, WayPoint
+from maps.models import Adventure, Map, MapSegment, WayPoint
 
 from rest_framework import serializers
 
@@ -12,9 +12,9 @@ class MapSerializer(serializers.ModelSerializer):
         model = Map
         fields= ['id','name']
         
-class DaySegmentSerializer(serializers.ModelSerializer):
+class MapSegmentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DaySegment
+        model = MapSegment
         fields = '__all__'
         
 class WayPointSerializer(serializers.ModelSerializer):
