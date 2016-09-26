@@ -20,7 +20,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 		});
 }])
 .controller("mainController",['$scope','$http','$log',function($scope,$http,$log){
-	var userId = document.getElementById("userId").value;
+    var userId = document.getElementById("userId").value;
     $scope.userId = userId;
     
     $http.get('/api/rest/userInfo/' + userId).then(function(data){
@@ -36,8 +36,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     });
 }])
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams','leafletData',function($scope,$http,$log, $routeParams,leafletData){
-	//set map based on url...
-	var urlAdvId  = $routeParams.advId;
+    //set map based on url...
+    var urlAdvId  = $routeParams.advId;
     
     $scope.startSet = false;
     startLat = null;
@@ -61,7 +61,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     });
     
     //init map
-	var token = document.getElementById("mapboxToken").value;
+    var token = document.getElementById("mapboxToken").value;
     var mapboxMapName = document.getElementById("mapboxMap").value;
     angular.extend($scope, {
         center: {
@@ -87,6 +87,9 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	
     	finishLayer = new L.LayerGroup();
     	finishLayer.addTo(map);
+
+	latestPathLayer = new L.LayerGroup();
+	latestPathLayer.addTo(map);
     });
     
     // map click
@@ -94,34 +97,31 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	var lat = wrap.leafletEvent.latlng.lat;
     	var lng = wrap.leafletEvent.latlng.lng;
     	
-    	if ($scope.startSet){
-    		//set finish
-    		startLat = lat;
-    		startLng = lng;
-    		finishLayer.clearLayers();
-    		
-    		var circleOptions = {'color':'#FB0C00'};
-            var newLatLng = new L.latLng(lat,lng);
-            var marker = new L.circleMarker(newLatLng,circleOptions).setRadius(3);
-    		
-            marker.addTo(finishLayer);
-    		$scope.finishSet = true;
-            
+    	if (!$scope.startSet){
+	    //setstart point.
+    	    startLat = lat;
+    	    startLng = lng;
+	    
+    	    drawStartCircle(lat,lng);
+    	    $scope.startSet = true;
     	}else{
-    		//set start point.
-    		finishLat = lat;
-    		finishLng = lng;
-    		
-            //erase previous circle
-            startLayer.clearLayers();
+    	    finishLat = lat;
+    	    finishLng = lng;
+    	    
+            drawFinishCircle(lat,lng);
+	    navInfo = getNavLine(startLat,startLng,finishLat,finishLng,"line");
 
-            //draw circle
-            var circleOptions = {'color':'#551A8B'};
-            var newLatLng = new L.latLng(lat,lng);
-            var marker = new L.circleMarker(newLatLng,circleOptions).setRadius(3);
-            
-            marker.addTo(startLayer);
-    		$scope.startSet = true;
+	    navLine = navInfo.navLine;
+	    distance = navInfo.distance;
+
+	    var polyline_options = {
+		color: '#00264d'
+	    };
+
+	    latestPathLayer.clearLayers();
+	    var polyline = L.polyline(navLine, polyline_options).addTo(latestPathLayer);
+	    
+	    $scope.finishSet = true;
     	}
     });
     
