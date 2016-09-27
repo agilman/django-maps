@@ -38,7 +38,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams','leafletData',function($scope,$http,$log, $routeParams,leafletData){
     //set map based on url...
     var urlAdvId  = $routeParams.advId;
-
+    
     //emit... if needed.
     $scope.currentAdvId=urlAdvId;
     
@@ -62,13 +62,25 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	if($scope.maps.length>0){
     	    $scope.currentMapId  =  $scope.maps[0].id;
     	    $scope.currentMapName= $scope.maps[0].name;
-    	    
-    	    //set start coordinates if there is data...
+    	        
     	    //get Map
     	    $http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
     	    	geoJsonLayer.addData(data.data);
-    	    });
+    	    	
+    	    	//set startPoint to last point from established line...
+    	    	$log.log(data.data);
+    	    	if (data.data.features.length>0){
+    	    		var lastSegment = data.data.features[data.data.features.length-1].geometry.coordinates;
+    	    		
+    	    		if (lastSegment.length>0){
+    	    			startLat = lastSegment[lastSegment.length-1][1];
+    	    			startLng = lastSegment[lastSegment.length-1][0];
 
+    	    			setStartPoint(startLat,startLng);
+    	    			$scope.startSet = true;
+    	    		}
+    	    	}
+    	    });
     	}
     });
     
@@ -97,8 +109,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	startLayer = new L.LayerGroup();
     	startLayer.addTo(map);
     	
-    	finishLayer = new L.LayerGroup();
-    	finishLayer.addTo(map);
+    	endLayer = new L.LayerGroup();
+    	endLayer.addTo(map);
 
     	latestPathLayer = new L.LayerGroup();
     	latestPathLayer.addTo(map);
@@ -112,32 +124,14 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	var lat = wrap.leafletEvent.latlng.lat;
     	var lng = wrap.leafletEvent.latlng.lng;
     	
+    	//set start point.
     	if (!$scope.startSet){
-	    //setstart point.
-    	    startLat = lat;
-    	    startLng = lng;
-	    
-    	    drawStartCircle(lat,lng);
+    		setStartPoint(lat,lng);
     	    $scope.startSet = true;
     	}else{
-    	    endLat = lat;
-    	    endLng = lng;
-    	    
-            drawFinishCircle(lat,lng);
-	    navInfo = getNavLine(startLat,startLng,endLat,endLng,"line");
-
-	    navLine = navInfo.navLine;
-	    distance = navInfo.distance;
-
-	    var polyline_options = {
-		color: '#00264d'
-	    };
-
-	    latestPathLayer.clearLayers();
-	    var polyline = L.polyline(navLine, polyline_options).addTo(latestPathLayer);
-	    
-	    $scope.endSet = true;
-    	}
+    		setEndPoint(lat,lng);	    
+    		$scope.endSet = true;
+    		}
     });
     
     $scope.createMap = function(){
@@ -153,17 +147,24 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 
     $scope.createSegment = function(){
 	
-	var newSegment = {'mapId':$scope.currentMapId,
+    	var wp = [[startLat,startLng],[endLat,endLng]];
+    	var newSegment = {'mapId':$scope.currentMapId,
 			  'startTime':$scope.dateRangeStart,
 			  'endTime': $scope.dateRangeEnd,
 			  'distance':0,
-			  'waypoints':[[startLat,startLng],[endLat,endLng]],
+			  'waypoints':wp,
 			 };
-	$http.post('/api/rest/mapSegment',JSON.stringify(newSegment)).then(function(data){
-	    //add to scope geojson...
-	    //unset things
+    	$http.post('/api/rest/mapSegment',JSON.stringify(newSegment)).then(function(data){
+    		//add to scope geojson...
+    		setStartPoint(endLat,endLng);
+    		
+    		//unset things
+    		endLat = null;
+    		endLng = null;
+    		endLayer.clearLayers();
+    		
+    		$scope.endSet = false;	
 	});
-	
 	
 	$log.log($scope.dateRangeStart);
     };  // end of createSegment

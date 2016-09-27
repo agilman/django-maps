@@ -11,14 +11,40 @@ function drawStartCircle(lat,lng){
 }
 
 function drawFinishCircle(lat,lng){
-    finishLayer.clearLayers();
+    endLayer.clearLayers();
 
     //draw circle
     var circleOptions = {'color':'#FB0C00'}
     var newLatLng = new L.latLng(lat,lng);
     var marker = new L.circleMarker(newLatLng,circleOptions).setRadius(3);    
     
-    marker.addTo(finishLayer);
+    marker.addTo(endLayer);
+}
+
+function setStartPoint(lat,lng){
+    startLat = lat;
+    startLng = lng;
+
+    drawStartCircle(lat,lng);
+}
+
+function setEndPoint(lat,lng){
+    endLat = lat;
+    endLng = lng;
+    
+    drawFinishCircle(lat,lng);
+    
+	navInfo = getNavLine(startLat,startLng,endLat,endLng,"line");
+
+	navLine = navInfo.navLine;
+	distance = navInfo.distance;
+
+	var polyline_options = {
+			color: '#00264d'
+	};
+
+	latestPathLayer.clearLayers();
+	var polyline = L.polyline(navLine, polyline_options).addTo(latestPathLayer);
 }
 
 function getNavLine(startLat,startLng,endLat,endLng,navType){
