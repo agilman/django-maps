@@ -56,6 +56,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 
     $scope.currentMapId= null;
     $scope.currentMapName=null;
+    //Load maps, and latest segments
     $http.get('/api/rest/advMaps/' + urlAdvId).then(function(data){
     	$scope.maps = data.data;
     	
@@ -68,7 +69,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    	geoJsonLayer.addData(data.data);
     	    	
     	    	//set startPoint to last point from established line...
-    	    	$log.log(data.data);
     	    	if (data.data.features.length>0){
     	    		var lastSegment = data.data.features[data.data.features.length-1].geometry.coordinates;
     	    		
@@ -155,14 +155,18 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 			  'waypoints':wp,
 			 };
     	$http.post('/api/rest/mapSegment',JSON.stringify(newSegment)).then(function(data){
-    		//add to scope geojson...
+    		//return needs to be geojson
+    		$log.log(data.data);
+    		//add to geojson...
+    		geoJsonLayer.addData(data.data);
+    		
     		setStartPoint(endLat,endLng);
     		
     		//unset things
     		endLat = null;
     		endLng = null;
     		endLayer.clearLayers();
-    		
+    		latestPathLayer.clearLayers();
     		$scope.endSet = false;	
 	});
 	

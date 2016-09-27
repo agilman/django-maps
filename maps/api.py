@@ -53,12 +53,22 @@ def makeGeoJsonFromMap(map):
             coordinates.append([float(coord.lat),float(coord.lng)])
                 
         geometry = {"type":"LineString","coordinates":coordinates}
-        segmentDict = {"type":"Feature","properties":{"SegmentId":segment.id},"geometry":geometry}
+        segmentDict = {"type":"Feature","properties":{"segmentId":segment.id},"geometry":geometry}
         features.append(segmentDict)
 
     mapDict = {"type":"FeatureCollection","properties":{"mapId": map.id,"mapName":map.name},"features":features}
         
     return mapDict
+
+def makeGeoJsonFromSegment(segment):
+    coordinates = []
+    for coord in segment.coordinates.all():
+        coordinates.append([float(coord.lat),float(coord.lng)])
+        
+    geometry = {"type":"LineString","coordinates":coordinates}
+        
+    feature = {"type":"Feature","properties":{"segmentId":segment.id},"geometry":geometry}
+    return feature
 
 @csrf_exempt
 def advMaps(request,advId=None):
@@ -86,9 +96,7 @@ def maps(request,mapId=None):
         if map!=None:
             results = makeGeoJsonFromMap(map)
         return JsonResponse(results,safe=False)
-        
-        #this returns coordinates set
-        pass        
+     
     elif request.method == 'DELETE':
         mapToDel = Map.objects.get(id=mapId)
         mapToDel.delete()
@@ -129,6 +137,7 @@ def mapSegment(request,segmentId=None):
             waypointObj.save()
             
         #return custom geoJson
-        serialized = MapSegmentSerializer(mapSegment)
-        return JsonResponse(serialized.data,safe=False)
+        result = makeGeoJsonFromSegment(mapSegment)
+        
+        return JsonResponse(result,safe=False)
     
