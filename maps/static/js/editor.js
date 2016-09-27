@@ -62,6 +62,11 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    $scope.currentMapName= $scope.maps[0].name;
     	    
     	    //set start coordinates if there is data...
+    	    //get Map
+    	    $http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
+    	    	geoJsonLayer.addData(data.data);
+    	    });
+
     	}
     });
     
@@ -93,8 +98,11 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	finishLayer = new L.LayerGroup();
     	finishLayer.addTo(map);
 
-	latestPathLayer = new L.LayerGroup();
-	latestPathLayer.addTo(map);
+    	latestPathLayer = new L.LayerGroup();
+    	latestPathLayer.addTo(map);
+    	
+    	geoJsonLayer = new L.geoJson();
+    	geoJsonLayer.addTo(map);
     });
     
     // map click
@@ -142,6 +150,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     };
 
     $scope.createSegment = function(){
+	/*
 	var newSegment = {'mapId':$scope.currentMapId,
 			  'startTime':$scope.dateRangeStart,
 			  'endTime': $scope.dateRangeEnd,
@@ -156,8 +165,9 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    //unset things
 	});
 	
+	*/
 	$log.log($scope.dateRangeStart);
-    };
+    };  // end of createSegment
     
     $scope.deleteMap = function(index){
     	var mapId = $scope.maps[index].id;
