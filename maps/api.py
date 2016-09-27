@@ -1,4 +1,4 @@
-from maps.models import Adventure, Map , MapSegment
+from maps.models import Adventure, Map , MapSegment, WayPoint
 from maps.serealizers import AdventureSerializer, MapSerializer, MapSegmentSerializer
 from django.http import JsonResponse
 
@@ -50,7 +50,7 @@ def makeGeoJsonFromMap(map):
 
         coordinates = []
         for coord in segment.coordinates.all():
-            coordinates.append([float(coord.Lat),float(coord.Lng)])
+            coordinates.append([float(coord.lat),float(coord.lng)])
                 
         geometry = {"type":"LineString","coordinates":coordinates}
         segmentDict = {"type":"Feature","properties":{"SegmentId":segment.id},"geometry":geometry}
@@ -103,15 +103,32 @@ def mapSegment(request,segmentId=None):
         data = JSONParser().parse(request)
         map = Map.objects.get(id=int(data["mapId"]))
         
-        print(dir(map))
+
+        startTime  = None
+        endTime = None
+        if "startTime" in data.keys():
+            startTime = data["startTime"]
+        if "endTime" in data.keys():
+            endTIme = data["endTime"]
+            
+        distance = data["distance"]
+        waypoints = data["waypoints"]
+        
+        #create segment
         mapSegment = MapSegment(map=map,
                                 startTime=None,
                                 endTime=None,
-                                startLat=data["startLat"],
-                                startLng=data["startLng"],
-                                endLat = data["endLat"],
-                                endLng = data["endLng"],
                                 distance = None)
         mapSegment.save()
+        
+        #create waypoints
+        for point in waypoints:
+            waypointObj = WayPoint(segment = mapSegment,
+                                   lat = point[1],
+                                   lng = point[0])
+            waypointObj.save()
+            
+        #return custom geoJson
         serialized = MapSegmentSerializer(mapSegment)
         return JsonResponse(serialized.data,safe=False)
+    

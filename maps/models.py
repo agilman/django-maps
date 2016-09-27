@@ -12,14 +12,17 @@ class Adventure(models.Model):
 class Map(models.Model):
     adv = models.ForeignKey(Adventure,on_delete=models.CASCADE)
     name = models.CharField(max_length=32)
-
+        
 class MapSegment(models.Model):
     map = models.ForeignKey(Map,on_delete=models.CASCADE, related_name="segments")
+    startTime = models.DateTimeField(null=True)
+    endTime = models.DateTimeField(null=True)
+    distance = models.IntegerField(null=True)
     
 class WayPoint(models.Model):
-    segmentId = models.ForeignKey(MapSegment,on_delete=models.CASCADE, related_name="coordinates")
-    Lat = models.DecimalField(max_digits=9, decimal_places=6)
-    Lng = models.DecimalField(max_digits=9, decimal_places=6)
+    segment = models.ForeignKey(MapSegment,on_delete=models.CASCADE, related_name="coordinates")
+    lat = models.DecimalField(max_digits=9, decimal_places=6)
+    lng = models.DecimalField(max_digits=9, decimal_places=6)
     
     def __str__(self):
         return '[%s,%s]' %(self.Lat,self.Lng)

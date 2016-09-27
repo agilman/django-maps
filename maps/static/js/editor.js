@@ -46,6 +46,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     startLat = null;
     startLng = null;
     startDatetime = null;
+    $scope.startTime = null;
+    $scope.endtTime = null;
     
     $scope.endSet = false;
     endLat = null;
@@ -150,22 +152,19 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     };
 
     $scope.createSegment = function(){
-	/*
+	
 	var newSegment = {'mapId':$scope.currentMapId,
 			  'startTime':$scope.dateRangeStart,
 			  'endTime': $scope.dateRangeEnd,
-			  'startLat':startLat,
-			  'startLng':startLng,
-			  'endLat':endLat,
-			  'endLng':endLng,
-			  'distance':0
+			  'distance':0,
+			  'waypoints':[[startLat,startLng],[endLat,endLng]],
 			 };
 	$http.post('/api/rest/mapSegment',JSON.stringify(newSegment)).then(function(data){
 	    //add to scope geojson...
 	    //unset things
 	});
 	
-	*/
+	
 	$log.log($scope.dateRangeStart);
     };  // end of createSegment
     
