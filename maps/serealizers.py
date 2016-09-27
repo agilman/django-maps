@@ -12,23 +12,15 @@ class WayPointSerializer(serializers.ModelSerializer):
         model = WayPoint 
         fields = ('Lat','Lng')
 
-"""
-class SegmentPropertiesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SegmentProperties
-        fields = ['distance']
-"""
 
 class MapSegmentSerializer(serializers.ModelSerializer):
-    coordinates = WayPointSerializer(many=True,read_only=True)
     class Meta:
         model = MapSegment
-        fields = ('id','coordinates', 'properties')
+        fields = ['id']
 
         
 class MapSerializer(serializers.ModelSerializer):
-    segments = MapSegmentSerializer(many=True)
     class Meta:
         model = Map
-        fields= ['id','name', 'segments']
+        fields= ['id','name']
         

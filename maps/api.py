@@ -43,39 +43,30 @@ def adventures(request,advId=None):
         #TODO Probably should return success code instead of object...
         return JsonResponse(serialized.data,safe=False)
 
-def makeGeoJsonFromMaps(maps):
-    results = []
-    for i in maps:
-        features = []
-        for segment in i.segments.all():
+def makeGeoJsonFromMap(map):
+    features = []
 
-            coordinates = []
-            for coord in segment.coordinates.all():
-                coordinates.append([float(coord.Lat),float(coord.Lng)])
+    for segment in map.segments.all():
+
+        coordinates = []
+        for coord in segment.coordinates.all():
+            coordinates.append([float(coord.Lat),float(coord.Lng)])
                 
-            geometry = {"type":"LineString","coordinates":coordinates}
-            segmentDict = {"type":"Feature","properties":{"SegmentId":segment.id},"geometry":geometry}
-            features.append(segmentDict)
+        geometry = {"type":"LineString","coordinates":coordinates}
+        segmentDict = {"type":"Feature","properties":{"SegmentId":segment.id},"geometry":geometry}
+        features.append(segmentDict)
 
-        mapDict = {"type":"FeatureCollection","properties":{"mapId": i.id,"mapName":i.name},"features":features}
+    mapDict = {"type":"FeatureCollection","properties":{"mapId": map.id,"mapName":map.name},"features":features}
         
-        
-        results.append(mapDict)
-
-    return results
-
+    return mapDict
 
 @csrf_exempt
 def advMaps(request,advId=None):
     if request.method == 'GET':
-        #maps = Map.objects.filter(advId=advId)
-        #serializer = MapSerializer(maps, many=True)
-        #return JsonResponse(serializer.data,safe=False)
+        maps = Map.objects.filter(adv=advId)
+        serializer = MapSerializer(maps, many=True)
+        return JsonResponse(serializer.data,safe=False)
         
-        mapsQ = Map.objects.filter(adv=advId)
-        results = makeGeoJsonFromMaps(mapsQ.all())
-        return JsonResponse(results,safe=False)
-    
     if request.method == 'POST':
         data = JSONParser().parse(request)
         adv = Adventure.objects.get(id=int(data["advId"]))
@@ -88,6 +79,14 @@ def advMaps(request,advId=None):
 @csrf_exempt
 def maps(request,mapId=None):
     if request.method == 'GET':
+        
+        map = Map.objects.filter(id=mapId).first()
+        
+        results = []
+        if map!=None:
+            results = makeGeoJsonFromMap(map)
+        return JsonResponse(results,safe=False)
+        
         #this returns coordinates set
         pass        
     elif request.method == 'DELETE':
