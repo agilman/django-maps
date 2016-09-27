@@ -2,6 +2,8 @@ from maps.models import Adventure, Map , MapSegment
 from maps.serealizers import AdventureSerializer, MapSerializer, MapSegmentSerializer
 from django.http import JsonResponse
 
+from collections import OrderedDict
+
 from django.contrib.auth.models import User
 ###REST 
 #from django.shortcuts import render
@@ -41,16 +43,43 @@ def adventures(request,advId=None):
         #TODO Probably should return success code instead of object...
         return JsonResponse(serialized.data,safe=False)
 
+def makeGeoJsonFromMaps(maps):
+    results = []
+    for i in maps:
+        features = []
+        for segment in i.segments.all():
+
+            coordinates = []
+            for coord in segment.coordinates.all():
+                coordinates.append([float(coord.Lat),float(coord.Lng)])
+                
+            geometry = {"type":"LineString","coordinates":coordinates}
+            segmentDict = {"type":"Feature","properties":{"SegmentId":segment.id},"geometry":geometry}
+            features.append(segmentDict)
+
+        mapDict = {"type":"FeatureCollection","properties":{"mapId": i.id,"mapName":i.name},"features":features}
+        
+        
+        results.append(mapDict)
+
+    return results
+
+
 @csrf_exempt
 def advMaps(request,advId=None):
     if request.method == 'GET':
-        maps = Map.objects.filter(advId=advId)
-        serializer = MapSerializer(maps, many=True)
-        return JsonResponse(serializer.data,safe=False)
+        #maps = Map.objects.filter(advId=advId)
+        #serializer = MapSerializer(maps, many=True)
+        #return JsonResponse(serializer.data,safe=False)
+        
+        mapsQ = Map.objects.filter(adv=advId)
+        results = makeGeoJsonFromMaps(mapsQ.all())
+        return JsonResponse(results,safe=False)
+    
     if request.method == 'POST':
         data = JSONParser().parse(request)
         adv = Adventure.objects.get(id=int(data["advId"]))
-        map = Map(name=data["name"],advId=adv)
+        map = Map(name=data["name"],adv=adv)
         map.save()
         
         serialized =  MapSerializer(map)
@@ -74,9 +103,9 @@ def mapSegment(request,segmentId=None):
     if request.method=='POST':
         data = JSONParser().parse(request)
         map = Map.objects.get(id=int(data["mapId"]))
-        print(map)
         
-        mapSegment = MapSegment(mapId=map,
+        print(dir(map))
+        mapSegment = MapSegment(map=map,
                                 startTime=None,
                                 endTime=None,
                                 startLat=data["startLat"],
