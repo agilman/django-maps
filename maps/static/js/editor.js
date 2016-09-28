@@ -53,6 +53,30 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     endLng = null;
     finishDatetime = null;
 
+    setupMapFromDOM = function(index){
+	    //get Map
+	    $http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
+	    	geoJsonLayer.addData(data.data);
+	    	
+	    	//set startPoint to last point from established line...
+	    	if (data.data.features.length>0){
+	    		var lastSegment = data.data.features[data.data.features.length-1].geometry.coordinates;
+	    		
+	    		if (lastSegment.length>0){
+	    			startLat = lastSegment[lastSegment.length-1][1];
+	    			startLng = lastSegment[lastSegment.length-1][0];
+
+	    			setStartPoint(startLat,startLng);
+	    			$scope.startSet = true;
+	    		}
+	    	}else{ //if the selected map doesn't have any points
+	    		startLat = null;
+	    		startLng = null;
+	    		$scope.startSet = false;    		
+	    	}
+	    });
+    };
+    
     $scope.currentMapId= null;
     $scope.currentMapName=null;
     //Load maps, and latest segments
@@ -63,23 +87,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    $scope.currentMapId  =  $scope.maps[$scope.maps.length-1].id;
     	    $scope.currentMapName= $scope.maps[$scope.maps.length-1].name;
     	        
-    	    //get Map
-    	    $http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
-    	    	geoJsonLayer.addData(data.data);
-    	    	
-    	    	//set startPoint to last point from established line...
-    	    	if (data.data.features.length>0){
-    	    		var lastSegment = data.data.features[data.data.features.length-1].geometry.coordinates;
-    	    		
-    	    		if (lastSegment.length>0){
-    	    			startLat = lastSegment[lastSegment.length-1][1];
-    	    			startLng = lastSegment[lastSegment.length-1][0];
-
-    	    			setStartPoint(startLat,startLng);
-    	    			$scope.startSet = true;
-    	    		}
-    	    	}
-    	    });
+    	    setupMapFromDOM($scope.maps.length-1);
     	}
     });
     
@@ -138,10 +146,14 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	 $scope.currentMapId = $scope.maps[index].id;
 	 $scope.currentMapName = $scope.maps[index].name;
 	 
+	 endLat = null;
+	 endLng = null;
+	 $scope.endSet = false;
+	 setupMapFromDOM(index);//load right map...
+	 
 	 clearLayers();
-	 //load right map...
-
     };
+    
     $scope.isMapActive = function(index){
     	if($scope.maps[index].id == $scope.currentMapId){
     		return true;
@@ -198,9 +210,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     		latestPathLayer.clearLayers();
     		
     		$scope.endSet = false;	
-	});
+    	});
 	
-	$log.log($scope.dateRangeStart);
     };  // end of createSegment
     
     $scope.deleteMap = function(index){
