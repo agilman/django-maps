@@ -11,9 +11,9 @@
       </li>
     </ul>
     <h4>New Map:</h4>
-    <input class="form-control" placeholder="New Map Name" id="newMapName" type="text">
+    <input class="form-control" placeholder="New Map Name" ng-model="newMapName" type="text">
     <br>
-    <button class="btn btn-primary" id="addMapButton" ng-click="createMap()">Create Map</button>
+    <button class="btn btn-primary" id="addMapButton" ng-click="createMap()" ng-show="newMapName.length">Create Map</button>
 
     <br>
     <hr>
@@ -53,7 +53,7 @@
       </ul>
     </div>
 
-    <button class="btn btn-primary" id="addSegmentButton" ng-click="createSegment()">Create Segment</button>
+    <button class="btn btn-primary" id="addSegmentButton" ng-click="createSegment()" ng-show="endSet">Save Segment</button>
     <!-- end datetime pickers -->
     
   </div>

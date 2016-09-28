@@ -38,7 +38,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams','leafletData',function($scope,$http,$log, $routeParams,leafletData){
     //set map based on url...
     var urlAdvId  = $routeParams.advId;
-    
     //emit... if needed.
     $scope.currentAdvId=urlAdvId;
     
@@ -135,7 +134,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     });
     
     $scope.createMap = function(){
-    	var mapName = document.getElementById("newMapName").value;
+    	var mapName = $scope.newMapName;
     	//prepare json to pass
     	var newMap = {'advId':$scope.currentAdvId,'name':mapName};
     	$http.post('/api/rest/advMaps/'+$scope.currentAdvId,JSON.stringify(newMap)).then(function(data){
@@ -153,7 +152,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     		endLayer.clearLayers();
     		latestPathLayer.clearLayers();
     		geoJsonLayer.clearLayers();
-    		document.getElementById("newMapName").value="";
+    		$scope.newMapName = null;
+
     	})
     };
 
@@ -168,7 +168,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 			 };
     	$http.post('/api/rest/mapSegment',JSON.stringify(newSegment)).then(function(data){
     		//return needs to be geojson
-    		$log.log(data.data);
+    		
     		//add to geojson...
     		geoJsonLayer.addData(data.data);
     		
