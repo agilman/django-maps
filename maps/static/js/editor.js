@@ -60,8 +60,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	$scope.maps = data.data;
     	
     	if($scope.maps.length>0){
-    	    $scope.currentMapId  =  $scope.maps[0].id;
-    	    $scope.currentMapName= $scope.maps[0].name;
+    	    $scope.currentMapId  =  $scope.maps[$scope.maps.length-1].id;
+    	    $scope.currentMapName= $scope.maps[$scope.maps.length-1].name;
     	        
     	    //get Map
     	    $http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
@@ -133,6 +133,23 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     		}
     });
     
+    $scope.selectMap = function(index){
+    //if change is needed...
+	 $scope.currentMapId = $scope.maps[index].id;
+	 $scope.currentMapName = $scope.maps[index].name;
+	 
+	 clearLayers();
+	 //load right map...
+
+    };
+    $scope.isMapActive = function(index){
+    	if($scope.maps[index].id == $scope.currentMapId){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    };
+    
     $scope.createMap = function(){
     	var mapName = $scope.newMapName;
     	//prepare json to pass
@@ -187,7 +204,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     };  // end of createSegment
     
     $scope.deleteMap = function(index){
-    	var mapId = $scope.maps[index].id;
+       	var mapId = $scope.maps[index].id;
     	$http.delete('/api/rest/maps/'+mapId).then(function(resp){
     		//clear entry from list
     		$scope.maps.splice(index,1);
@@ -199,9 +216,10 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     			startLng = null;
     			startLat = null
     			$scope.startSet = null;
-    			scope.endSet = null;
+    			$scope.endSet = null;
     		}
     	});
+
     };
 }])
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
