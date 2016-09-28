@@ -53,6 +53,15 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     endLng = null;
     finishDatetime = null;
 
+    fitMap= function(bounds){
+    	leafletData.getMap().then(function(map) {
+    	    console.log("Make fit: ", map);
+    	    console.log("Map Center:", map.getCenter());
+    	    console.log("Map Bounds:", map.getBounds());
+            map.fitBounds(bounds);
+    	});
+    };
+    
     setupMapFromDOM = function(index){
 	    //get Map
 	    $http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
@@ -66,6 +75,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    			startLat = lastSegment[lastSegment.length-1][1];
 	    			startLng = lastSegment[lastSegment.length-1][0];
 
+	    			fitMap(geoJsonLayer.getBounds());
 	    			setStartPoint(startLat,startLng);
 	    			$scope.startSet = true;
 	    		}
