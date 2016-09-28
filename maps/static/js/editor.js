@@ -139,8 +139,20 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	//prepare json to pass
     	var newMap = {'advId':$scope.currentAdvId,'name':mapName};
     	$http.post('/api/rest/advMaps/'+$scope.currentAdvId,JSON.stringify(newMap)).then(function(data){
-    		$scope.maps.push(data.data);
-    		//clear field
+    		var latestMap = data.data;
+    		$scope.maps.push(latestMap);   		
+    		
+    		$scope.currentMapId= latestMap.id;
+    		$scope.currentMapName = latestMap.name;
+    		
+    		if(startLat & startLng){
+    			setStartPoint(startLat,startLng);
+    		}
+    		//clear things
+    		
+    		endLayer.clearLayers();
+    		latestPathLayer.clearLayers();
+    		geoJsonLayer.clearLayers();
     		document.getElementById("newMapName").value="";
     	})
     };
@@ -167,6 +179,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     		endLng = null;
     		endLayer.clearLayers();
     		latestPathLayer.clearLayers();
+    		
     		$scope.endSet = false;	
 	});
 	
@@ -178,6 +191,16 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	$http.delete('/api/rest/maps/'+mapId).then(function(resp){
     		//clear entry from list
     		$scope.maps.splice(index,1);
+    		
+    		if (mapId == $scope.currentMapId){
+    			clearLayers();
+    			endLat = null;
+    			endLng = null;
+    			startLng = null;
+    			startLat = null
+    			$scope.startSet = null;
+    			scope.endSet = null;
+    		}
     	});
     };
 }])

@@ -9,6 +9,13 @@ function drawStartCircle(lat,lng){
     
     marker.addTo(startLayer);	
 }
+function clearLayers(){
+	startLayer.clearLayers();
+	endLayer.clearLayers();
+	latestPathLayer.clearLayers();
+	geoJsonLayer.clearLayers();
+};
+
 
 function drawFinishCircle(lat,lng){
     endLayer.clearLayers();

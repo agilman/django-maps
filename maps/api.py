@@ -109,35 +109,38 @@ def maps(request,mapId=None):
 def mapSegment(request,segmentId=None):
     if request.method=='POST':
         data = JSONParser().parse(request)
-        map = Map.objects.get(id=int(data["mapId"]))
+        #Try validation with serializers...
         
+        if "mapId" in data.keys() and data["mapId"] is not None:
+            map = Map.objects.get(id=int(data["mapId"]))
 
-        startTime  = None
-        endTime = None
-        if "startTime" in data.keys():
-            startTime = data["startTime"]
-        if "endTime" in data.keys():
-            endTIme = data["endTime"]
+            startTime  = None
+            endTime = None
+            if "startTime" in data.keys():
+                startTime = data["startTime"]
+            if "endTime" in data.keys():
+                endTIme = data["endTime"]
             
-        distance = data["distance"]
-        waypoints = data["waypoints"]
+            distance = data["distance"]
+            waypoints = data["waypoints"]
         
-        #create segment
-        mapSegment = MapSegment(map=map,
+            #create segment
+            mapSegment = MapSegment(map=map,
                                 startTime=None,
                                 endTime=None,
                                 distance = None)
-        mapSegment.save()
+            mapSegment.save()
         
-        #create waypoints
-        for point in waypoints:
-            waypointObj = WayPoint(segment = mapSegment,
+            #create waypoints
+            for point in waypoints:
+                waypointObj = WayPoint(segment = mapSegment,
                                    lat = point[1],
                                    lng = point[0])
-            waypointObj.save()
+                waypointObj.save()
             
         #return custom geoJson
-        result = makeGeoJsonFromSegment(mapSegment)
+            result = makeGeoJsonFromSegment(mapSegment)
         
-        return JsonResponse(result,safe=False)
-    
+            return JsonResponse(result,safe=False)
+        else:
+            return JsonResponse({"error":"Bad input"})
