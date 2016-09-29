@@ -81,16 +81,16 @@ def advMaps(request,advId=None):
             
         return JsonResponse(results,safe=False)
 
-    #TODO This should move to /api/rest/maps 
-    #TODO This should return custom json with distance = 0
+    #TODO This should move to /api/rest/maps
     if request.method == 'POST':
         data = JSONParser().parse(request)
         adv = Adventure.objects.get(id=int(data["advId"]))
         map = Map(name=data["name"],adv=adv)
+        
         map.save()
         
-        serialized =  MapSerializer(map)
-        return JsonResponse(serialized.data,safe=False)
+        result = {"id":map.id,"name":map.name,"distance":0 }    
+        return JsonResponse(result,safe=False)
 
 @csrf_exempt
 def maps(request,mapId=None):

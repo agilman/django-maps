@@ -17,8 +17,8 @@
     <button class="btn btn-primary" id="addMapButton" ng-click="createMap()" ng-show="newMapName.length">Create Map</button>
 
     <br>
-    <hr>
     <div ng-show="isSegmentsVisible()">
+    <hr>
     <h4>New Segment:</h4>
     <!--- datetime pickers -->
     <div class="dropdown form-group">
@@ -45,7 +45,7 @@
   		<button type="button" ng-class="isNavCarActive()"  ng-click="setCarActive()"><i class="fa fa-car" style="font-size:32px"></i></button>
 	</div>
     <div ng-show="segmentDistance">
-    Segment Distance : {{ getSegmentDistance() }}
+    Segment Distance : {{ getSegmentDistance() }}km
     </div>
     <div class="dropdown form-group">
       <label>End Date</label>
