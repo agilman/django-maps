@@ -52,12 +52,10 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     endLat = null;
     endLng = null;
     finishDatetime = null;
-
+    $scope.navActive=1;
+    
     fitMap= function(bounds){
     	leafletData.getMap().then(function(map) {
-    	    console.log("Make fit: ", map);
-    	    console.log("Map Center:", map.getCenter());
-    	    console.log("Map Bounds:", map.getBounds());
             map.fitBounds(bounds);
     	});
     };
@@ -163,6 +161,37 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	 
 	 clearLayers();
     };
+    
+    
+    /////NAV Type selection....
+    $scope.isNavLineActive = function(){
+    	if ($scope.navActive==1){
+    		return "btn btn-primary";
+    	}
+    	else{ return "btn btn-secondary";}
+    };
+    $scope.isNavBikeActive = function(){
+    	if ($scope.navActive==2){
+    		return "btn btn-primary";
+    	}
+    	else{ return "btn btn-secondary";}
+    };
+    $scope.isNavCarActive = function(){
+    	if ($scope.navActive==3){
+    		return "btn btn-primary";
+    	}
+    	else{ return "btn btn-secondary";}
+    };
+    $scope.setLineActive = function(){
+    	$scope.navActive=1;    	
+    };
+    $scope.setBikeActive = function(){
+    	$scope.navActive=2;    	
+    };
+    $scope.setCarActive = function(){
+    	$scope.navActive=3;    	
+    };
+    
     
     $scope.isMapActive = function(index){
     	if($scope.maps[index].id == $scope.currentMapId){

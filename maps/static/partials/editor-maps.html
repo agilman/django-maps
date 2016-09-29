@@ -36,11 +36,18 @@
       </ul>
     </div>
     
+     Navigation Type: 
+    <div class="btn-group" role="group" aria-label="Basic example">
+  		<button type="button" ng-class="isNavLineActive()" ng-click="setLineActive()"><i class="fa fa-arrows-h" style="font-size:32px"></i></button>
+  		<button type="button" ng-class="isNavBikeActive()" ng-click="setBikeActive()"><i class="fa fa-bicycle" style="font-size:32px"></i></button>
+  		<button type="button" ng-class="isNavCarActive()"  ng-click="setCarActive()"><i class="fa fa-car" style="font-size:32px"></i></button>
+	</div>
+    
     <div class="dropdown form-group">
       <label>End Date</label>
       <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
 	<div class="input-group date">
-	  <span class="input-group-addon"><i class="glyphicon glyphicon glyphicon-map-marker"  ng-class="{red:endSet}"></i></span>
+	  <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"  ng-class="{red:endSet}"></i></span>
 	  <input type="text" class="form-control" data-ng-model="dateRangeEnd">
 	  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 	</div>
