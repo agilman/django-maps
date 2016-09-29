@@ -41,7 +41,7 @@ function setEndPoint(lat,lng){
     
     drawFinishCircle(lat,lng);
     
-	navInfo = getNavLine(startLat,startLng,endLat,endLng,"line");
+	navInfo = getNavLine(startLat,startLng,endLat,endLng);
 
 	navLine = navInfo.navLine;
 	distance = navInfo.distance;
@@ -57,7 +57,7 @@ function setEndPoint(lat,lng){
 function getNavLine(startLat,startLng,endLat,endLng,navType){
     var newCoordinates = [];
     var distance = 0;
-    if (navType=="line"){
+    if (navActive==1){ //If navtype is line
 	newCoordinates.push([parseFloat(startLat),parseFloat(startLng)]);
 	newCoordinates.push([parseFloat(endLat),parseFloat(endLng)]);
 	
@@ -65,26 +65,33 @@ function getNavLine(startLat,startLng,endLat,endLng,navType){
 	var endLatLng = new L.latLng(parseFloat(endLat),parseFloat(endLng));
 	distance = Math.floor(startLatLng.distanceTo(endLatLng));
 	
-    }else{
-	/**
-	var accessToken = document.getElementById("mapBoxToken").value;
-	var myURL ="https://api.mapbox.com/v4/directions/mapbox."+navType+"/"+ startLng+","+startLat+";"+endLng+","+endLat+".json?access_token="+accessToken\
-	;
+    }else{ //If navtype requires getting directions from mapbox api
+    	var navTypeStr = "cycling";
+    	if (navActive == 3){ navTypeStr = "driving";};
 	
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET",myURL,false);
-	xmlhttp.send();
+    	var accessToken = mapboxToken;	
+    	var myURL ="https://api.mapbox.com/directions/v5/mapbox/"+navTypeStr+"/"+ startLng+","+startLat+";"+endLng+","+endLat+"?access_token="+accessToken	;
 	
-	var json_back = JSON.parse(xmlhttp.response);
-	var aCoords = json_back.routes[0].geometry.coordinates;
-	
-	for (var i = 0; i < aCoords.length; i++){
-	    newCoordinates.push([aCoords[i][1],aCoords[i][0]]);
-	}
-	
-	distance = json_back.routes[0].distance;
-	*/
-    }
+    	var xmlhttp = new XMLHttpRequest();
+    	xmlhttp.open("GET",myURL,false);
+    	xmlhttp.send();
+
+    	var json_back = JSON.parse(xmlhttp.response);
+    	
+    	var navOption = json_back.routes[0];
+    	var navPolyline = navOption.geometry;
+
+    	var test = L.Polyline.fromEncoded(navPolyline);
+    	console.log(test);
+    	
+    	for (var i = 0;i < test._latlngs.length; i++){
+    		newCoordinates.push([test._latlngs[i].lat ,test._latlngs[i].lng]);
+    		
+    	}
+    	
+    	distance = json_back.routes[0].distance;
+    	
+    	}
     
     return {'navLine':newCoordinates,'distance':distance};
 }

@@ -52,7 +52,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     endLat = null;
     endLng = null;
     finishDatetime = null;
-    $scope.navActive=1;
+    navActive=1;
     
     fitMap= function(bounds){
     	leafletData.getMap().then(function(map) {
@@ -100,7 +100,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     });
     
     //init map
-    var token = document.getElementById("mapboxToken").value;
+    mapboxToken = document.getElementById("mapboxToken").value;
     var mapboxMapName = document.getElementById("mapboxMap").value;
     angular.extend($scope, {
         center: {
@@ -112,7 +112,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
             url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}',
             type: 'xyz',
             options: {
-                apikey: token,
+                apikey: mapboxToken,
                 mapid: mapboxMapName
             }
         },
@@ -165,31 +165,31 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     
     /////NAV Type selection....
     $scope.isNavLineActive = function(){
-    	if ($scope.navActive==1){
+    	if (navActive==1){
     		return "btn btn-primary";
     	}
     	else{ return "btn btn-secondary";}
     };
     $scope.isNavBikeActive = function(){
-    	if ($scope.navActive==2){
+    	if (navActive==2){
     		return "btn btn-primary";
     	}
     	else{ return "btn btn-secondary";}
     };
     $scope.isNavCarActive = function(){
-    	if ($scope.navActive==3){
+    	if (navActive==3){
     		return "btn btn-primary";
     	}
     	else{ return "btn btn-secondary";}
     };
     $scope.setLineActive = function(){
-    	$scope.navActive=1;    	
+    	navActive=1;    	
     };
     $scope.setBikeActive = function(){
-    	$scope.navActive=2;    	
+    	navActive=2;    	
     };
     $scope.setCarActive = function(){
-    	$scope.navActive=3;    	
+    	navActive=3;    	
     };
     
     
