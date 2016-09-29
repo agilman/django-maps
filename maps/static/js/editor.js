@@ -41,12 +41,15 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     //emit... if needed.
     $scope.currentAdvId=urlAdvId;
     
+    $scope.maps = [];
     $scope.startSet = false;
     startLat = null;
     startLng = null;
     startDatetime = null;
     $scope.startTime = null;
     $scope.endtTime = null;
+    $scope.segmentDistance = null;
+    
     
     $scope.endSet = false;
     endLat = null;
@@ -144,7 +147,9 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     		setStartPoint(lat,lng);
     	    $scope.startSet = true;
     	}else{
-    		setEndPoint(lat,lng);	    
+    		var navData = setEndPoint(lat,lng);
+    		$scope.segmentDistance = navData.distance;
+    		$log.log("Setting segmentDistance: " + navData.distance);	    
     		$scope.endSet = true;
     		}
     });

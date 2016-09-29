@@ -12,6 +12,9 @@ class Adventure(models.Model):
 class Map(models.Model):
     adv = models.ForeignKey(Adventure,on_delete=models.CASCADE)
     name = models.CharField(max_length=32)
+    
+    def total_distance(self):
+        return self.segments.all().aggregate(models.Sum('distance'))['distance__sum']
         
 class MapSegment(models.Model):
     map = models.ForeignKey(Map,on_delete=models.CASCADE, related_name="segments")

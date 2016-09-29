@@ -73,10 +73,16 @@ def makeGeoJsonFromSegment(segment):
 @csrf_exempt
 def advMaps(request,advId=None):
     if request.method == 'GET':
-        maps = Map.objects.filter(adv=advId)
-        serializer = MapSerializer(maps, many=True)
-        return JsonResponse(serializer.data,safe=False)
-        
+        queryset = Map.objects.filter(adv=advId)
+        results = []
+        for i in queryset.all():
+            myMap = {"id":i.id,"name":i.name,"distance":i.total_distance()}
+            results.append(myMap)
+            
+        return JsonResponse(results,safe=False)
+
+    #TODO This should move to /api/rest/maps 
+    #TODO This should return custom json with distance = 0
     if request.method == 'POST':
         data = JSONParser().parse(request)
         adv = Adventure.objects.get(id=int(data["advId"]))
@@ -128,7 +134,7 @@ def mapSegment(request,segmentId=None):
             mapSegment = MapSegment(map=map,
                                 startTime=None,
                                 endTime=None,
-                                distance = None)
+                                distance = distance)
             mapSegment.save()
         
             #create waypoints

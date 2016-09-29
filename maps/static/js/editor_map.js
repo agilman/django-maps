@@ -43,8 +43,8 @@ function setEndPoint(lat,lng){
     
 	navInfo = getNavLine(startLat,startLng,endLat,endLng);
 
-	navLine = navInfo.navLine;
-	distance = navInfo.distance;
+	var navLine = navInfo.navLine;
+
 
 	var polyline_options = {
 			color: '#00264d'
@@ -52,6 +52,8 @@ function setEndPoint(lat,lng){
 
 	latestPathLayer.clearLayers();
 	var polyline = L.polyline(navLine, polyline_options).addTo(latestPathLayer);
+	
+	return navInfo;
 }
 
 function getNavLine(startLat,startLng,endLat,endLng,navType){

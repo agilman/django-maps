@@ -6,7 +6,8 @@
       <li class="list-group-item clearfix" ng-repeat="map in maps" ng-class="{active:isMapActive($index)}" ng-click="selectMap($index)">
 	{{ map.name }}
 	<span class="pull-right">
-	  <button class="btn" ng-click="deleteMap($index); $event.stopPropagation();"><span class="glyphicon glyphicon-remove"></span></button>
+		{{ map.distance }}Km
+		<button class="btn" ng-click="deleteMap($index); $event.stopPropagation();"><span class="glyphicon glyphicon-remove"></span></button>
 	</span>
       </li>
     </ul>
@@ -43,7 +44,9 @@
   		<button type="button" ng-class="isNavBikeActive()" ng-click="setBikeActive()"><i class="fa fa-bicycle" style="font-size:32px"></i></button>
   		<button type="button" ng-class="isNavCarActive()"  ng-click="setCarActive()"><i class="fa fa-car" style="font-size:32px"></i></button>
 	</div>
-    
+    <div segmentDistance>
+    Segment Distance : {{ segmentDistance }}
+    </div>
     <div class="dropdown form-group">
       <label>End Date</label>
       <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
