@@ -201,6 +201,21 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	}
     };
     
+    $scope.isMapVisible = function(){
+    	if ($scope.maps.length>0){
+    		return true;
+    	} else{
+    		return false;
+    	}
+    }
+    $scope.isSegmentsVisible = function(){
+    	if ($scope.startSet){
+    		return true;
+    	}
+    	else{
+    		return false;
+    	}
+    };
     $scope.createMap = function(){
     	var mapName = $scope.newMapName;
     	//prepare json to pass
