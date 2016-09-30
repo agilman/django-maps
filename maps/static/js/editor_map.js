@@ -83,17 +83,16 @@ function getNavLine(startLat,startLng,endLat,endLng,navType){
     	var navOption = json_back.routes[0];
     	var navPolyline = navOption.geometry;
 
-    	var test = L.Polyline.fromEncoded(navPolyline);
-    	console.log(test);
+    	var decodedLine = L.Polyline.fromEncoded(navPolyline);
     	
-    	for (var i = 0;i < test._latlngs.length; i++){
-    		newCoordinates.push([test._latlngs[i].lat ,test._latlngs[i].lng]);
+    	for (var i = 0;i < decodedLine._latlngs.length; i++){
+    		newCoordinates.push([decodedLine._latlngs[i].lat ,decodedLine._latlngs[i].lng]);
     		
     	}
     	
     	distance = json_back.routes[0].distance;
     	
-    	}
+    }
     
     return {'navLine':newCoordinates,'distance':distance};
 }
