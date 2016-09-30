@@ -5,7 +5,7 @@
       <li class="list-group-item clearfix adventure" ng-repeat="adventure in adventures" ng-class="isAdvSelected($index)" ng-click="advClick($index)">
 	{{ adventure.name }}
 	<span class="pull-right">	
-	  <button class="btn" ng-click="deleteAdv($index)"><span class="glyphicon glyphicon-remove"></span></button>
+	  <button class="btn" ng-click="deleteAdv($index); $event.stopPropagation()"><span class="glyphicon glyphicon-remove"></span></button>
 	</span>
       </li>
     </ul>   		

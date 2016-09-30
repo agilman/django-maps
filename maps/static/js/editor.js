@@ -35,11 +35,18 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	$scope.currentAdvIndex=0;
     });
 
-    $scope.$on('advChangeEvent',function(event,data){
-	$scope.currentAdvId  =  $scope.adventures[data].id;
-    	$scope.currentAdvName= $scope.adventures[data].name;
-	$scope.currentAdvIndex=data;
+    $scope.$on('advChangeEvent',function(event,indx){
+	$scope.currentAdvId   =  $scope.adventures[indx].id;
+    	$scope.currentAdvName = $scope.adventures[indx].name;
+	$scope.currentAdvIndex= indx;
     });
+
+    $scope.$on('deselectAdv',function(event){
+	$scope.currentAdvId=null;
+	$scope.currentAdvName=null;
+	$scope.currentAdvIndex=null;
+    });
+    
 }])
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams','leafletData',function($scope,$http,$log, $routeParams,leafletData){
     //set map based on url...
@@ -339,14 +346,43 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
             
             //clear field
             document.getElementById("newAdvName").value="";
+
+	    //change to latest
+	    $scope.$emit('advChangeEvent', $scope.adventures.length-1);
         })
     };
     
     $scope.deleteAdv = function(index){
 	var advId = $scope.adventures[index].id;
     	$http.delete('/api/rest/adventures/'+advId).then(function(resp){
-    		//clear entry from list
-    		$scope.adventures.splice(index,1);
+    	    //clear entry from list
+    	    $scope.adventures.splice(index,1);
+
+	    //if after delete there are no adventures:
+	    //  deselect currentAdvItems
+	    //else
+	    // if deleted adventure after the currently selected adv: no changes
+	    // elif deleted adventure before the currently selected adv: need to change current adv to one below
+	    // elif deleted adventure that is currently selected:
+	    //   select last adv
+	    //
+
+	    if ($scope.adventures.length==0){
+		$log.log("There are no advs left");
+		$scope.$emit("deselectAdv");
+	    }else{
+		if (index > $scope.currentAdvIndex){
+		    $log.log("case 1");
+		    //noChanges
+		}else if (index < $scope.currentAdvIndex){
+		    $log.log("case 2");
+		    $scope.$emit('advChangeEvent',$scope.currentAdvIndex-1);
+		}else if (index == $scope.currentAdvIndex){
+		    $log.log("case 3");
+		    $scope.$emit('advChangeEvent',$scope.adventures.length-1);
+		}
+	    }
+	    
     	});
     };
 
