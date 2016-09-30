@@ -22,17 +22,23 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 .controller("mainController",['$scope','$http','$log',function($scope,$http,$log){
     var userId = document.getElementById("userId").value;
     $scope.userId = userId;
+    $scope.adventures = [];
+    $scope.currentAdvId=null;
+    $scope.currentAdvName=null;
+    $scope.currentAdvIndex=null;
     
     $http.get('/api/rest/userInfo/' + userId).then(function(data){
     	$scope.adventures = data.data;
     	//Get latest adv if adventureId not provided...
     	$scope.currentAdvId  =  $scope.adventures[0].id;
     	$scope.currentAdvName= $scope.adventures[0].name;
+	$scope.currentAdvIndex=0;
     });
 
     $scope.$on('advChangeEvent',function(event,data){
 	$scope.currentAdvId  =  $scope.adventures[data].id;
     	$scope.currentAdvName= $scope.adventures[data].name;
+	$scope.currentAdvIndex=data;
     });
 }])
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams','leafletData',function($scope,$http,$log, $routeParams,leafletData){
@@ -314,6 +320,15 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
     $scope.profilePic = "/static/img/blank-profile-picture.png";
 
+    $scope.isAdvSelected = function(index){
+	$log.log("Looking for index: " + index);
+	if ($scope.currentAdvIndex ==index){
+	    return "active";
+	}else{
+	 //pass
+	}
+    };
+    
     $scope.createAdv = function(){
 	var advName = document.getElementById("newAdvName").value;
 	//prepare json to pass                                                                                                                                       

@@ -2,7 +2,7 @@
   <div class="col-lg-4">
     <h3>Adventures:</h3>
     <ul class="list-group">
-      <li class="list-group-item clearfix adventure" ng-repeat="adventure in adventures" ng-click="advClick($index)">
+      <li class="list-group-item clearfix adventure" ng-repeat="adventure in adventures" ng-class="isAdvSelected($index)" ng-click="advClick($index)">
 	{{ adventure.name }}
 	<span class="pull-right">	
 	  <button class="btn" ng-click="deleteAdv($index)"><span class="glyphicon glyphicon-remove"></span></button>
