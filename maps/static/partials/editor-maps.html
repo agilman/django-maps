@@ -1,7 +1,7 @@
 
 <div class="row">
   <div class="col-lg-3">
-    <div ng-show="maps.length>0">
+    <div ng-show="maps.length>0" ng-cloak="mapSelect-cloak">
       <h4>Maps:</h4>
       <ul class="list-group">
 	<li class="list-group-item clearfix" ng-repeat="map in maps" ng-class="{active:isMapActive($index)}" ng-click="selectMap($index)">
@@ -13,6 +13,10 @@
 	</li>
       </ul>
     </div>
+    <div class="mapSelect-cloak">
+      Pleases wait...
+    </div>
+
     <h4>New Map:</h4>
     <input class="form-control" placeholder="New Map Name" ng-model="newMapName" type="text">
     <br>
