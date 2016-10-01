@@ -115,7 +115,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     endLat = null;
     endLng = null;
     finishDatetime = null;
-    navActive=1;
+    navActive=3;
+    $scope.pleasesWait = true;
     
     fitMap= function(bounds){
     	leafletData.getMap().then(function(map) {
@@ -159,6 +160,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	        
     	    setupMapFromDOM($scope.maps.length-1);
     	}
+	$scope.pleasesWait  = false;
     });
     
     //init map

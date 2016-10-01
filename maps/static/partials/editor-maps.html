@@ -1,7 +1,10 @@
 
 <div class="row">
   <div class="col-lg-3">
-    <div ng-show="maps.length>0" ng-cloak="mapSelect-cloak">
+    <div ng-show="pleasesWait">
+      Pleases wait...
+    </div>
+    <div ng-show="maps.length>0" ng-cloak>
       <h4>Maps:</h4>
       <ul class="list-group">
 	<li class="list-group-item clearfix" ng-repeat="map in maps" ng-class="{active:isMapActive($index)}" ng-click="selectMap($index)">
@@ -13,9 +16,6 @@
 	</li>
       </ul>
     </div>
-    <div class="mapSelect-cloak">
-      Pleases wait...
-    </div>
 
     <h4>New Map:</h4>
     <input class="form-control" placeholder="New Map Name" ng-model="newMapName" type="text">
@@ -23,7 +23,7 @@
     <button class="btn btn-primary" id="addMapButton" ng-click="createMap()" ng-show="newMapName.length">Create Map</button>
 
     <br>
-    <div ng-show="isSegmentsVisible()">
+    <div ng-show="isSegmentsVisible()" ng-cloak>
     <hr>
     <h4>New Segment:</h4>
     <!--- datetime pickers -->
