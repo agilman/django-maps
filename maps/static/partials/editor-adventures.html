@@ -1,14 +1,16 @@
 <div class="row">
   <div class="col-lg-4">
-    <h3>Adventures:</h3>
-    <ul class="list-group">
-      <li class="list-group-item clearfix adventure" ng-repeat="adventure in adventures" ng-class="isAdvSelected($index)" ng-click="advClick($index)">
-	{{ adventure.name }}
-	<span class="pull-right">	
-	  <button class="btn" ng-click="deleteAdv($index); $event.stopPropagation()"><span class="glyphicon glyphicon-remove"></span></button>
-	</span>
-      </li>
-    </ul>   		
+    <div ng-show="adventures.length>0">
+      <h3>Adventures:</h3>
+      <ul class="list-group">
+	<li class="list-group-item clearfix adventure" ng-repeat="adventure in adventures" ng-class="isAdvSelected($index)" ng-click="advClick($index)">
+	  {{ adventure.name }}
+	  <span class="pull-right">	
+	    <button class="btn" ng-click="deleteAdv($index); $event.stopPropagation()"><span class="glyphicon glyphicon-remove"></span></button>
+	  </span>
+	</li>
+      </ul>
+    </div>
     <br>
     <h4>New Adventure: </h4>
     <input class="form-control" placeholder="New adventure name" id="newAdvName" type="text">

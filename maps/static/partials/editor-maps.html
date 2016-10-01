@@ -1,16 +1,18 @@
 
 <div class="row">
   <div class="col-lg-3">
-    <h4>Maps:</h4>
-    <ul class="list-group">
-      <li class="list-group-item clearfix" ng-repeat="map in maps" ng-class="{active:isMapActive($index)}" ng-click="selectMap($index)">
-	{{ map.name }}
-	<span class="pull-right">
+    <div ng-show="maps.length>0">
+      <h4>Maps:</h4>
+      <ul class="list-group">
+	<li class="list-group-item clearfix" ng-repeat="map in maps" ng-class="{active:isMapActive($index)}" ng-click="selectMap($index)">
+	  {{ map.name }}
+	  <span class="pull-right">
 		{{ getMapDistance($index) }}Km
 		<button class="btn" ng-click="deleteMap($index); $event.stopPropagation();"><span class="glyphicon glyphicon-remove"></span></button>
-	</span>
-      </li>
-    </ul>
+	  </span>
+	</li>
+      </ul>
+    </div>
     <h4>New Map:</h4>
     <input class="form-control" placeholder="New Map Name" ng-model="newMapName" type="text">
     <br>
