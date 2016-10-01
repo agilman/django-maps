@@ -26,6 +26,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $scope.currentAdvId=null;
     $scope.currentAdvName=null;
     $scope.currentAdvIndex=null;
+
+    $scope.currentEditorPage=null;
     
     $http.get('/api/rest/userInfo/' + userId).then(function(data){
     	$scope.adventures = data.data;
@@ -35,6 +37,45 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	$scope.currentAdvIndex=0;
     });
 
+    $scope.isAdvEditorActive = function(){
+	if ($scope.currentEditorPage=="advs"){
+	    return "active";
+	}
+    };
+
+    $scope.isMapEditorActive = function(){
+	if ($scope.currentEditorPage=="maps"){
+	    return "active";
+	}
+	};
+    $scope.isBlogEditorActive = function(){
+	if ($scope.currentEditorPage=="blogs"){
+	    return "active";
+	}
+    };
+    
+    $scope.isGearEditorActive = function(){
+	if ($scope.currentEditorPage=="gear"){
+	    return "active";
+	}
+    };
+
+    $scope.$on('setAdvEditorActive',function(event){
+	$scope.currentEditorPage='advs';
+    });
+
+    $scope.$on('setMapEditorActive',function(event){
+	$scope.currentEditorPage='maps';
+    });
+
+    $scope.$on('setBlogEditorActive',function(event){
+	$scope.currentEditorPage='blog';
+    });
+
+    $scope.$on('setGearEditorActive',function(event){
+	$scope.currentEditorPage='gear';
+    });
+    
     $scope.$on('advChangeEvent',function(event,indx){
 	$scope.currentAdvId   =  $scope.adventures[indx].id;
     	$scope.currentAdvName = $scope.adventures[indx].name;
@@ -49,6 +90,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     
 }])
 .controller("mapsEditorController",['$scope','$http','$log','$routeParams','leafletData',function($scope,$http,$log, $routeParams,leafletData){
+    $scope.$emit("setMapEditorActive");
     //set map based on url...
     var urlAdvId  = $routeParams.advId;
     //emit... if needed.
@@ -325,6 +367,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     };
 }])
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
+    $scope.$emit('setAdvEditorActive');	    
     $scope.profilePic = "/static/img/blank-profile-picture.png";
 
     $scope.isAdvSelected = function(index){
@@ -368,17 +411,13 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    //
 
 	    if ($scope.adventures.length==0){
-		$log.log("There are no advs left");
 		$scope.$emit("deselectAdv");
 	    }else{
 		if (index > $scope.currentAdvIndex){
-		    $log.log("case 1");
 		    //noChanges
 		}else if (index < $scope.currentAdvIndex){
-		    $log.log("case 2");
 		    $scope.$emit('advChangeEvent',$scope.currentAdvIndex-1);
 		}else if (index == $scope.currentAdvIndex){
-		    $log.log("case 3");
 		    $scope.$emit('advChangeEvent',$scope.adventures.length-1);
 		}
 	    }

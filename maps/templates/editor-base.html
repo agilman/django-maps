@@ -49,7 +49,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      <ul class="nav navbar-nav">
-		<li><a href="#/">Adventure Editor</a></li>
+		<li ng-class="isAdvEditorActive()"><a ng-href="#/" ng-click="currentEditorPage='advs'">Adventure Editor</a></li>
 		<li><p class="navbar-text">{% verbatim %}{{ currentAdvName }}{% endverbatim %}</p></li>
 	      </ul>
               
@@ -74,9 +74,15 @@
 	  
 	  <ul class="nav navbar-nav">
     
-	    <li><a href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/maps">Maps Editor</a></li>
-	    <li><a href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/blogs">Blog Editor</a></li>
-	    <li><a href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/gear">Gear Editor</a></li>
+	    <li ng-class="isMapEditorActive()">
+	      <a ng-href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/maps" ng-click="currentEditorPage='maps'">Maps Editor</a>
+	    </li>
+	    <li>
+	      <a ng-href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/blogs">Blog Editor</a>
+	    </li>
+	    <li>
+	      <a ng-href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/gear" ng-clikc="currentEditorPage='gear'">Gear Editor</a>
+	    </li>
 	    
 	  </ul>
 	</div>
