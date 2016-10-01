@@ -77,11 +77,11 @@
 	    <li ng-class="isMapEditorActive()">
 	      <a ng-href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/maps" ng-click="currentEditorPage='maps'">Maps Editor</a>
 	    </li>
-	    <li>
-	      <a ng-href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/blogs">Blog Editor</a>
+	    <li ng-class="isBlogEditorActive()">
+	      <a ng-href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/blogs" ng-click="currentEditorPage='blogs'">Blog Editor</a>
 	    </li>
-	    <li>
-	      <a ng-href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/gear" ng-clikc="currentEditorPage='gear'">Gear Editor</a>
+	    <li ng-class="isGearEditorActive()">
+	      <a ng-href="#/{% verbatim %}{{ currentAdvId }}{% endverbatim %}/gear" ng-click="currentEditorPage='gear'">Gear Editor</a>
 	    </li>
 	    
 	  </ul>

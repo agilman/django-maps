@@ -8,15 +8,15 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 		})
 		.when("/:advId/maps",{
 			templateUrl:"/static/partials/editor-maps.html",
-			controller:"mapsEditorController",
+			controller:"mapEditorController",
 		})
 		.when("/:advId/blogs",{
 			templateUrl:"/static/partials/editor-blogs.html",
-			controller:"advEditorController"
+		        controller:"blogEditorController"
 		})
 		.when("/:advId/gear", {
 			templateUrl: "/static/partials/editor-gear.html",
-			controller: "advEditorController"
+			controller: "gearEditorController"
 		});
 }])
 .controller("mainController",['$scope','$http','$log',function($scope,$http,$log){
@@ -32,9 +32,11 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $http.get('/api/rest/userInfo/' + userId).then(function(data){
     	$scope.adventures = data.data;
     	//Get latest adv if adventureId not provided...
-    	$scope.currentAdvId  =  $scope.adventures[0].id;
-    	$scope.currentAdvName= $scope.adventures[0].name;
-	$scope.currentAdvIndex=0;
+	if ($scope.adventures.length > 0){
+    	    $scope.currentAdvId  = $scope.adventures[$scope.adventures.length-1].id;
+    	    $scope.currentAdvName= $scope.adventures[$scope.adventures.length-1].name;
+	    $scope.currentAdvIndex=$scope.adventures.length-1;
+	}
     });
 
     $scope.isAdvEditorActive = function(){
@@ -69,7 +71,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     });
 
     $scope.$on('setBlogEditorActive',function(event){
-	$scope.currentEditorPage='blog';
+	$scope.currentEditorPage='blogs';
     });
 
     $scope.$on('setGearEditorActive',function(event){
@@ -89,7 +91,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     });
     
 }])
-.controller("mapsEditorController",['$scope','$http','$log','$routeParams','leafletData',function($scope,$http,$log, $routeParams,leafletData){
+.controller("mapEditorController",['$scope','$http','$log','$routeParams','leafletData',function($scope,$http,$log, $routeParams,leafletData){
     $scope.$emit("setMapEditorActive");
     //set map based on url...
     var urlAdvId  = $routeParams.advId;
@@ -207,7 +209,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     		var navData = setEndPoint(lat,lng);
     		newSegmentPath = navData.navLine;
     		$scope.segmentDistance = navData.distance;
-    		$log.log("Setting segmentDistance: " + navData.distance);	    
+    		
     		$scope.endSet = true;
     		}
     });
@@ -366,12 +368,17 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	});
     };
 }])
+.controller("blogEditorController",['$scope','$http','$log',function($scope,$http,$log){
+    $scope.$emit('setBlogEditorActive');
+}])
+.controller("gearEditorController",['$scope','$http','$log',function($scope,$http,$log){
+    $scope.$emit('setGearEditorActive');
+}])
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
-    $scope.$emit('setAdvEditorActive');	    
+    $scope.$emit('setAdvEditorActive');
     $scope.profilePic = "/static/img/blank-profile-picture.png";
 
     $scope.isAdvSelected = function(index){
-	$log.log("Looking for index: " + index);
 	if ($scope.currentAdvIndex ==index){
 	    return "active";
 	}else{
