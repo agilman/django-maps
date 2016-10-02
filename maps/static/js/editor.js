@@ -117,12 +117,22 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     finishDatetime = null;
     navActive=3;
     $scope.pleasesWait = true;
+
+
+    //init geocoder
+    leafletData.getMap().then(function(map){
+	L.Control.geocoder().addTo(map);
+    });
+			      
     
     fitMap= function(bounds){
     	leafletData.getMap().then(function(map) {
             map.fitBounds(bounds);
+
+	    //
     	});
     };
+
     
     setupMapFromDOM = function(index){
 	    //get Map
