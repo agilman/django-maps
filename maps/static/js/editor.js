@@ -132,7 +132,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    //
     	});
     };
-
     
     setupMapFromDOM = function(index){
 	    //get Map
@@ -361,6 +360,17 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	});
 	
     };  // end of createSegment
+
+    $scope.deselectEndSet = function(){
+	$endLat = null;
+	$endLng = null;
+	newSegmentPath = [];
+	endLayer.clearLayers();
+	latestPathLayer.clearLayers();
+	$scope.endSet = null;
+	$scope.segmentDistance=null;
+	
+    };
     
     $scope.deleteMap = function(index){
        	var mapId = $scope.maps[index].id;

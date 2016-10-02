@@ -17,12 +17,13 @@
       </ul>
     </div>
 
+    <div ng-cloak>
     <h4>New Map:</h4>
     <input class="form-control" placeholder="New Map Name" ng-model="newMapName" type="text">
     <br>
     <button class="btn btn-primary" id="addMapButton" ng-click="createMap()" ng-show="newMapName.length">Create Map</button>
-
     <br>
+    </div>
     <div ng-show="isSegmentsVisible()" ng-cloak>
     <hr>
     <h4>New Segment:</h4>
@@ -57,7 +58,7 @@
       <label>End Date</label>
       <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
 	<div class="input-group date">
-	  <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker"  ng-class="{red:endSet}"></i></span>
+	  <span class="input-group-addon" ng-click="deselectEndSet();$event.stopPropagation();"><i class="glyphicon glyphicon-map-marker"  ng-class="{red:endSet}"></i></span>
 	  <input type="text" class="form-control" data-ng-model="dateRangeEnd">
 	  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 	</div>
