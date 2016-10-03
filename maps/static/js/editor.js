@@ -109,6 +109,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $scope.startTime = null;
     $scope.endtTime = null;
     $scope.segmentDistance = null;
+    $scope.dayNotes = null;
     
     
     $scope.endSet = false;
@@ -342,10 +343,10 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     }
     $scope.isSegmentsVisible = function(){
     	if ($scope.startSet){
-    		return true;
+    	    return true;
     	}
     	else{
-    		return false;
+    	    return false;
     	}
     };
     
@@ -355,10 +356,10 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     
     $scope.getMapDistance = function(index){
     	if($scope.maps[index].distance){
-    		return Number($scope.maps[index].distance/1000).toFixed(1);
-    		}
+    	    return Number($scope.maps[index].distance/1000).toFixed(1);
+    	}
     	else{
-    	return 0;
+    	    return 0;
     	}
     }
     
@@ -367,51 +368,54 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	//prepare json to pass
     	var newMap = {'advId':$scope.currentAdvId,'name':mapName};
     	$http.post('/api/rest/advMaps/'+$scope.currentAdvId,JSON.stringify(newMap)).then(function(data){
-    		var latestMap = data.data;
-    		$scope.maps.push(latestMap);   		
-    		
-    		$scope.currentMapId= latestMap.id;
-    		$scope.currentMapName = latestMap.name;
-    		$scope.currentMapIndx = $scope.maps.length-1;
-    		
-    		if(startLat & startLng){
-    			setStartPoint(startLat,startLng);
-    		}
-    		//clear things
-    		
-    		endLayer.clearLayers();
-    		latestPathLayer.clearLayers();
-    		geoJsonLayer.clearLayers();
-    		$scope.newMapName = null;
-    		$scope.segmentDistance = null;
+    	    var latestMap = data.data;
+    	    $scope.maps.push(latestMap);   		
+    	    
+    	    $scope.currentMapId= latestMap.id;
+    	    $scope.currentMapName = latestMap.name;
+    	    $scope.currentMapIndx = $scope.maps.length-1;
+    	    
+    	    if(startLat & startLng){
+    		setStartPoint(startLat,startLng);
+    	    }
+    	    //clear things
+    	    
+    	    endLayer.clearLayers();
+    	    latestPathLayer.clearLayers();
+    	    geoJsonLayer.clearLayers();
+    	    $scope.newMapName = null;
+    	    $scope.segmentDistance = null;
     	})
     };
-
+    
     $scope.createSegment = function(){
     	var newSegment = {'mapId':$scope.currentMapId,
 			  'startTime':$scope.dateRangeStart,
 			  'endTime': $scope.dateRangeEnd,
 			  'distance': $scope.segmentDistance,
 			  'waypoints':newSegmentPath,
+			  'dayNotes':$scope.dayNotes,
 			 };
     	$http.post('/api/rest/mapSegment',JSON.stringify(newSegment)).then(function(data){
-    		//return needs to be geojson
-    		
-    		//add to geojson...
-    		geoJsonLayer.addData(data.data);
-    		$scope.maps[$scope.currentMapIndx].distance += $scope.segmentDistance;
-    		
-    		setStartPoint(endLat,endLng);
-    		
-    		//unset things
-    		endLat = null;
-    		endLng = null;
-    		newSegmentPath = [];
-    		endLayer.clearLayers();
-    		latestPathLayer.clearLayers();
-    		
-    		$scope.segmentDistance = null;
-    		$scope.endSet = false;	
+    	    //return needs to be geojson
+    	    
+    	    //add to geojson...
+    	    geoJsonLayer.addData(data.data);
+    	    $scope.maps[$scope.currentMapIndx].distance += $scope.segmentDistance;
+    	    
+    	    setStartPoint(endLat,endLng);
+    	    
+    	    //unset things
+    	    endLat = null;
+    	    endLng = null;
+    	    newSegmentPath = [];
+    	    endLayer.clearLayers();
+    	    latestPathLayer.clearLayers();
+    	    
+    	    $scope.segmentDistance = null;
+    	    $scope.endSet = false;
+	    $scope.dayNotes = null;
+	    
     	});
 	
     };  // end of createSegment
@@ -429,18 +433,18 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $scope.deleteMap = function(index){
        	var mapId = $scope.maps[index].id;
     	$http.delete('/api/rest/maps/'+mapId).then(function(resp){
-    		//clear entry from list
-    		$scope.maps.splice(index,1);
-    		
-    		if (mapId == $scope.currentMapId){
-    			clearLayers();
-    			endLat = null;
-    			endLng = null;
-    			startLng = null;
-    			startLat = null
-    			$scope.startSet = null;
-    			$scope.endSet = null;
-    		}
+    	    //clear entry from list
+    	    $scope.maps.splice(index,1);
+    	    
+    	    if (mapId == $scope.currentMapId){
+    		clearLayers();
+    		endLat = null;
+    		endLng = null;
+    		startLng = null;
+    		startLat = null
+    		$scope.startSet = null;
+    		$scope.endSet = null;
+    	    }
     	});
     };
 }])
@@ -453,7 +457,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
     $scope.$emit('setAdvEditorActive');
     $scope.profilePic = "/static/img/blank-profile-picture.png";
-
+    
     $scope.isAdvSelected = function(index){
 	if ($scope.currentAdvIndex ==index){
 	    return "active";

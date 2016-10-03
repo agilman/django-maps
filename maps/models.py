@@ -29,4 +29,8 @@ class WayPoint(models.Model):
     
     def __str__(self):
         return '[%s,%s]' %(self.Lat,self.Lng)
+
+class DayNote(models.Model):
+    segment = models.ForeignKey(MapSegment,on_delete=models.CASCADE, related_name="dayNotes")
+    note = models.CharField(max_length=512)
     

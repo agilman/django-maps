@@ -1,4 +1,4 @@
-from maps.models import Adventure, Map , MapSegment, WayPoint
+from maps.models import Adventure, Map , MapSegment, WayPoint, DayNote
 from maps.serealizers import AdventureSerializer, MapSerializer, MapSegmentSerializer
 from django.http import JsonResponse
 
@@ -122,6 +122,7 @@ def mapSegment(request,segmentId=None):
 
             startTime  = None
             endTime = None
+            dayNotes = None
             if "startTime" in data.keys():
                 startTime = data["startTime"]
             if "endTime" in data.keys():
@@ -129,6 +130,9 @@ def mapSegment(request,segmentId=None):
             
             distance = data["distance"]
             waypoints = data["waypoints"]
+            if 'dayNotes' in data.keys():
+                dayNotes = data['dayNotes']
+               
         
             #create segment
             mapSegment = MapSegment(map=map,
@@ -136,7 +140,11 @@ def mapSegment(request,segmentId=None):
                                 endTime=None,
                                 distance = distance)
             mapSegment.save()
-        
+
+            if dayNotes:
+                dayNoteObj = DayNote(segment = mapSegment,note = dayNotes)
+                dayNoteObj.save()
+                
             #create waypoints
             for point in waypoints:
                 waypointObj = WayPoint(segment = mapSegment,
