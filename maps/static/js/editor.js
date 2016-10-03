@@ -117,19 +117,17 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     finishDatetime = null;
     navActive=3;
     $scope.pleasesWait = true;
-
+    mapboxToken = document.getElementById("mapboxToken").value;
+    mapboxMapName = document.getElementById("mapboxMap").value;
 
     //init geocoder
     leafletData.getMap().then(function(map){
 	L.Control.geocoder().addTo(map);
     });
-			      
     
     fitMap= function(bounds){
     	leafletData.getMap().then(function(map) {
             map.fitBounds(bounds);
-
-	    //
     	});
     };
     
@@ -157,7 +155,70 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    	}
 	    });
     };
-    
+
+    var tileLayers = {
+	mapbox1 : {
+	    name: "Mapbox Custom",
+	    type: "xyz",
+	    url :  'http://api.tiles.mapbox.com/v4/'+mapboxMapName+'/{z}/{x}/{y}.png?access_token='+mapboxToken,
+	    layerOptions: {
+		continuousWorld:true
+	    }
+	},
+	mapbox2 : {
+	    name: "Mapbox Streets",
+	    type: "xyz",
+	    url : 'https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token='+ mapboxToken,
+	    layerOptions: {
+		continuousWorld:true
+	    }
+	},
+	mapbox3:{
+	    name: "Mapbox Outdoors",
+	    type: "xyz",
+	    url : 'https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?access_token=' + mapboxToken,
+	    layerOptions: {
+		continuousWorld:true
+	    }
+	},
+	mapbox4:{
+	    name: "Mapbox Satellite",
+	    type: "xyz",
+	    url: 'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=' + mapboxToken,
+	    layerOptions: {
+		continuousWorld:true
+	    }
+	},
+	mapbox5:{
+	    name: "Mapbox Satellite-hybrid",
+	    type: "xyz",
+	    url: 'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token=' + mapboxToken,
+	    layerOptions: {
+		continuousWorld:true
+	    }
+	},
+	osm:{
+	    name: "OpenStreetMap",
+	    type: "xyz",
+	    url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+	    layerOptions: {
+		subdomains: ["a", "b", "c"],
+		attribution: "&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
+		continuousWorld: true
+	    }
+	},
+	cycling:{
+	    name: "OpenCycleMap",
+	    type: "xyz",
+	    url: "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
+	    layerOptions: {
+		subdomains: ["a", "b", "c"],
+		attribution: "&copy; <a href=\"http://www.opencyclemap.org/copyright\">OpenCycleMap</a> contributors - &copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
+		continuousWorld: true
+	    }
+	}
+    }
+
     //Load maps, and latest segments
     $http.get('/api/rest/advMaps/' + urlAdvId).then(function(data){
     	$scope.maps = data.data;
@@ -173,22 +234,16 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     });
     
     //init map
-    mapboxToken = document.getElementById("mapboxToken").value;
-    var mapboxMapName = document.getElementById("mapboxMap").value;
     angular.extend($scope, {
         center: {
             lat: 45.510,
             lng: -122.4832,
             zoom: 10
         },
-        tiles: {
-            url: 'http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}',
-            type: 'xyz',
-            options: {
-                apikey: mapboxToken,
-                mapid: mapboxMapName
-            }
-        },
+	layers: {
+	    baselayers: tileLayers
+	},
+
         geojson: {}
     });
 	
@@ -369,7 +424,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	latestPathLayer.clearLayers();
 	$scope.endSet = null;
 	$scope.segmentDistance=null;
-	
     };
     
     $scope.deleteMap = function(index){
@@ -450,7 +504,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 		    $scope.$emit('advChangeEvent',$scope.adventures.length-1);
 		}
 	    }
-	    
     	});
     };
 
