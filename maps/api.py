@@ -54,11 +54,18 @@ def makeGeoJsonFromMap(map):
                 
         geometry = {"type":"LineString","coordinates":coordinates}
 
+        notesResults = segment.dayNotes.first()
+        notes = []
+        if type(notesResults)!=type(None):
+            note = notesResults.note
+            notes.append(note)
+            
         segmentDict = {"type":"Feature",
                        "properties": {"segmentId":segment.id,
                                       'distance':segment.distance,
                                       'startTime':segment.startTime,
-                                      'endTime':segment.endTime},
+                                      'endTime':segment.endTime,
+                                      'notes':notes},
                        "geometry":geometry}
         features.append(segmentDict)
 

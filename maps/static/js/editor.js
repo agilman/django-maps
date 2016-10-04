@@ -1,23 +1,23 @@
 (function(angular){
 angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-directive'])
 .config(['$routeProvider', function ($routeProvider) {
-		$routeProvider
-		.when("/",{
-			templateUrl:"/static/partials/editor-adventures.html",
-			controller:"advEditorController"
-		})
-		.when("/:advId/maps",{
-			templateUrl:"/static/partials/editor-maps.html",
-			controller:"mapEditorController",
-		})
-		.when("/:advId/blogs",{
-			templateUrl:"/static/partials/editor-blogs.html",
-		        controller:"blogEditorController"
-		})
-		.when("/:advId/gear", {
-			templateUrl: "/static/partials/editor-gear.html",
-			controller: "gearEditorController"
-		});
+    $routeProvider
+	.when("/",{
+	    templateUrl:"/static/partials/editor-adventures.html",
+	    controller:"advEditorController"
+	})
+	.when("/:advId/maps",{
+	    templateUrl:"/static/partials/editor-maps.html",
+	    controller:"mapEditorController",
+	})
+	.when("/:advId/blogs",{
+	    templateUrl:"/static/partials/editor-blogs.html",
+	    controller:"blogEditorController"
+	})
+	.when("/:advId/gear", {
+	    templateUrl: "/static/partials/editor-gear.html",
+	    controller: "gearEditorController"
+	});
 }])
 .controller("mainController",['$scope','$http','$log',function($scope,$http,$log){
     var userId = document.getElementById("userId").value;
@@ -121,6 +121,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $scope.selectedSegmentStartTime = null;
     $scope.selectedSegmentEndTime = null;
     $scope.selectedSegmentDistance = null;
+    $scope.selectedSegmentNotes = null;
     
     mapboxToken = document.getElementById("mapboxToken").value;
     mapboxMapName = document.getElementById("mapboxMap").value;
@@ -171,14 +172,14 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	var segment =getSegmentById(e.target.segmentId);
 	var properties = segment.properties; 
 	var myPolyline = drawSegmentHighlight(segment.geometry.coordinates);
+
+	//TODO: instead of fitMap, flyTo center on line, at reasonable zoom.
 	fitMap(myPolyline.getBounds());
-	
+
 	$scope.selectedSegmentDistance = properties.distance;
-	
 	$scope.selectedSegmentStartTime = properties.startTime;
 	$scope.selectedSegmentEndTime = properties.endTime;
-	//$scope.selectedSegmentNotes= segment.notes;
-	
+	$scope.selectedSegmentNotes = properties.notes[0];	
     }
 
     function drawSegmentCenters(segments){
