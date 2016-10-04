@@ -98,3 +98,12 @@ function getNavLine(startLat,startLng,endLat,endLng,navType){
 }
 
 
+function getSegmentById(id){
+    for (var i =0;i<mySegmentsData.features.length;i++){
+	if (mySegmentsData.features[i].properties.segmentId == id){
+	    return mySegmentsData.features[i];
+	}
+	
+    }
+    return [];
+}

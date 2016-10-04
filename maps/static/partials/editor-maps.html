@@ -24,62 +24,73 @@
     <button class="btn btn-primary" id="addMapButton" ng-click="createMap()" ng-show="newMapName.length">Create Map</button>
     <br>
     </div>
-    <div ng-show="isSegmentsVisible()" ng-cloak>
-    <hr>
-    <h4>New Segment:</h4>
-    <!--- datetime pickers -->
-    <div class="dropdown form-group">
-      <label>Start Date</label>
-      <a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown">
-	<div class="input-group date">
-	  <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker" ng-class="{purple:startSet}"></i></span>
-	  <input type="text" class="form-control" data-ng-model="dateRangeStart">
-	  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-	</div>
-      </a>
-      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-	<datetimepicker data-ng-model="dateRangeStart"
-			data-datetimepicker-config="{ dropdownSelector: '#dropdownStart', renderOn: 'end-date-changed' }"
-			data-on-set-time="startDateOnSetTime()"
-			data-before-render="startDateBeforeRender($dates)"></datetimepicker>
-      </ul>
+    <div ng-show="isSegmentsVisible()" ng-hide="showSegment" ng-cloak>
+      <hr>
+      <h4>New Segment:</h4>
+      <!--- datetime pickers -->
+      <div class="dropdown form-group">
+	<label>Start Date</label>
+	<a class="dropdown-toggle" id="dropdownStart" role="button" data-toggle="dropdown">
+	  <div class="input-group date">
+	    <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker" ng-class="{purple:startSet}"></i></span>
+	    <input type="text" class="form-control" data-ng-model="dateRangeStart">
+	    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+	  </div>
+	</a>
+	<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+	  <datetimepicker data-ng-model="dateRangeStart"
+			  data-datetimepicker-config="{ dropdownSelector: '#dropdownStart', renderOn: 'end-date-changed' }"
+			  data-on-set-time="startDateOnSetTime()"
+			  data-before-render="startDateBeforeRender($dates)"></datetimepicker>
+	</ul>
+      </div>
+      
+      Navigation Type: 
+      <div class="btn-group" role="group" aria-label="Basic example">
+	<button type="button" ng-class="isNavLineActive()" ng-click="setLineActive()"><i class="fa fa-arrows-h" style="font-size:32px"></i></button>
+	<button type="button" ng-class="isNavBikeActive()" ng-click="setBikeActive()"><i class="fa fa-bicycle" style="font-size:32px"></i></button>
+	<button type="button" ng-class="isNavCarActive()"  ng-click="setCarActive()"><i class="fa fa-car" style="font-size:32px"></i></button>
+      </div>
+      <div ng-show="segmentDistance">
+	Segment Distance : {{ getSegmentDistance() }}km
+      </div>
+      <div class="dropdown form-group">
+	<label>End Date</label>
+	<a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
+	  <div class="input-group date">
+	    <span class="input-group-addon" ng-click="deselectEndSet();$event.stopPropagation();"><i class="glyphicon glyphicon-map-marker"  ng-class="{red:endSet}"></i></span>
+	    <input type="text" class="form-control" data-ng-model="dateRangeEnd">
+	    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+	  </div>
+	</a>
+	<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+	  <datetimepicker data-ng-model="dateRangeEnd"
+			  data-datetimepicker-config="{ dropdownSelector: '#dropdownEnd', renderOn: 'start-date-changed' }"
+			  data-on-set-time="endDateOnSetTime()"
+			  data-before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"></datetimepicker>
+	</ul>
+      </div>
+
+      <h5>Day Notes:</h5>
+      <textarea class="field" id="dayNotes" rows="6" style="min-width:100%" ng-model="dayNotes"></textarea>
+      
+
+      <button class="btn btn-primary" id="addSegmentButton" ng-click="createSegment()" ng-show="endSet">Save Segment</button>
+      <!-- end datetime pickers -->
+    </div>
+
+    <div ng-show="showSegment" ng-cloak>
+      <hr>
+      <h4>Selected Segment:</h4><div class="pull-right"><a ng-click="deselectSegment()">Unselect segment </a></div>
+      <h5>Start datetime:</h5> {{ selectedSegmentStartTime }}
+      <h5>End datetime: </h5> {{ selectedSegmentEndTime }}
+      <h5>Distance:</h5> {{ selectedSegmentDistance }}
+      <h5>Notes</h5>
+  
     </div>
     
-    Navigation Type: 
-    <div class="btn-group" role="group" aria-label="Basic example">
-      <button type="button" ng-class="isNavLineActive()" ng-click="setLineActive()"><i class="fa fa-arrows-h" style="font-size:32px"></i></button>
-      <button type="button" ng-class="isNavBikeActive()" ng-click="setBikeActive()"><i class="fa fa-bicycle" style="font-size:32px"></i></button>
-      <button type="button" ng-class="isNavCarActive()"  ng-click="setCarActive()"><i class="fa fa-car" style="font-size:32px"></i></button>
-    </div>
-    <div ng-show="segmentDistance">
-      Segment Distance : {{ getSegmentDistance() }}km
-    </div>
-    <div class="dropdown form-group">
-      <label>End Date</label>
-      <a class="dropdown-toggle" id="dropdownEnd" role="button" data-toggle="dropdown">
-	<div class="input-group date">
-	  <span class="input-group-addon" ng-click="deselectEndSet();$event.stopPropagation();"><i class="glyphicon glyphicon-map-marker"  ng-class="{red:endSet}"></i></span>
-	  <input type="text" class="form-control" data-ng-model="dateRangeEnd">
-	  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-	</div>
-      </a>
-      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-	<datetimepicker data-ng-model="dateRangeEnd"
-			data-datetimepicker-config="{ dropdownSelector: '#dropdownEnd', renderOn: 'start-date-changed' }"
-			data-on-set-time="endDateOnSetTime()"
-			data-before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"></datetimepicker>
-      </ul>
-    </div>
-
-    <h5>Day Notes:</h5>
-    <textarea class="field" id="dayNotes" rows="6" style="min-width:100%" ng-model="dayNotes"></textarea>
-
-
-    <button class="btn btn-primary" id="addSegmentButton" ng-click="createSegment()" ng-show="endSet">Save Segment</button>
-    <!-- end datetime pickers -->
-    
   </div>
-  </div>
+  
   <div class="col-lg-9">
     <leaflet style="width:100%;height:800px;" layers="layers" ng-show="isMapVisible()" lf-center="center">
     </leaflet>	

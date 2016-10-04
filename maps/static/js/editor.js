@@ -110,13 +110,18 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $scope.endtTime = null;
     $scope.segmentDistance = null;
     $scope.dayNotes = null;
-    
+
     $scope.endSet = false;
     endLat = null;
     endLng = null;
     finishDatetime = null;
     navActive=3;
     $scope.pleasesWait = true;
+    $scope.showSegment = false;
+    $scope.selectedSegmentStartTime = null;
+    $scope.selectedSegmentEndTime = null;
+    $scope.selectedSegmentDistance = null;
+    
     mapboxToken = document.getElementById("mapboxToken").value;
     mapboxMapName = document.getElementById("mapboxMap").value;
 
@@ -134,15 +139,16 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     setupMapFromDOM = function(index){
 	//get Map
 	$http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
-	    var myData = data.data;
-	    geoJsonLayer.addData(myData);
+	    //should this be attached to $scope?
+	    mySegmentsData = data.data;
+	    geoJsonLayer.addData(mySegmentsData);
 
-	    //draw circles on segment centers
-	    drawSegmentCenters(myData);
+	    //draw circles (currently markers) on segment centers, for segment selection.
+	    drawSegmentCenters(mySegmentsData);
 	    
 	    //set startPoint to last point from established line...
-	    if (myData.features.length>0){
-	    	var lastSegment = myData.features[myData.features.length-1].geometry.coordinates;	
+	    if (mySegmentsData.features.length>0){
+	    	var lastSegment = mySegmentsData.features[mySegmentsData.features.length-1].geometry.coordinates;	
 	    	
 	    	if (lastSegment.length>0){
 	    	    startLat = lastSegment[lastSegment.length-1][1];
@@ -160,8 +166,18 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	});
     };
 
-    function segmentMarkerClick(e){
-	console.log(e.target.segmentId);
+    $scope.segmentMarkerClick= function(e){
+	$scope.showSegment=true;
+	
+	var segment = getSegmentById(e.target.segmentId).properties;	
+	
+	$scope.selectedSegmentDistance = segment.distance;
+	$log.log($scope.selectedSegmentDistance);
+	$scope.selectedSegmentStartTime = segment.startTime;
+	$scope.selectedSegmentEndTime = segment.endTime;
+	//$scope.selectedSegmentNotes= segment.notes;
+
+	
     }
 
     function drawSegmentCenters(segments){
@@ -183,12 +199,16 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    }
 	    
 	    var markerPoint = [point[1],point[0]];
-	    var newMarker = new L.Marker(markerPoint).on('click',segmentMarkerClick);
+	    var newMarker = new L.Marker(markerPoint).on('click',$scope.segmentMarkerClick);
 	    newMarker.segmentId = segmentId;
 	    newMarker.addTo(segmentMarkersLayer);
 	}
     }
-    
+
+    $scope.deselectSegment = function(){
+	$scope.showSegment = false;
+    };
+
     var tileLayers = {
 	mapbox1 : {
 	    name: "Mapbox Custom",
@@ -263,7 +283,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	        
     	    setupMapFromDOM($scope.maps.length-1);
     	}
-	$scope.pleasesWait  = false;
+	$scope.pleasesWait = false;
     });
     
     //init map
