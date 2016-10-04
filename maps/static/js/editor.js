@@ -130,7 +130,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	L.Control.geocoder().addTo(map);
     });
     
-    fitMap= function(bounds){
+    function fitMap(bounds){
     	leafletData.getMap().then(function(map) {
             map.fitBounds(bounds);
     	});
@@ -168,15 +168,16 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 
     $scope.segmentMarkerClick= function(e){
 	$scope.showSegment=true;
+	var segment =getSegmentById(e.target.segmentId);
+	var properties = segment.properties; 
+	var myPolyline = drawSegmentHighlight(segment.geometry.coordinates);
+	fitMap(myPolyline.getBounds());
 	
-	var segment = getSegmentById(e.target.segmentId).properties;	
+	$scope.selectedSegmentDistance = properties.distance;
 	
-	$scope.selectedSegmentDistance = segment.distance;
-	$log.log($scope.selectedSegmentDistance);
-	$scope.selectedSegmentStartTime = segment.startTime;
-	$scope.selectedSegmentEndTime = segment.endTime;
+	$scope.selectedSegmentStartTime = properties.startTime;
+	$scope.selectedSegmentEndTime = properties.endTime;
 	//$scope.selectedSegmentNotes= segment.notes;
-
 	
     }
 
@@ -207,6 +208,9 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 
     $scope.deselectSegment = function(){
 	$scope.showSegment = false;
+	selectedSegmentLayer.clearLayers();
+
+	//TODO: bring focus around last point;
     };
 
     var tileLayers = {
@@ -316,10 +320,17 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 
 	segmentMarkersLayer = new L.LayerGroup();
 	segmentMarkersLayer.addTo(map);
+
+	selectedSegmentLayer = new L.LayerGroup();
+	selectedSegmentLayer.addTo(map);
     });
     
     // map click
     $scope.$on("leafletDirectiveMap.click",function(e,wrap){
+	//unset segment selection view
+	$scope.showSegment = false;
+
+	
     	var lat = wrap.leafletEvent.latlng.lat;
     	var lng = wrap.leafletEvent.latlng.lng;
     	
@@ -408,6 +419,10 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $scope.getSegmentDistance = function(){
     	return Number($scope.segmentDistance/1000).toFixed(1);
     }
+
+    $scope.getSelectedSegmentDistance = function(){
+	return Number($scope.selectedSegmentDistance/1000).toFixed(1);
+    }
     
     $scope.getMapDistance = function(index){
     	if($scope.maps[index].distance){
@@ -434,7 +449,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     		setStartPoint(startLat,startLng);
     	    }
     	    //clear things
-    	    
     	    endLayer.clearLayers();
     	    latestPathLayer.clearLayers();
     	    geoJsonLayer.clearLayers();

@@ -81,10 +81,10 @@
 
     <div ng-show="showSegment" ng-cloak>
       <hr>
-      <h4>Selected Segment:</h4><div class="pull-right"><a ng-click="deselectSegment()">Unselect segment </a></div>
+      <h4 style="color:#ff751a">Selected Segment:</h4><div class="pull-right"><a ng-click="deselectSegment()">Unselect segment </a></div>
       <h5>Start datetime:</h5> {{ selectedSegmentStartTime }}
       <h5>End datetime: </h5> {{ selectedSegmentEndTime }}
-      <h5>Distance:</h5> {{ selectedSegmentDistance }}
+      <h5>Distance:</h5> {{ getSelectedSegmentDistance() }} Km
       <h5>Notes</h5>
   
     </div>
