@@ -166,15 +166,15 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	//get Map
 	$http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
 	    //should this be attached to $scope?
-	    mySegmentsData = data.data;
-	    geoJsonLayer.addData(mySegmentsData);
+	    $scope.segmentsData = data.data;
+	    geoJsonLayer.addData($scope.segmentsData);
 
 	    //draw circles (currently markers) on segment centers, for segment selection.
-	    drawSegmentCenters(mySegmentsData);
+	    drawSegmentCenters($scope.segmentsData);
 	    
 	    //set startPoint to last point from established line...
-	    if (mySegmentsData.features.length>0){
-	    	var lastSegment = mySegmentsData.features[mySegmentsData.features.length-1].geometry.coordinates;	
+	    if ($scope.segmentsData.features.length>0){
+	    	var lastSegment = $scope.segmentsData.features[$scope.segmentsData.features.length-1].geometry.coordinates;	
 	    	
 	    	if (lastSegment.length>0){
 	    	    startLat = lastSegment[lastSegment.length-1][1];
@@ -197,7 +197,12 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 
     $scope.segmentMarkerClick= function(e){
 	$scope.showSegment=true;
-	var segment =getSegmentById(e.target.segmentId);
+	//$log.log($scope.segmentsData);
+	$scope.currentSegmentIndex = getSegmentIndexById($scope.segmentsData,e.target.segmentId);
+
+	
+	var segment =$scope.segmentsData.features[$scope.currentSegmentIndex];
+	$log.log(segment);
 	var properties = segment.properties; 
 	var myPolyline = drawSegmentHighlight(segment.geometry.coordinates);
 
@@ -210,6 +215,23 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	$scope.selectedSegmentNotes = properties.notes[0];	
     }
 
+    function addSegmentMarker(segment){
+	//this is invoked on 'save segment' button. It marks the segment center marker.
+	var coordinates = segment.geometry.coordinates;
+	point =[];
+	if (coordinates.length==2){
+	    point = coordinates[0];
+	}else{
+	    point = coordinates[Math.floor(coordinates.length/2)];
+	}
+
+	console.log(point);
+	var markerPoint = [point[1],point[0]];
+	var newMarker = new L.Marker(markerPoint).on('click',$scope.segmentMarkerClick);
+	newMarker.segmentId = segment.properties.segmentId;
+	newMarker.addTo(segmentMarkersLayer);
+    };
+    
     function drawSegmentCenters(segments){
 	//clear previous
 	segmentMarkersLayer.clearLayers();
@@ -514,12 +536,16 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 			 };
     	$http.post('/api/rest/mapSegment',JSON.stringify(newSegment)).then(function(data){
     	    //return needs to be geojson
-    	    
+    	    var jsonData = data.data
     	    //add to geojson...
-    	    geoJsonLayer.addData(data.data);
+    	    geoJsonLayer.addData(jsonData);
     	    $scope.maps[$scope.currentMapIndx].distance += $scope.segmentDistance;
-    	    
     	    setStartPoint(endLat,endLng);
+	    
+	    $scope.segmentsData.features.push(jsonData);
+	    
+	    //Add marker to map.
+	    addSegmentMarker(jsonData);
     	    
     	    //unset things
     	    endLat = null;

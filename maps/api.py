@@ -80,8 +80,12 @@ def makeGeoJsonFromSegment(segment):
         coordinates.append([float(coord.lat),float(coord.lng)])
     
     geometry = {"type":"LineString","coordinates":coordinates}
+    notes = []
+    for notesObj in segment.dayNotes.all():
+        notes.append(notesObj.note)
         
-    feature = {"type":"Feature","properties":{"segmentId":segment.id},"geometry":geometry}
+    distance = segment.distance
+    feature = {"type":"Feature","properties":{"segmentId":segment.id,"distance":distance,"notes":notes},"geometry":geometry}
     return feature
 
 @csrf_exempt
