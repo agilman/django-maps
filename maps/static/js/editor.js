@@ -111,7 +111,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $scope.segmentDistance = null;
     $scope.dayNotes = null;
     
-    
     $scope.endSet = false;
     endLat = null;
     endLng = null;
@@ -131,32 +130,65 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
             map.fitBounds(bounds);
     	});
     };
-    
-    setupMapFromDOM = function(index){
-	    //get Map
-	    $http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
-	    	geoJsonLayer.addData(data.data);
-	    	
-	    	//set startPoint to last point from established line...
-	    	if (data.data.features.length>0){
-	    		var lastSegment = data.data.features[data.data.features.length-1].geometry.coordinates;
-	    		
-	    		if (lastSegment.length>0){
-	    			startLat = lastSegment[lastSegment.length-1][1];
-	    			startLng = lastSegment[lastSegment.length-1][0];
 
-	    			fitMap(geoJsonLayer.getBounds());
-	    			setStartPoint(startLat,startLng);
-	    			$scope.startSet = true;
-	    		}
-	    	}else{ //if the selected map doesn't have any points
-	    		startLat = null;
-	    		startLng = null;
-	    		$scope.startSet = false;    		
+    setupMapFromDOM = function(index){
+	//get Map
+	$http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
+	    var myData = data.data;
+	    geoJsonLayer.addData(myData);
+
+	    //draw circles on segment centers
+	    drawSegmentCenters(myData);
+	    
+	    //set startPoint to last point from established line...
+	    if (myData.features.length>0){
+	    	var lastSegment = myData.features[myData.features.length-1].geometry.coordinates;	
+	    	
+	    	if (lastSegment.length>0){
+	    	    startLat = lastSegment[lastSegment.length-1][1];
+	    	    startLng = lastSegment[lastSegment.length-1][0];
+		    
+	    	    fitMap(geoJsonLayer.getBounds());
+	    	    setStartPoint(startLat,startLng);
+	    	    $scope.startSet = true;
 	    	}
-	    });
+	    }else{ //if the selected map doesn't have any points
+	    	startLat = null;
+	    	startLng = null;
+	    	$scope.startSet = false;    		
+	    }
+	});
     };
 
+    function segmentMarkerClick(e){
+	console.log(e.target.segmentId);
+    }
+
+    function drawSegmentCenters(segments){
+	//clear previous
+	segmentMarkersLayer.clearLayers();
+	
+	for(var i = 0;i<segments.features.length;i++){
+	    var coordinates = segments.features[i].geometry.coordinates;
+	    var point = [ ];
+	    var segmentId =  segments.features[i].properties.segmentId;
+	    if (coordinates.length==2){
+		// TODO:this is a line... need to find it's geometric center
+		point = coordinates[0];
+		
+	    }else{
+		// this is a navline... just take a middle point
+		
+		point = coordinates[Math.floor(coordinates.length/2)];
+	    }
+	    
+	    var markerPoint = [point[1],point[0]];
+	    var newMarker = new L.Marker(markerPoint).on('click',segmentMarkerClick);
+	    newMarker.segmentId = segmentId;
+	    newMarker.addTo(segmentMarkersLayer);
+	}
+    }
+    
     var tileLayers = {
 	mapbox1 : {
 	    name: "Mapbox Custom",
@@ -261,6 +293,9 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	
     	geoJsonLayer = new L.geoJson();
     	geoJsonLayer.addTo(map);
+
+	segmentMarkersLayer = new L.LayerGroup();
+	segmentMarkersLayer.addTo(map);
     });
     
     // map click
