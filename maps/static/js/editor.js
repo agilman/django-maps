@@ -137,6 +137,32 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	});
     };
 
+    function centerMap(center){
+	leafletData.getMap().then(function(map){
+	    map.panTo(center);
+	});
+    };
+
+    function centerOnStart(lat,lng){
+	leafletData.getMap().then(function(map){
+	    map.setView([lat,lng],9);
+	});
+    }
+
+    function flyTo(center){
+	leafletData.getMap().then(function(map){
+	    $log.log("current zoom: " +map.getZoom());
+	    var zoom = map.getZoom();
+	    if (zoom>11){
+		map.flyTo(center,10);
+	    }else if(zoom<6){
+		map.flyTo(center,10);
+	    }else{
+		map.flyTo(center);
+	    }
+	});
+    };
+
     setupMapFromDOM = function(index){
 	//get Map
 	$http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
@@ -154,8 +180,11 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    	if (lastSegment.length>0){
 	    	    startLat = lastSegment[lastSegment.length-1][1];
 	    	    startLng = lastSegment[lastSegment.length-1][0];
+
+		    //center map on last point
+		    centerOnStart(startLat,startLng);
+	    	    //fitMap(geoJsonLayer.getBounds());
 		    
-	    	    fitMap(geoJsonLayer.getBounds());
 	    	    setStartPoint(startLat,startLng);
 	    	    $scope.startSet = true;
 	    	}
@@ -174,7 +203,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	var myPolyline = drawSegmentHighlight(segment.geometry.coordinates);
 
 	//TODO: instead of fitMap, flyTo center on line, at reasonable zoom.
-	fitMap(myPolyline.getBounds());
+	centerMap(myPolyline.getBounds().getCenter());
 
 	$scope.selectedSegmentDistance = properties.distance;
 	$scope.selectedSegmentStartTime = properties.startTime;
@@ -212,6 +241,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	selectedSegmentLayer.clearLayers();
 
 	//TODO: bring focus around last point;
+	var center = new L.LatLng(startLat,startLng);
+	flyTo(center);
     };
 
     var tileLayers = {
