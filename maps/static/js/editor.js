@@ -452,8 +452,13 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    endLayer.clearLayers();
     	    latestPathLayer.clearLayers();
     	    geoJsonLayer.clearLayers();
+	    segmentMarkersLayer.clearLayers();
+	    selectedSegmentLayer.clearLayers();
     	    $scope.newMapName = null;
     	    $scope.segmentDistance = null;
+
+	    //center map around start point.
+	    
     	})
     };
     

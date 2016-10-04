@@ -10,10 +10,13 @@ function drawStartCircle(lat,lng){
     marker.addTo(startLayer);	
 }
 function clearLayers(){
-	startLayer.clearLayers();
-	endLayer.clearLayers();
-	latestPathLayer.clearLayers();
-	geoJsonLayer.clearLayers();
+    startLayer.clearLayers();
+    endLayer.clearLayers();
+    latestPathLayer.clearLayers();
+    geoJsonLayer.clearLayers();
+
+    segmentMarkersLayer.clearLayers();
+    selectedSegmentLayer.clearLayers();    
 };
 
 
