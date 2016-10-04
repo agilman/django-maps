@@ -151,7 +151,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 
     function flyTo(center){
 	leafletData.getMap().then(function(map){
-	    $log.log("current zoom: " +map.getZoom());
 	    var zoom = map.getZoom();
 	    if (zoom>11){
 		map.flyTo(center,10);
@@ -368,15 +367,15 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	
     	//set start point.
     	if (!$scope.startSet){
-    		setStartPoint(lat,lng);
+    	    setStartPoint(lat,lng);
     	    $scope.startSet = true;
     	}else{
-    		var navData = setEndPoint(lat,lng);
-    		newSegmentPath = navData.navLine;
-    		$scope.segmentDistance = navData.distance;
-    		
-    		$scope.endSet = true;
-    		}
+    	    var navData = setEndPoint(lat,lng);
+    	    newSegmentPath = navData.navLine;
+    	    $scope.segmentDistance = navData.distance;
+    	    
+    	    $scope.endSet = true;
+    	}
     });
     
     $scope.selectMap = function(index){
@@ -434,9 +433,9 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     
     $scope.isMapVisible = function(){
     	if ($scope.maps.length>0){
-    		return true;
+    	    return true;
     	} else{
-    		return false;
+    	    return false;
     	}
     }
     $scope.isSegmentsVisible = function(){
@@ -446,6 +445,16 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	else{
     	    return false;
     	}
+    };
+    $scope.isSegmentsHidden = function(){
+	if (!$scope.isSegmentsVisible()){
+	    return true;
+	} else {
+	    if ($scope.showSegment){
+		return true;}
+	    else{
+		return false;}
+	}
     };
     
     $scope.getSegmentDistance = function(){
@@ -488,6 +497,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    selectedSegmentLayer.clearLayers();
     	    $scope.newMapName = null;
     	    $scope.segmentDistance = null;
+	    $scope.showSegment = false;
 
 	    //center map around start point.
 	    
@@ -551,6 +561,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     		$scope.startSet = null;
     		$scope.endSet = null;
     	    }
+	    $scope.showSegment=false;
     	});
     };
 }])

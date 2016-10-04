@@ -24,7 +24,7 @@
     <button class="btn btn-primary" id="addMapButton" ng-click="createMap()" ng-show="newMapName.length">Create Map</button>
     <br>
     </div>
-    <div ng-show="isSegmentsVisible()" ng-hide="showSegment" ng-cloak>
+    <div ng-show="isSegmentsVisible()" ng-hide="isSegmentsHidden()" ng-cloak>
       <hr>
       <h4>New Segment:</h4>
       <!--- datetime pickers -->
