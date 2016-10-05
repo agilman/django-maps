@@ -81,7 +81,20 @@
 
     <div ng-show="showSegment" ng-cloak>
       <hr>
-      <h4 style="color:#ff751a">Selected Segment:</h4><div class="pull-right"><a ng-click="deselectSegment()">Unselect segment </a></div>
+      <div class="btn-group" role="group">
+	<button type="button" class="btn btn-default" ng-show="currentSegmentIndex>0" ng-click="loadPreviousSegment();">
+	  <span ><i class="glyphicon glyphicon-chevron-left"></i>Previous</span>
+	</button>
+	
+	<button type="button" class="btn btn-default" ng-click="deselectSegment()">
+	  <span style="color:#ff751a"><i></i>current</span>
+	</button>
+	
+	<button type="button" class="btn btn-default" ng-show="showNextSegmentButton()" ng-click="loadNextSegment();">
+	  <span>Next<i class="glyphicon glyphicon-chevron-right"></i></span>
+	</button>	
+      </div>
+      <br>
       <label>Start datetime:</label> {{ selectedSegmentStartTime }}
       <br>
       <label>End datetime: </label> {{ selectedSegmentEndTime }}

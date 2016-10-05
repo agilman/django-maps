@@ -122,6 +122,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $scope.selectedSegmentEndTime = null;
     $scope.selectedSegmentDistance = null;
     $scope.selectedSegmentNotes = null;
+    $scope.currentSegmentIndex=null;
+    $scope.segmentsData = null;
     
     mapboxToken = document.getElementById("mapboxToken").value;
     mapboxMapName = document.getElementById("mapboxMap").value;
@@ -140,6 +142,13 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     function centerMap(center){
 	leafletData.getMap().then(function(map){
 	    map.panTo(center);
+
+	    if (map.getZoom()<7){
+		map.setView(center,9);
+	    }else if (map.getZoom()>11){
+		map.setView(center,9);
+	    }
+	    
 	});
     };
 
@@ -194,26 +203,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    }
 	});
     };
-
-    $scope.segmentMarkerClick= function(e){
-	$scope.showSegment=true;
-	//$log.log($scope.segmentsData);
-	$scope.currentSegmentIndex = getSegmentIndexById($scope.segmentsData,e.target.segmentId);
-
-	
-	var segment =$scope.segmentsData.features[$scope.currentSegmentIndex];
-	$log.log(segment);
-	var properties = segment.properties; 
-	var myPolyline = drawSegmentHighlight(segment.geometry.coordinates);
-
-	//TODO: instead of fitMap, flyTo center on line, at reasonable zoom.
-	centerMap(myPolyline.getBounds().getCenter());
-
-	$scope.selectedSegmentDistance = properties.distance;
-	$scope.selectedSegmentStartTime = properties.startTime;
-	$scope.selectedSegmentEndTime = properties.endTime;
-	$scope.selectedSegmentNotes = properties.notes[0];	
-    }
 
     function addSegmentMarker(segment){
 	//this is invoked on 'save segment' button. It marks the segment center marker.
@@ -399,6 +388,16 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    $scope.endSet = true;
     	}
     });
+
+    $scope.showNextSegmentButton = function(){
+	if ($scope.segmentsData){
+	    if($scope.currentSegmentIndex < $scope.segmentsData.features.length-1){
+		return true;
+	    }
+	}
+	
+	return false;
+    }
     
     $scope.selectMap = function(index){
     //if change is needed...
@@ -520,9 +519,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    $scope.newMapName = null;
     	    $scope.segmentDistance = null;
 	    $scope.showSegment = false;
-
-	    //center map around start point.
-	    
     	})
     };
     
@@ -553,7 +549,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    newSegmentPath = [];
     	    endLayer.clearLayers();
     	    latestPathLayer.clearLayers();
-    	    
+	    selectedSegmentLayer.clearLayers();
+
     	    $scope.segmentDistance = null;
     	    $scope.endSet = false;
 	    $scope.dayNotes = null;
@@ -571,6 +568,64 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	$scope.endSet = null;
 	$scope.segmentDistance=null;
     };
+
+    ///////TODO:::: REFACTOR these 3 function: 
+    
+    $scope.segmentMarkerClick= function(e){
+	$scope.showSegment=true;
+	//$log.log($scope.segmentsData);
+	$scope.currentSegmentIndex = getSegmentIndexById($scope.segmentsData,e.target.segmentId);
+	
+	var segment =$scope.segmentsData.features[$scope.currentSegmentIndex];
+	var properties = segment.properties; 
+	var myPolyline = drawSegmentHighlight(segment.geometry.coordinates);
+	
+	//TODO: instead of fitMap, flyTo center on line, at reasonable zoom.
+	centerMap(myPolyline.getBounds().getCenter());
+	
+	$scope.selectedSegmentDistance = properties.distance;
+	$scope.selectedSegmentStartTime = properties.startTime;
+	$scope.selectedSegmentEndTime = properties.endTime;
+	$scope.selectedSegmentNotes = properties.notes[0];
+    };
+    
+    $scope.loadPreviousSegment = function(){
+	//$scope.showSegment=true;
+	//$log.log($scope.segmentsData);
+	$scope.currentSegmentIndex -= 1;
+	
+	var segment =$scope.segmentsData.features[$scope.currentSegmentIndex];
+	var properties = segment.properties; 
+	var myPolyline = drawSegmentHighlight(segment.geometry.coordinates);
+
+	centerMap(myPolyline.getBounds().getCenter());
+
+	$scope.selectedSegmentDistance = properties.distance;
+	$scope.selectedSegmentStartTime = properties.startTime;
+	$scope.selectedSegmentEndTime = properties.endTime;
+	$scope.selectedSegmentNotes = properties.notes[0];	
+    };
+
+    $scope.loadNextSegment = function(){
+	//$scope.showSegment=true;
+	//$log.log($scope.segmentsData);
+	$scope.currentSegmentIndex += 1;
+	
+	var segment =$scope.segmentsData.features[$scope.currentSegmentIndex];
+	var properties = segment.properties; 
+	var myPolyline = drawSegmentHighlight(segment.geometry.coordinates);
+
+	centerMap(myPolyline.getBounds().getCenter());
+
+	$scope.selectedSegmentDistance = properties.distance;
+	$scope.selectedSegmentStartTime = properties.startTime;
+	$scope.selectedSegmentEndTime = properties.endTime;
+	$scope.selectedSegmentNotes = properties.notes[0];	
+    };
+
+    
+
+    
     
     $scope.deleteMap = function(index){
        	var mapId = $scope.maps[index].id;
