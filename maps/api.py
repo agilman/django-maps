@@ -65,6 +65,7 @@ def makeGeoJsonFromMap(map):
                                       'distance':segment.distance,
                                       'startTime':segment.startTime,
                                       'endTime':segment.endTime,
+                                      'delay': segment.delay,
                                       'notes':notes},
                        "geometry":geometry}
         features.append(segmentDict)
@@ -83,9 +84,11 @@ def makeGeoJsonFromSegment(segment):
     notes = []
     for notesObj in segment.dayNotes.all():
         notes.append(notesObj.note)
-        
+    
+    delay = segment.delay
     distance = segment.distance
-    feature = {"type":"Feature","properties":{"segmentId":segment.id,"distance":distance,"notes":notes},"geometry":geometry}
+
+    feature = {"type":"Feature","properties":{"segmentId":segment.id,"distance":distance,"delay":delay,"notes":notes},"geometry":geometry}
     return feature
 
 @csrf_exempt
@@ -151,12 +154,15 @@ def mapSegment(request,segmentId=None):
             if 'dayNotes' in data.keys():
                 dayNotes = data['dayNotes']
                
-        
+
+            delay = data['delay']
+            
             #create segment
             mapSegment = MapSegment(map=map,
-                                startTime=None,
-                                endTime=None,
-                                distance = distance)
+                                    startTime=None,
+                                    endTime=None,
+                                    distance = distance,
+                                    delay=delay)
             mapSegment.save()
 
             if dayNotes:

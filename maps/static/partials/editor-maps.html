@@ -70,7 +70,14 @@
 			  data-before-render="endDateBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)"></datetimepicker>
 	</ul>
       </div>
-
+      
+      <div class="form-group">
+	<label for="dalaySelect">Delay:</label>
+	<select class="selectpicker" id="delaySelect" ng-options="item as item.label for item in delayOptions track by item.value" ng-model="selectedDelayOption">
+	</select>	
+      </div>
+      
+      <hr>
       <h5>Day Notes:</h5>
       <textarea class="field" id="dayNotes" rows="6" style="min-width:100%" ng-model="dayNotes"></textarea>
       

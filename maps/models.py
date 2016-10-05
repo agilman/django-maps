@@ -20,7 +20,8 @@ class MapSegment(models.Model):
     map = models.ForeignKey(Map,on_delete=models.CASCADE, related_name="segments")
     startTime = models.DateTimeField(null=True)
     endTime = models.DateTimeField(null=True)
-    distance = models.IntegerField(null=True)
+    distance = models.IntegerField()
+    delay = models.IntegerField()
     
 class WayPoint(models.Model):
     segment = models.ForeignKey(MapSegment,on_delete=models.CASCADE, related_name="coordinates")

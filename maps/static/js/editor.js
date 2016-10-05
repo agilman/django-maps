@@ -124,6 +124,9 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $scope.selectedSegmentNotes = null;
     $scope.currentSegmentIndex=null;
     $scope.segmentsData = null;
+
+    $scope.delayOptions = [{ label: "No delay", value: 0 }, { label: "5 Days", value: 5 },{ label: "15 Days", value: 15 },{ label: "30 Days", value: 30 }];
+    $scope.selectedDelayOption = $scope.delayOptions[0];    
     
     mapboxToken = document.getElementById("mapboxToken").value;
     mapboxMapName = document.getElementById("mapboxMap").value;
@@ -214,7 +217,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    point = coordinates[Math.floor(coordinates.length/2)];
 	}
 
-	console.log(point);
 	var markerPoint = [point[1],point[0]];
 	var newMarker = new L.Marker(markerPoint).on('click',$scope.segmentMarkerClick);
 	newMarker.segmentId = segment.properties.segmentId;
@@ -534,6 +536,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 			  'distance': $scope.segmentDistance,
 			  'waypoints':newSegmentPath,
 			  'dayNotes':$scope.dayNotes,
+			  'delay':$scope.selectedDelayOption.value,
 			 };
     	$http.post('/api/rest/mapSegment',JSON.stringify(newSegment)).then(function(data){
     	    //return needs to be geojson
