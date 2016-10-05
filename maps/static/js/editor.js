@@ -126,7 +126,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $scope.segmentsData = null;
 
     $scope.delayOptions = [{ label: "No delay", value: 0 }, { label: "5 Days", value: 5 },{ label: "15 Days", value: 15 },{ label: "30 Days", value: 30 }];
-    $scope.selectedDelayOption = $scope.delayOptions[0];    
+    $scope.selectedDelayOption = $scope.delayOptions[0];
+    $scope.selectedDelayValue = $scope.delayOptions[0].value;
     
     mapboxToken = document.getElementById("mapboxToken").value;
     mapboxMapName = document.getElementById("mapboxMap").value;
@@ -594,6 +595,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	$scope.selectedSegmentDistance = properties.distance;
 	$scope.selectedSegmentStartTime = properties.startTime;
 	$scope.selectedSegmentEndTime = properties.endTime;
+	$scope.selectedDelayValue = properties.delay;
 	$scope.selectedSegmentNotes = properties.notes[0];
     };
     
@@ -611,6 +613,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	$scope.selectedSegmentDistance = properties.distance;
 	$scope.selectedSegmentStartTime = properties.startTime;
 	$scope.selectedSegmentEndTime = properties.endTime;
+	$scope.selectedDelayValue = properties.delay;
 	$scope.selectedSegmentNotes = properties.notes[0];	
     };
 
@@ -628,6 +631,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	$scope.selectedSegmentDistance = properties.distance;
 	$scope.selectedSegmentStartTime = properties.startTime;
 	$scope.selectedSegmentEndTime = properties.endTime;
+	$scope.selectedDelayValue = properties.delay;
 	$scope.selectedSegmentNotes = properties.notes[0];	
     };
 

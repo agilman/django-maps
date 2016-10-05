@@ -73,8 +73,8 @@
       
       <div class="form-group">
 	<label for="dalaySelect">Delay:</label>
-	<select class="selectpicker" id="delaySelect" ng-options="item as item.label for item in delayOptions track by item.value" ng-model="selectedDelayOption">
-	</select>	
+	<select class="selectpicker" id="delaySelect" ng-options="item as item.label for item in delayOptions track by item.value" ng-model="selectedDelayOption" ng-change="selectedDelayValue=selectedDelayOption.value">
+	</select>
       </div>
       
       <hr>
@@ -107,6 +107,8 @@
       <label>End datetime: </label> {{ selectedSegmentEndTime }}
       <br>
       <label>Distance:</label> {{ getSelectedSegmentDistance() }} Km
+      <br>
+      <label>Delay:</label> {{ selectedDelayValue }}
       <br>
       <label>Notes</label> {{ selectedSegmentNotes }}
   
