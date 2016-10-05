@@ -7,7 +7,7 @@
     <div ng-show="maps.length>0" ng-cloak>
       <h4>Maps:</h4>
       <ul class="list-group">
-	<li class="list-group-item clearfix" ng-repeat="map in maps" ng-class="{active:isMapActive($index)}" ng-click="selectMap($index)">
+	<li class="list-group-item clearfix" ng-repeat="map in maps" ng-class="{active:isMapActive($index)}" ng-click="selectMapClick($index)">
 	  {{ map.name }}
 	  <span class="pull-right">
 		{{ getMapDistance($index) }}Km

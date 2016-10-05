@@ -356,7 +356,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 
     	latestPathLayer = new L.LayerGroup();
     	latestPathLayer.addTo(map);
-    	
+
+	//This is used to draw current established map
     	geoJsonLayer = new L.geoJson();
     	geoJsonLayer.addTo(map);
 
@@ -399,18 +400,22 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	return false;
     }
     
-    $scope.selectMap = function(index){
+    $scope.selectMapClick = function(index){
     //if change is needed...
-	 $scope.currentMapId = $scope.maps[index].id;
-	 $scope.currentMapName = $scope.maps[index].name;
-	 $scope.currentMapIndx = index;
-	 
-	 endLat = null;
-	 endLng = null;
-	 $scope.endSet = false;
-	 setupMapFromDOM(index);//load right map...
-	 
-	 clearLayers();
+	$scope.currentMapId = $scope.maps[index].id;
+	$scope.currentMapName = $scope.maps[index].name;
+
+	if ($scope.currentMapIndx == index){
+	    fitMap(geoJsonLayer.getBounds());
+	}else{
+	    $scope.currentMapIndx = index;
+	    endLat = null;
+	    endLng = null;
+	    $scope.endSet = false;
+	    setupMapFromDOM(index);//load right map...
+	    
+	    clearLayers();
+	}
     };
     
     
