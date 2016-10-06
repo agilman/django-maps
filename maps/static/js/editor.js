@@ -179,7 +179,10 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     function setStartTimeFromLast(segment){
 	var last = $scope.segmentsData.features[$scope.segmentsData.features.length-1];
 	var endTime = last.properties.endTime;
-	if (endTime){
+	if (endTime){//if last segment has endTime set... set this as start time.
+	    var ts = moment(last.properties.endTime).startOf("day").add(6,'hours').add(1,'days');
+	    $scope.dateRangeStart = ts;
+	    
 	}else{
 	    $scope.dateRangeStart = moment({hour:6});
 	}
@@ -388,10 +391,19 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     });
 
     function setEndTime(){
-	//if startTime is today:
-	//   set endTIme as now
+	//if dateRangeStart is today:
+	//   set dateRangeEnd as now
+	//if dateRangeStart is in the future:
+	// set dateRangeEnd as 6pm of same day as future dateRangeStart
 
-	$scope.dateRangeEnd = moment();
+	var startTs = $scope.dateRangeStart._d;
+
+	if(moment(startTs).startOf('day') > moment().startOf('day')){
+	    $scope.dateRangeEnd = moment(startTs).startOf('day').add(18,'hours');
+	}else{
+	    $scope.dateRangeEnd = moment();
+	}
+	
     }
     
     // map click
@@ -572,7 +584,8 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    geoJsonLayer.addData(jsonData);
     	    $scope.maps[$scope.currentMapIndx].distance += $scope.segmentDistance;
     	    setStartPoint(endLat,endLng);
-	    
+
+	    //TODO: investigate why start and end date aren't showing up on segment click.
 	    $scope.segmentsData.features.push(jsonData);
 	    
 	    //Add marker to map.
@@ -589,7 +602,10 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    $scope.segmentDistance = null;
     	    $scope.endSet = false;
 	    $scope.dayNotes = null;
-	    
+
+	    //set dateRangeStart to 6am next day from dateRangeEnd.
+	    $scope.dateRangeStart = moment($scope.dateRangeEnd._d).startOf('day').add(1,'days').add(6,'hours') 
+	    $scope.dateRangeEnd = null;	    
     	});
 	
     };  // end of createSegment
