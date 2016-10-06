@@ -105,9 +105,11 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     $scope.startSet = false;
     startLat = null;
     startLng = null;
-    startDatetime = null;
+
+    //Why not use dateRangeStart?
     $scope.startTime = null;
     $scope.endtTime = null;
+    
     $scope.segmentDistance = null;
     $scope.dayNotes = null;
 
@@ -152,7 +154,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	    }else if (map.getZoom()>11){
 		map.setView(center,9);
 	    }
-	    
 	});
     };
 
@@ -175,6 +176,15 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	});
     };
 
+    function setStartTimeFromLast(segment){
+	var last = $scope.segmentsData.features[$scope.segmentsData.features.length-1];
+	var endTime = last.properties.endTime;
+	if (endTime){
+	}else{
+	    $scope.dateRangeStart = moment({hour:6});
+	}
+    };
+    
     setupMapFromDOM = function(index){
 	//get Map
 	$http.get('/api/rest/maps/' + $scope.currentMapId).then(function(data){
@@ -199,7 +209,12 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 		    
 	    	    setStartPoint(startLat,startLng);
 	    	    $scope.startSet = true;
+
+		    //set start time as 6am the next day from last point.
+		    setStartTimeFromLast();
 	    	}
+		
+		
 	    }else{ //if the selected map doesn't have any points
 	    	startLat = null;
 	    	startLng = null;
@@ -321,6 +336,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	}
     }
 
+    //MAIN/// Hmmm, lots of definitions above...
     //Load maps, and latest segments
     $http.get('/api/rest/advMaps/' + urlAdvId).then(function(data){
     	$scope.maps = data.data;
@@ -370,26 +386,36 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	selectedSegmentLayer = new L.LayerGroup();
 	selectedSegmentLayer.addTo(map);
     });
+
+    function setEndTime(){
+	//if startTime is today:
+	//   set endTIme as now
+
+	$scope.dateRangeEnd = moment();
+    }
     
     // map click
     $scope.$on("leafletDirectiveMap.click",function(e,wrap){
 	//unset segment selection view
 	$scope.showSegment = false;
-
 	
     	var lat = wrap.leafletEvent.latlng.lat;
     	var lng = wrap.leafletEvent.latlng.lng;
     	
     	//set start point.
+	
     	if (!$scope.startSet){
     	    setStartPoint(lat,lng);
     	    $scope.startSet = true;
+	    $scope.dateRangeStart = moment({hour:6});
+
     	}else{
     	    var navData = setEndPoint(lat,lng);
     	    newSegmentPath = navData.navLine;
     	    $scope.segmentDistance = navData.distance;
     	    
     	    $scope.endSet = true;
+	    setEndTime();
     	}
     });
 
@@ -530,7 +556,7 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	})
     };
     
-    $scope.createSegment = function(){
+    $scope.createSegment = function(){	
     	var newSegment = {'mapId':$scope.currentMapId,
 			  'startTime':$scope.dateRangeStart,
 			  'endTime': $scope.dateRangeEnd,
@@ -634,10 +660,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	$scope.selectedDelayValue = properties.delay;
 	$scope.selectedSegmentNotes = properties.notes[0];	
     };
-
-    
-
-    
     
     $scope.deleteMap = function(index){
        	var mapId = $scope.maps[index].id;

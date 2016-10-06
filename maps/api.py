@@ -147,20 +147,19 @@ def mapSegment(request,segmentId=None):
             if "startTime" in data.keys():
                 startTime = data["startTime"]
             if "endTime" in data.keys():
-                endTIme = data["endTime"]
+                endTime = data["endTime"]
             
             distance = data["distance"]
             waypoints = data["waypoints"]
             if 'dayNotes' in data.keys():
-                dayNotes = data['dayNotes']
-               
+                dayNotes = data['dayNotes']               
 
             delay = data['delay']
             
             #create segment
             mapSegment = MapSegment(map=map,
-                                    startTime=None,
-                                    endTime=None,
+                                    startTime=startTime,
+                                    endTime=endTime,
                                     distance = distance,
                                     delay=delay)
             mapSegment.save()
