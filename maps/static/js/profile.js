@@ -21,18 +21,23 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 }])
 .controller('mainController',['$scope','$log','$http',function($scope,$log,$http){
     //get adventure lists
-    var userId = document.getElementById("userId").value;
+    $scope.userId = document.getElementById("userId").value;
     //TODO check proper way of handling rest                                                                                                                         
-    $http.get('/api/rest/userInfo/' + userId).then(function(data){
+    $http.get('/api/rest/userInfo/' + $scope.userId).then(function(data){
         $scope.adventures = data.data;
         $scope.currentAdvId = $scope.adventures[0].id;
         $scope.currentAdvName = $scope.adventures[0].name;
     });
 }])
-.controller('advController',['$scope','$log','leafletData',function($scope,$log,leafletData){
+.controller('advController',['$scope','$log','$http','leafletData',function($scope,$log,$http,leafletData){
     //Check if user has adventures
     //if he doesn't, show message.
-    
+
+
+    //Gotta get advOverview map....
+    $http.get('/api/rest/advsOverview/'+ $scope.userId).then(function(data){
+
+    });
     //if there are maps worth visualizing
     //init map
     var mapboxToken = document.getElementById("mapboxToken").value;

@@ -10,7 +10,7 @@ class Adventure(models.Model):
     name = models.CharField(max_length=32)
 
 class Map(models.Model):
-    adv = models.ForeignKey(Adventure,on_delete=models.CASCADE)
+    adv = models.ForeignKey(Adventure,on_delete=models.CASCADE,related_name="maps")
     name = models.CharField(max_length=32)
     
     def total_distance(self):
@@ -29,7 +29,7 @@ class WayPoint(models.Model):
     lng = models.DecimalField(max_digits=9, decimal_places=6)
     
     def __str__(self):
-        return '[%s,%s]' %(self.Lat,self.Lng)
+        return '[%s,%s]' %(self.lat,self.lng)
 
 class DayNote(models.Model):
     segment = models.ForeignKey(MapSegment,on_delete=models.CASCADE, related_name="dayNotes")

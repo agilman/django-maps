@@ -33,6 +33,7 @@ urlpatterns = [
     #API URLs
     url(r'^api/rest/userInfo/(?P<userId>\d+)$', api.userInfo), #get only
     url(r'^api/rest/adventures$', api.adventures), #post
+    url(r'^api/rest/advsOverview/(?P<userId>\d+)$', api.advsOverview), #get
     url(r'^api/rest/adventures/(?P<advId>\d+)$', api.adventures), #get, delete
     url(r'^api/rest/advMaps/(?P<advId>\d+)$', api.advMaps),
     url(r'^api/rest/maps/(?P<mapId>\d+)$', api.maps),

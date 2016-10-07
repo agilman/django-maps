@@ -43,6 +43,34 @@ def adventures(request,advId=None):
         #TODO Probably should return success code instead of object...
         return JsonResponse(serialized.data,safe=False)
 
+@csrf_exempt
+def advsOverview(request,userId):
+    """This returns all start and end points from all the segments in all the maps, for all adventures.
+    The goal is to visualize roughly all the travelling the user has done."""
+    
+    if request.method=="GET":
+        results = []
+        #this is awful
+        advs = Adventure.objects.filter(owner_id=userId).all()
+        for adv in advs:
+            advResult = []
+            advMaps = adv.maps.all()
+            for advMap in advMaps:
+                segments = advMap.segments.all()
+                for segment in segments:
+                    wayPoints = segment.coordinates.all()
+                    start = wayPoints[0]
+                    startPoint = [start.lat,start.lng]
+                    
+                    end = wayPoints[wayPoints.count()-1]
+                    endPoint = [end.lat,end.lng]
+                    
+                    
+                    advResult.append([startPoint,endPoint])
+            results.append({'advId':adv.id,'segments':advResult})
+        
+        return JsonResponse(results, safe=False)
+
 def makeGeoJsonFromMap(map):
     features = []
 
