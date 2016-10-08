@@ -55,15 +55,15 @@ def advsOverview(request,userId):
         for adv in advs:
             advCoordinates = []
             distance = 0
+
             advMaps = adv.maps.all()
             for advMap in advMaps:
                 segments = advMap.segments.all()
                 for segment in segments:
-                    wayPoints = segment.coordinates.all()
-                    start = wayPoints[0]
+                    start = segment.coordinates.first()
                     startPoint = [float(start.lat),float(start.lng)]
                     
-                    end = wayPoints[len(wayPoints)-1]
+                    end = segment.coordinates.last()
                     endPoint = [float(end.lat),float(end.lng)]
                     
                     ###TODO: allow for non-continuous lines? 
@@ -82,7 +82,6 @@ def advsOverview(request,userId):
                     
                     distance += segment.distance
             
-            
             advGeoJson = {'type':'Feature',
                           'properties':{'advId':adv.id,
                                         'distance': distance },
@@ -93,7 +92,6 @@ def advsOverview(request,userId):
 
 
         adventuresGeoJson = {'type':'FeatureCollection','properties':{'userId':userId},'features': allAdvs}
-        
         
         return JsonResponse(adventuresGeoJson, safe=False)
 
