@@ -33,13 +33,8 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
     //Check if user has adventures
     //if he doesn't, show message.
 
-
-    //Gotta get advOverview map....
-    $http.get('/api/rest/advsOverview/'+ $scope.userId).then(function(data){
-
-    });
-    //if there are maps worth visualizing
-    //init map
+    $scope.advsOverviewData = null;
+    
     var mapboxToken = document.getElementById("mapboxToken").value;
     var mapboxMapName = document.getElementById("mapboxMap").value;
 
@@ -84,12 +79,29 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 	geojson: {}
     });
 
-    leafletData.getMap().then(function(map){
-	advsLayer= new L.LayerGroup();
-	advsLayer.addTo(map);
-    });
+
     
-    //visualize adventures on map	
+    leafletData.getMap().then(function(map){
+	advsOverviewLayer = new L.geoJson();
+	advsOverviewLayer.addTo(map);
+    });
+
+    function fitMap(bounds){
+	leafletData.getMap().then(function(map){
+	    map.fitBounds(bounds);
+	});
+    };
+    
+    //Gotta get advOverview map....
+    $http.get('/api/rest/advsOverview/'+ $scope.userId).then(function(data){
+	$scope.advsOverviewData = data.data;
+	advsOverviewLayer.addData($scope.advsOverviewData);
+
+	fitMap(advsOverviewLayer.getBounds())
+    });
+    //if there are maps worth visualizing
+    //init map
+
 }])
 .controller('mapsController',['$scope','$log','$routeParams',function($scope,$log,$routeParams){
 	var currentAdvFromUrl  = $routeParams.advId;

@@ -49,27 +49,53 @@ def advsOverview(request,userId):
     The goal is to visualize roughly all the travelling the user has done."""
     
     if request.method=="GET":
-        results = []
+        allAdvs = []
         #this is awful
         advs = Adventure.objects.filter(owner_id=userId).all()
         for adv in advs:
-            advResult = []
+            advCoordinates = []
+            distance = 0
             advMaps = adv.maps.all()
             for advMap in advMaps:
                 segments = advMap.segments.all()
                 for segment in segments:
                     wayPoints = segment.coordinates.all()
                     start = wayPoints[0]
-                    startPoint = [start.lat,start.lng]
+                    startPoint = [float(start.lat),float(start.lng)]
                     
-                    end = wayPoints[wayPoints.count()-1]
-                    endPoint = [end.lat,end.lng]
+                    end = wayPoints[len(wayPoints)-1]
+                    endPoint = [float(end.lat),float(end.lng)]
                     
+                    ###TODO: allow for non-continuous lines? 
+                    #Add first segment
+                    if len(advCoordinates) == 0:
+                        advCoordinates.append(startPoint)
+                        advCoordinates.append(endPoint)
                     
-                    advResult.append([startPoint,endPoint])
-            results.append({'advId':adv.id,'segments':advResult})
+                    #If this is not the first segment, check if startPoint is same as last endPoint
+                    else:
+                        if advCoordinates[len(advCoordinates)-1]==startPoint:  
+                            advCoordinates.append(endPoint)
+                        else:
+                            advCoordinates.append(startPoint)
+                            advCoordinates.append(endPoint)
+                    
+                    distance += segment.distance
+            
+            
+            advGeoJson = {'type':'Feature',
+                          'properties':{'advId':adv.id,
+                                        'distance': distance },
+                          'geometry':{'type':'LineString',
+                                      'coordinates': advCoordinates}}
+            
+            allAdvs.append(advGeoJson)
+
+
+        adventuresGeoJson = {'type':'FeatureCollection','properties':{'userId':userId},'features': allAdvs}
         
-        return JsonResponse(results, safe=False)
+        
+        return JsonResponse(adventuresGeoJson, safe=False)
 
 def makeGeoJsonFromMap(map):
     features = []
