@@ -54,7 +54,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	  <ul class="nav navbar-nav">
 	    <li ng-class="isAdvEditorActive()"><a ng-href="#/" ng-click="currentEditorPage='advs'">Adventure Editor</a></li>
-	    <li><p class="navbar-text">{% verbatim %}{{ currentAdvName }}{% endverbatim %}</p></li>
+	    <li ng-cloak><p class="navbar-text">{% verbatim %}{{ currentAdvName }}{% endverbatim %}</p></li>
 	  </ul>
           
           <ul class="nav navbar-nav navbar-right">

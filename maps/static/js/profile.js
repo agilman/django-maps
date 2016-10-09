@@ -26,12 +26,14 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
     $scope.adventures = null;
     $scope.currentAdvId = null;
     $scope.currentAdvName = null;
+    $scope.currentAdvIndex= null;
     
     //TODO check proper way of handling rest
     $http.get('/api/rest/userInfo/' + $scope.userId).then(function(data){
-        $scope.adventures = data.data;
-        $scope.currentAdvId = $scope.adventures[0].id;
-        $scope.currentAdvName = $scope.adventures[0].name;
+	$scope.adventures = data.data;
+	$scope.currentAdvId = $scope.adventures[$scope.adventures.length-1].id;
+	$scope.currentAdvName = $scope.adventures[$scope.adventures.length-1].name;
+	$scope.currentAdvIndex = $scope.adventures.length-1;
     });
 
     $scope.isAdvPageActive = function(){
@@ -72,6 +74,11 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 
     $scope.$on('setGearPageActive',function(event){
 	$scope.currentPage='gear';
+    });
+
+    $scope.$on('advChangeEvent',function(event,index){
+	$scope.currentAdvName = $scope.adventures[index].name;
+	$scope.currentAdvIndex = index;
     });
 }])
 .controller('advController',['$scope','$log','$http','leafletData',function($scope,$log,$http,leafletData){
@@ -155,6 +162,20 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 
     $scope.mouseleaveAdv = function(index){
 	segmentHighlightLayer.clearLayers();
+    };
+
+    $scope.isAdvSelected = function(index){
+	if ($scope.currentAdvIndex == index){
+	    return "active";
+	}
+    };
+    $scope.advSelectClick = function(index){
+	if($scope.currentAdvIndex==index){
+	    var segmentGeoJson= new L.geoJson(segmentHighlightLayer.toGeoJSON());
+	    fitMap(segmentGeoJson.getBounds());
+	}else{
+	    $scope.$emit("advChangeEvent",index);
+	}
     };
 }])
 .controller('mapsController',['$scope','$log','$routeParams',function($scope,$log,$routeParams){

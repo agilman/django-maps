@@ -15,8 +15,7 @@
   
   <!-- Custom Fonts -->
   <link href="/static/landing/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-  
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">  
   
   <!-- leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0/dist/leaflet.css" >
@@ -52,6 +51,7 @@
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	  <ul class="nav navbar-nav">
 	    <li ng-class="isAdvPageActive()"><a ng-href="#/" ng-click="currentPage='advs'">Adventures</a></li>
+	    <li ng-cloak><p class="navbar-text">{% verbatim %}{{ currentAdvName }}{% endverbatim %}</p></li>
 	  </ul>
 	  {% block loginNav %}
 	  <ul class="nav navbar-nav navbar-right">

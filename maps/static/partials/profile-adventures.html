@@ -10,7 +10,7 @@
 
     <h4>Advnetures:</h4>
     <ul class="list-group">
-      <li class="list-group-item adventure" ng-repeat="adventure in adventures" ng-click="goToAdv(adventure.id);" ng-mouseover="mouseOnAdv($index)" ng-mouseleave="mouseleaveAdv()">
+      <li class="list-group-item adventure" ng-repeat="adventure in adventures" ng-mouseover="mouseOnAdv($index)" ng-mouseleave="mouseleaveAdv()" ng-class="isAdvSelected($index)" ng-click="advSelectClick($index)">
 	{{ adventure.name }}
       </li>
     </ul>
