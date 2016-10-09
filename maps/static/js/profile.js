@@ -22,14 +22,60 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 .controller('mainController',['$scope','$log','$http',function($scope,$log,$http){
     //get adventure lists
     $scope.userId = document.getElementById("userId").value;
-    //TODO check proper way of handling rest                                                                                                                         
+    $scope.currentPage = 'advs';
+    $scope.adventures = null;
+    $scope.currentAdvId = null;
+    $scope.currentAdvName = null;
+    
+    //TODO check proper way of handling rest
     $http.get('/api/rest/userInfo/' + $scope.userId).then(function(data){
         $scope.adventures = data.data;
         $scope.currentAdvId = $scope.adventures[0].id;
         $scope.currentAdvName = $scope.adventures[0].name;
     });
+
+    $scope.isAdvPageActive = function(){
+	if($scope.currentPage == 'advs'){
+	    return "active";
+	}
+    };
+
+    $scope.isMapPageActive = function(){
+	if($scope.currentPage == 'maps'){
+	    return "active";
+	}
+    };
+
+    $scope.isBlogPageActive = function(){
+	if($scope.currentPage == 'blogs'){
+	    return "active";
+	}
+    };
+
+    $scope.isGearPageActive = function(){
+	if($scope.currentPage == 'gear'){
+	    return "active";
+	}
+    };
+    
+    $scope.$on('setAdvPageActive',function(event){
+	$scope.currentPage='advs';
+    });
+
+    $scope.$on('setMapPageActive',function(event){
+	$scope.currentPage='maps';
+    });
+
+    $scope.$on('setBlogPageActive',function(event){
+	$scope.currentPage='blogs';
+    });
+
+    $scope.$on('setGearPageActive',function(event){
+	$scope.currentPage='gear';
+    });
 }])
 .controller('advController',['$scope','$log','$http','leafletData',function($scope,$log,$http,leafletData){
+    $scope.$emit("setAdvPageActive");
     //Check if user has adventures
     //if he doesn't, show message.
 
@@ -112,13 +158,12 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
     };
 }])
 .controller('mapsController',['$scope','$log','$routeParams',function($scope,$log,$routeParams){
-	var currentAdvFromUrl  = $routeParams.advId;
-	$log.log("Current adv from url: "+ currentAdvFromUrl);
+    $scope.$emit("setMapPageActive");
 }])
 .controller('blogsController',['$scope','$log',function($scope,$log){
-	$log.log("Hello from blogs controller");
+    $scope.$emit("setBlogPageActive");
 }])
 .controller('gearController',['$scope','$log',function($scope,$log){
-	$log.log("Hello from gear controller");
+    $scope.$emit("setGearPageActive");
 }]);
 })(window.angular);

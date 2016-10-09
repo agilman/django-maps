@@ -123,7 +123,7 @@ function drawSegmentHighlight(segment){
 	     
     var polyline_options = {
 	color: '#ff751a',
-	width: '5px'
+	weight: '6'
     };
 
     
