@@ -79,11 +79,13 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 	geojson: {}
     });
 
-
     
     leafletData.getMap().then(function(map){
 	advsOverviewLayer = new L.geoJson();
 	advsOverviewLayer.addTo(map);
+	
+	segmentHighlightLayer = new L.LayerGroup();
+	segmentHighlightLayer.addTo(map);
     });
 
     function fitMap(bounds){
@@ -99,9 +101,15 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 
 	fitMap(advsOverviewLayer.getBounds())
     });
-    //if there are maps worth visualizing
-    //init map
 
+    $scope.mouseOnAdv = function(index){
+	var coordinates = $scope.advsOverviewData.features[index].geometry.coordinates;
+	drawSegmentHighlight(coordinates);
+    };
+
+    $scope.mouseleaveAdv = function(index){
+	segmentHighlightLayer.clearLayers();
+    };
 }])
 .controller('mapsController',['$scope','$log','$routeParams',function($scope,$log,$routeParams){
 	var currentAdvFromUrl  = $routeParams.advId;
