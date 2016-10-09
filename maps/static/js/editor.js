@@ -396,13 +396,14 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	//if dateRangeStart is in the future:
 	// set dateRangeEnd as 6pm of same day as future dateRangeStart
 
-	var startTs = $scope.dateRangeStart._d;
-
-	if(moment(startTs).startOf('day') > moment().startOf('day')){
-	    $scope.dateRangeEnd = moment(startTs).startOf('day').add(18,'hours');
-	}else{
+	var startTs = $scope.dateRangeStart;
+		
+	if(moment(startTs).startOf('day').isSame(moment().startOf('day'))){
 	    $scope.dateRangeEnd = moment();
+	}else{
+	    $scope.dateRangeEnd = moment(startTs).startOf('day').add(18,'hours');
 	}
+
 	
     }
     
@@ -415,7 +416,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	var lng = wrap.leafletEvent.latlng.lng;
     	
     	//set start point.
-	
     	if (!$scope.startSet){
     	    setStartPoint(lat,lng);
     	    $scope.startSet = true;
