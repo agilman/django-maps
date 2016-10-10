@@ -155,6 +155,12 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 	fitMap(advsOverviewLayer.getBounds())
     });
 
+    $scope.getAdvDistance = function(index){
+	if ($scope.advsOverviewData != null){
+	    return $scope.advsOverviewData.features[index].properties.distance/1000;
+	}
+    };
+
     $scope.mouseOnAdv = function(index){
 	var coordinates = $scope.advsOverviewData.features[index].geometry.coordinates;
 	drawSegmentHighlight(coordinates);

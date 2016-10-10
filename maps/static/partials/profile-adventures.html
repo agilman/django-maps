@@ -12,6 +12,9 @@
     <ul class="list-group">
       <li class="list-group-item adventure" ng-repeat="adventure in adventures" ng-mouseover="mouseOnAdv($index)" ng-mouseleave="mouseleaveAdv()" ng-class="isAdvSelected($index)" ng-click="advSelectClick($index)">
 	{{ adventure.name }}
+	<span class="pull-right" ng-cloak>
+	  {{ getAdvDistance($index) }} Km
+	</span>
       </li>
     </ul>
     
