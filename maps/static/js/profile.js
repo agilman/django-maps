@@ -77,6 +77,7 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
     });
 
     $scope.$on('advChangeEvent',function(event,index){
+	$scope.currentAdvId = $scope.adventures[index].id;
 	$scope.currentAdvName = $scope.adventures[index].name;
 	$scope.currentAdvIndex = index;
     });
@@ -131,11 +132,13 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 
 	geojson: {}
     });
-
     
     leafletData.getMap().then(function(map){
 	advsOverviewLayer = new L.geoJson();
 	advsOverviewLayer.addTo(map);
+
+	currentAdvLayer = new L.LayerGroup();
+	currentAdvLayer.addTo(map);
 	
 	segmentHighlightLayer = new L.LayerGroup();
 	segmentHighlightLayer.addTo(map);
@@ -151,7 +154,10 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
     $http.get('/api/rest/advsOverview/'+ $scope.userId).then(function(data){
 	$scope.advsOverviewData = data.data;
 	advsOverviewLayer.addData($scope.advsOverviewData);
-
+	
+	var a = $scope.advsOverviewData.features[$scope.currentAdvIndex].geometry.coordinates;
+	markCurrentPath(a);
+		
 	fitMap(advsOverviewLayer.getBounds())
     });
 
@@ -175,11 +181,14 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 	    return "active";
 	}
     };
+    
     $scope.advSelectClick = function(index){
 	if($scope.currentAdvIndex==index){
 	    var segmentGeoJson= new L.geoJson(segmentHighlightLayer.toGeoJSON());
 	    fitMap(segmentGeoJson.getBounds());
 	}else{
+	    var a = $scope.advsOverviewData.features[index].geometry.coordinates;
+	    markCurrentPath(a);
 	    $scope.$emit("advChangeEvent",index);
 	}
     };
