@@ -32,4 +32,5 @@ function markCurrentPath(coords){
     }
 
     var polyline = new L.polyline(newSegment, polyline_options).addTo(currentAdvLayer);
+    return polyline;
 }

@@ -149,6 +149,13 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 	    map.fitBounds(bounds);
 	});
     };
+
+    function centerMap(center){
+	leafletData.getMap().then(function(map){
+	    map.flyTo(center);
+
+	});
+    };
     
     //Gotta get advOverview map....
     $http.get('/api/rest/advsOverview/'+ $scope.userId).then(function(data){
@@ -188,7 +195,11 @@ angular.module('myApp', ['ngRoute','leaflet-directive'])
 	    fitMap(segmentGeoJson.getBounds());
 	}else{
 	    var a = $scope.advsOverviewData.features[index].geometry.coordinates;
-	    markCurrentPath(a);
+	    var line = markCurrentPath(a);
+
+	    var c = line.getCenter();
+	    //should this be fitMap instead?
+	    centerMap([c.lat,c.lng]);
 	    $scope.$emit("advChangeEvent",index);
 	}
     };
