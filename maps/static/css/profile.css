@@ -4,3 +4,10 @@ body {
 .second-navbar {
     top:51px;
 }
+
+.advInfo {
+    display: inline-block;
+    vertical-align: middle;
+    float: left;
+    
+}

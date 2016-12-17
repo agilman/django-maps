@@ -10,10 +10,16 @@
 
     <h4>Advnetures:</h4>
     <ul class="list-group">
-      <li class="list-group-item adventure" ng-repeat="adventure in adventures" ng-mouseover="mouseOnAdv($index)" ng-mouseleave="mouseleaveAdv()" ng-class="isAdvSelected($index)" ng-click="advSelectClick($index)">
-	{{ adventure.name }}
-	<span class="pull-right" ng-cloak>
-	  {{ getAdvDistance($index) }} Km
+      <li class="list-group-item adventure clearfix" ng-repeat="adventure in adventures" ng-mouseover="mouseOnAdv($index)" ng-mouseleave="mouseleaveAdv()" ng-class="isAdvSelected($index)" ng-click="advSelectClick($index)">
+	<span class="pull-left">
+	  <div class="thumbnail">
+	    <img src="/static/img/bicycle.png" width="100px" height="100px">
+	  </div>
+	  
+	</span>
+	<span class="pull-right advInfo" ng-cloak>
+	  <h3>{{ adventure.name }}</h3>
+	  <p> {{ getAdvDistance($index) }} Km</p>
 	</span>
       </li>
     </ul>
@@ -28,3 +34,4 @@
   
 </div>
 
+<div>Icons made by <a href="http://www.flaticon.com/authors/vectorgraphit" title="Vectorgraphit">Vectorgraphit</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
