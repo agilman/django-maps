@@ -354,7 +354,6 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
 	$scope.pleasesWait = false;
     });
     
-    //init map
     angular.extend($scope, {
         center: {
             lat: 45.510,
@@ -428,6 +427,10 @@ angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-direct
     	    
     	    $scope.endSet = true;
 	    setEndTime();
+
+	    //clear highlight layer
+	    //possibly need more map cleaning and adjusting zoom.
+	    selectedSegmentLayer.clearLayers();
     	}
     });
 
