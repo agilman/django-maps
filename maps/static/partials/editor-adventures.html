@@ -49,8 +49,9 @@
     
     <label for="biographyField">Biography:</label>
     <br>
-    <textarea class="field" id="biographyField" rows="6" style="min-width:100%" readonly></textarea>
-    <button class="btn btn-primary" id="editBioButton">Edit biography</button>
+    <textarea ng-disabled="bioDisabled();" class="field" id="biographyField" rows="6" style="min-width:100%" ng-keyup="editTextKeyUp()"></textarea>
+    <button class="btn btn-primary" ng-hide="bioEditEnabled" id="editBioButton" ng-click="editBioClick()">Edit biography</button>
+    <button class="btn btn-primary" ng-show="bioSaveEnabled" ng-click="saveBioClick()">Save!</button>
     <br>
 </div>
   

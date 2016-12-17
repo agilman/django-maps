@@ -1,5 +1,5 @@
-from maps.models import Adventure, Map , MapSegment, WayPoint, DayNote
-from maps.serealizers import AdventureSerializer, MapSerializer, MapSegmentSerializer
+from maps.models import UserBio, Adventure, Map , MapSegment, WayPoint, DayNote
+from maps.serealizers import UserBioSerializer, AdventureSerializer, MapSerializer, MapSegmentSerializer
 from django.http import JsonResponse
 
 from collections import OrderedDict
@@ -22,6 +22,11 @@ def userInfo(request,userId=None):
         adventures = Adventure.objects.filter(owner_id=userId)
         serializer = AdventureSerializer(adventures,many=True)
 
+        bio = UserBio.objects.filter(user=userId)
+        bioSerializer = UserBioSerializer(bio,many=False)
+        print(bioSerializer)
+        print("Need to join the two...")
+        
         return JsonResponse(serializer.data, safe=False)
     
 @csrf_exempt

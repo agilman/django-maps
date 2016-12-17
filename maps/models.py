@@ -4,11 +4,17 @@ from django.conf import settings
 
 
 # Create your models here.
+
+class UserBio(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE,)
+    bio = models.CharField(max_length=2048)
+    
 class Adventure(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,)
     name = models.CharField(max_length=32)
-
+    
 class Map(models.Model):
     adv = models.ForeignKey(Adventure,on_delete=models.CASCADE,related_name="maps")
     name = models.CharField(max_length=32)

@@ -1,7 +1,12 @@
-from maps.models import Adventure, Map, MapSegment, WayPoint
+from maps.models import UserBio, Adventure, Map, MapSegment, WayPoint
 
 from rest_framework import serializers
 
+class UserBioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserBio
+        fields = ['bio']
+        
 class AdventureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adventure

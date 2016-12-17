@@ -708,6 +708,8 @@
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
     $scope.$emit('setAdvEditorActive');
     $scope.profilePic = "/static/img/blank-profile-picture.png";
+    $scope.bioEditEnabled = false;
+    $scope.bioSaveEnabled = false;
     
     $scope.isAdvSelected = function(index){
 	if ($scope.currentAdvIndex ==index){
@@ -765,6 +767,25 @@
     $scope.advClick = function(index){
 	$scope.$emit('advChangeEvent',index);
     };
+
+    $scope.bioDisabled = function(){
+	return !$scope.bioEditEnabled;
+    };
+
+    $scope.editBioClick = function(){
+	$scope.bioEditEnabled = true;
+    };
+
+    $scope.editTextKeyUp = function(){
+	$scope.bioSaveEnabled = true;
+    };
+
+    $scope.saveBioClick = function(){
+	$scope.bioEditEnabled = false;
+	$scope.bioSaveEnabled = false;
+
+	//TODO SEND PUT REQUEST.
+    }
 
 }]);
 })(window.angular);
