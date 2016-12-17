@@ -9,5 +9,6 @@ body {
     display: inline-block;
     vertical-align: middle;
     float: left;
-    
+    padding-left: 10px;
+    text-align:left;
 }
