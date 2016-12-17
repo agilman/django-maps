@@ -1,5 +1,5 @@
 (function(angular){
-angular.module('myApp', ['ngRoute','leaflet-directive'])
+    angular.module('myApp', ['ngRoute','ui.bootstrap','leaflet-directive'])
 .config(['$routeProvider', function ($routeProvider) {
 		$routeProvider
 		.when("/",{
