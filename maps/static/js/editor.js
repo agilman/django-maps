@@ -1,5 +1,5 @@
 (function(angular){
-    angular.module('myApp', ['ngRoute','ui.bootstrap','ui.bootstrap.datetimepicker','leaflet-directive'])
+    angular.module('myApp', ['ngRoute','ui.bootstrap.datetimepicker','leaflet-directive'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
 	.when("/",{
