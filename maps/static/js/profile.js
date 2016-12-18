@@ -30,7 +30,7 @@
     
     //TODO check proper way of handling rest
     $http.get('/api/rest/userInfo/' + $scope.userId).then(function(data){
-	$scope.adventures = data.data;
+	$scope.adventures = data.data.adventures;
 	$scope.currentAdvId = $scope.adventures[$scope.adventures.length-1].id;
 	$scope.currentAdvName = $scope.adventures[$scope.adventures.length-1].name;
 	$scope.currentAdvIndex = $scope.adventures.length-1;

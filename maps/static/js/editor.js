@@ -23,14 +23,17 @@
     var userId = document.getElementById("userId").value;
     $scope.userId = userId;
     $scope.adventures = [];
-    $scope.currentAdvId=null;
-    $scope.currentAdvName=null;
-    $scope.currentAdvIndex=null;
+    $scope.bio = null;
+    $scope.currentAdvId = null;
+    $scope.currentAdvName = null;
+    $scope.currentAdvIndex = null;
 
-    $scope.currentEditorPage=null;
+    $scope.currentEditorPage = null;
     
     $http.get('/api/rest/userInfo/' + userId).then(function(data){
-    	$scope.adventures = data.data;
+    	$scope.adventures = data.data.adventures;
+	$scope.bio = data.data.bio;
+	
     	//Get latest adv if adventureId not provided...
 	if ($scope.adventures.length > 0){
     	    $scope.currentAdvId  = $scope.adventures[$scope.adventures.length-1].id;
@@ -781,10 +784,17 @@
     };
 
     $scope.saveBioClick = function(){
+	//Because of the binding, bio field wont be null when 'save' is clicked.
+	//Always sending POST, and letting server figure out if to create or update.
+	
+	var bio = document.getElementById("bioField").value;
+	var newBio = {'userId':$scope.userId,'bio':bio};
+    	$http.post('/api/rest/userInfo/'+$scope.userId,JSON.stringify(newBio)).then(function(data){
+    	    $scope.bio=data.data;
+	});	
+	
 	$scope.bioEditEnabled = false;
 	$scope.bioSaveEnabled = false;
-
-	//TODO SEND PUT REQUEST.
     }
 
 }]);

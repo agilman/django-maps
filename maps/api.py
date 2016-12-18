@@ -20,14 +20,36 @@ from django.views.decorators.csrf import csrf_exempt
 def userInfo(request,userId=None):
     if request.method == 'GET':
         adventures = Adventure.objects.filter(owner_id=userId)
-        serializer = AdventureSerializer(adventures,many=True)
+        advSerializer = AdventureSerializer(adventures,many=True)
 
-        bio = UserBio.objects.filter(user=userId)
-        bioSerializer = UserBioSerializer(bio,many=False)
-        print(bioSerializer)
-        print("Need to join the two...")
-        
-        return JsonResponse(serializer.data, safe=False)
+        bio = UserBio.objects.filter(user=userId).first()
+        bioSerializer = None
+      
+        if type(bio)!=type(None):
+            bioSerializer = UserBioSerializer(bio,many=False).data 
+
+        total = {"adventures":advSerializer.data,"bio":bioSerializer}        
+        return JsonResponse(total, safe=False)
+    
+    elif request.method == 'POST': #NO PUT,Only POST
+        data = JSONParser().parse(request)
+        user = User.objects.get(pk=int(data["userId"]))
+
+        #check if exists:
+        bioQuery = UserBio.objects.filter(user=user)
+        bio = None
+        if bioQuery.exists():
+            bioQuery.update(bio=data["bio"])
+
+            bio = bioQuery.first()
+
+        else:
+
+            bio = UserBio(user=user,bio=data["bio"])
+            bio.save()
+
+        serialized = UserBioSerializer(bio)
+        return JsonResponse(serialized.data,safe=False)
     
 @csrf_exempt
 def adventures(request,advId=None):
