@@ -27,14 +27,21 @@
     $scope.currentAdvId = null;
     $scope.currentAdvName = null;
     $scope.currentAdvIndex = null;
-
+    $scope.profilePic = "/static/img/blank-profile-picture.png";
     $scope.currentEditorPage = null;
     
     $http.get('/api/rest/userInfo/' + userId).then(function(data){
     	$scope.adventures = data.data.adventures;
 	$scope.bio = data.data.bio;
+	var profilePics = data.data.profile_pictures;
+
+	//TODO: need to check for active picture
+	if (profilePics.length>0){
+	    var pfPic = profilePics[profilePics.length-1];
+	    $scope.profilePic = "/static/user_media/"+$scope.userId+"/profile_pictures/"+pfPic.id+".png";
+	}
 	
-    	//Get latest adv if adventureId not provided...
+	//Get latest adv if adventureId not provided...
 	if ($scope.adventures.length > 0){
     	    $scope.currentAdvId  = $scope.adventures[$scope.adventures.length-1].id;
     	    $scope.currentAdvName= $scope.adventures[$scope.adventures.length-1].name;
@@ -710,7 +717,6 @@
 }])
 .controller("advEditorController",['$scope','$http','$log',function($scope,$http,$log){
     $scope.$emit('setAdvEditorActive');
-    $scope.profilePic = "/static/img/blank-profile-picture.png";
     $scope.bioEditEnabled = false;
     $scope.bioSaveEnabled = false;
     
@@ -814,7 +820,10 @@
 	    withCredentials: true,
 	    headers: {'Content-Type': undefined }
 	    //transformRequest: angular.identity
-	}).success($log.log("OK")).error($log.log("NOT OK"));
+	}).then(function(data){
+	    $scope.profilePic = "/static/user_media/"+$scope.userId+"/profile_pictures/"+data.data.picId+".png";
+	});
+	
 	
     };
 

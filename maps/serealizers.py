@@ -1,4 +1,4 @@
-from maps.models import UserBio, Adventure, Map, MapSegment, WayPoint
+from maps.models import UserProfilePicture, UserBio, Adventure, Map, MapSegment, WayPoint
 
 from rest_framework import serializers
 
@@ -6,6 +6,11 @@ class UserBioSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserBio
         fields = ['bio']
+
+class UserProfilePictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=UserProfilePicture
+        fields = ['id','active']
         
 class AdventureSerializer(serializers.ModelSerializer):
     class Meta:

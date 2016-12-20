@@ -1,5 +1,5 @@
 from maps.models import UserProfilePicture, UserBio, Adventure, Map , MapSegment, WayPoint, DayNote
-from maps.serealizers import UserBioSerializer, AdventureSerializer, MapSerializer, MapSegmentSerializer
+from maps.serealizers import UserProfilePictureSerializer, UserBioSerializer, AdventureSerializer, MapSerializer, MapSegmentSerializer
 from maps.forms import ProfilePhotoUploadForm
 from django.http import JsonResponse
 
@@ -28,11 +28,17 @@ def userInfo(request,userId=None):
 
         bio = UserBio.objects.filter(user=userId).first()
         bioSerializer = None
-      
+
         if type(bio)!=type(None):
             bioSerializer = UserBioSerializer(bio,many=False).data 
+            
+        userPicture = UserProfilePicture.objects.filter(user=userId)
+        userPicData = None
 
-        total = {"adventures":advSerializer.data,"bio":bioSerializer}        
+        if type(userPicture)!=type(None):
+            userPicData = UserProfilePictureSerializer(userPicture,many=True).data
+            
+        total = {"adventures":advSerializer.data,"bio":bioSerializer,"profile_pictures":userPicData}        
         return JsonResponse(total, safe=False)
     
     elif request.method == 'POST': #NO PUT,Only POST
@@ -80,7 +86,7 @@ def handle_uploaded_file(userId,f):
     os.rename(target,newName)
 
     
-    return 1
+    return profilePicture
 
 @csrf_exempt
 def profilePhoto(request):
@@ -90,9 +96,9 @@ def profilePhoto(request):
         if form.is_valid():
             userId = form.data['userId']
             f = request.FILES['file']
-            handle_uploaded_file(userId,f)
+            userPic = handle_uploaded_file(userId,f)
        
-        return JsonResponse({"test":"OK"},safe=False)
+            return JsonResponse({"picId":userPic.id},safe=False)
         
 @csrf_exempt
 def adventures(request,advId=None):

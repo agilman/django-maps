@@ -25,7 +25,6 @@ class RegistrationForm(UserCreationForm):
 
         #create directory for user media
         target = settings.USER_MEDIA_ROOT+'/'+str(user.id)
-        print(target)
         target2 = target + "/profile_pictures"
         os.mkdir(target)
         os.mkdir(target2)
