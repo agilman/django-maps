@@ -21,7 +21,8 @@ from maps import api
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$',views.landing),
-    
+
+    url(r'^auth/register', views.registration),
     url(r'^auth/', include("registration.backends.simple.urls")),
     
     #This will be entry point to SPA

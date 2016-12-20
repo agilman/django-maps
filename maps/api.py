@@ -19,6 +19,7 @@ from django_maps import settings
 from datetime import datetime
 import pytz
 import os
+
 @csrf_exempt
 def userInfo(request,userId=None):
     if request.method == 'GET':
@@ -58,7 +59,7 @@ def handle_uploaded_file(userId,f):
     #write file as is, convert to decided format, add to db,  delete old ?
 
     #save file as is
-    target = settings.USER_MEDIA_ROOT+'/'+str(userId)+'/profile_photos/'+f.name
+    target = settings.USER_MEDIA_ROOT+'/'+str(userId)+'/profile_pictures/'+f.name
 
     with open(target, 'wb+') as destination:
         for chunk in f.chunks():
@@ -75,7 +76,7 @@ def handle_uploaded_file(userId,f):
 
     #temp solution... need to convert to target file with right extension, and then delete the old file.
     #rename
-    newName = settings.USER_MEDIA_ROOT+'/'+str(userId)+'/profile_photos/'+str(profilePicture.id)+".png"
+    newName = settings.USER_MEDIA_ROOT+'/'+str(userId)+'/profile_pictures/'+str(profilePicture.id)+".png"
     os.rename(target,newName)
 
     
