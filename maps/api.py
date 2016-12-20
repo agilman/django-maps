@@ -1,5 +1,6 @@
 from maps.models import UserBio, Adventure, Map , MapSegment, WayPoint, DayNote
 from maps.serealizers import UserBioSerializer, AdventureSerializer, MapSerializer, MapSegmentSerializer
+from maps.forms import ProfilePhotoUploadForm
 from django.http import JsonResponse
 
 from collections import OrderedDict
@@ -50,7 +51,27 @@ def userInfo(request,userId=None):
 
         serialized = UserBioSerializer(bio)
         return JsonResponse(serialized.data,safe=False)
+
+def handle_uploaded_file(userId,f):
+
+
+    #TODO THIS needs to be dynamic from settings...
+    with open('/home/agilman/Documents/git/django_maps/maps/static/test/x.png', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
     
+@csrf_exempt
+def profilePhoto(request):
+    if request.method == 'POST':
+       
+        form = ProfilePhotoUploadForm(request.POST,request.FILES)
+        if form.is_valid():
+            userId = form.data['userId']
+            f = request.FILES['file']
+            handle_uploaded_file(userId,f)
+       
+        return JsonResponse({"test":"OK"},safe=False)
+        
 @csrf_exempt
 def adventures(request,advId=None):
     if request.method == 'POST':

@@ -797,5 +797,26 @@
 	$scope.bioSaveEnabled = false;
     }
 
+    $scope.uploadPictureClick = function(){
+	var domElement = document.getElementById("file");
+	angular.element(domElement).trigger('click');
+	//document.getElementById("fileSelect").trigger('click');
+    };
+
+    $scope.fileSelectChange = function(files){
+	var fd = new FormData();
+	//Take the first selected file
+	fd.append("userId", $scope.userId);
+	fd.append("file", files[0]);
+
+	var uploadUrl= "/api/rest/profilePhoto";
+	$http.post(uploadUrl, fd, {
+	    withCredentials: true,
+	    headers: {'Content-Type': undefined }
+	    //transformRequest: angular.identity
+	}).success($log.log("OK")).error($log.log("NOT OK"));
+	
+    };
+
 }]);
 })(window.angular);
