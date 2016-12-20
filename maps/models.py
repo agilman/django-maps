@@ -9,6 +9,12 @@ class UserBio(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE,)
     bio = models.CharField(max_length=2048)
+
+class UserProfilePicture(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE,)
+    uploadTime = models.DateTimeField()
+    active = models.BooleanField()
     
 class Adventure(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,

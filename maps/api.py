@@ -1,4 +1,4 @@
-from maps.models import UserBio, Adventure, Map , MapSegment, WayPoint, DayNote
+from maps.models import UserProfilePicture, UserBio, Adventure, Map , MapSegment, WayPoint, DayNote
 from maps.serealizers import UserBioSerializer, AdventureSerializer, MapSerializer, MapSegmentSerializer
 from maps.forms import ProfilePhotoUploadForm
 from django.http import JsonResponse
@@ -14,9 +14,11 @@ from django.contrib.auth.models import User
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 
-#from rest_framework.decorators import api_view
-#from rest_framework.response import Response
-        
+from django_maps import settings
+
+from datetime import datetime
+import pytz
+import os
 @csrf_exempt
 def userInfo(request,userId=None):
     if request.method == 'GET':
@@ -53,13 +55,32 @@ def userInfo(request,userId=None):
         return JsonResponse(serialized.data,safe=False)
 
 def handle_uploaded_file(userId,f):
+    #write file as is, convert to decided format, add to db,  delete old ?
 
+    #save file as is
+    target = settings.USER_MEDIA_ROOT+'/'+str(userId)+'/profile_photos/'+f.name
 
-    #TODO THIS needs to be dynamic from settings...
-    with open('/home/agilman/Documents/git/django_maps/maps/static/test/x.png', 'wb+') as destination:
+    with open(target, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+
+    #convert,resize,thumbs
     
+            
+    #add to db
+    user = User.objects.get(pk=int(userId))
+    my_date = datetime.now(pytz.timezone('US/Pacific'))
+    profilePicture = UserProfilePicture(user=user,uploadTime=my_date,active=True)
+    profilePicture.save()
+
+    #temp solution... need to convert to target file with right extension, and then delete the old file.
+    #rename
+    newName = settings.USER_MEDIA_ROOT+'/'+str(userId)+'/profile_photos/'+str(profilePicture.id)+".png"
+    os.rename(target,newName)
+
+    
+    return 1
+
 @csrf_exempt
 def profilePhoto(request):
     if request.method == 'POST':
