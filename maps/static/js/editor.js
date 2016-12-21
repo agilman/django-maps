@@ -94,6 +94,10 @@
 	$scope.currentAdvIndex= indx;
     });
 
+    $scope.$on('advNameChangeEvent',function(event,newName){
+	$scope.currentAdvName=newName;
+    });
+
     $scope.$on('deselectAdv',function(event){
 	$scope.currentAdvId=null;
 	$scope.currentAdvName=null;
@@ -721,6 +725,7 @@
     $scope.bioSaveEnabled = false;
     $scope.newAdvName = "";
     $scope.showEditor=false;
+    $scope.advEdited=false;
     $scope.advTypeOptions=[{name:"Bicycle Touring",'id':1},{name:"Backpacking",'id':2},{name:"Car/Van Camping",'id':3},{name:"Other",'id':4}];
     $scope.selectedAdvType = $scope.advTypeOptions[0];
 
@@ -785,11 +790,16 @@
     };
 
     $scope.advClick = function(index){
-	//if click on current adv:
-
-	if ($scope.currentAdvIndex==index){
+	if ($scope.currentAdvIndex==index){//if click on current adv..go to editor mode:
 	    $scope.showEditor= !$scope.showEditor;
-	    $scope.editAdvName = $scope.currentAdvName
+	    $scope.editAdvName = $scope.currentAdvName;
+
+	    //get current adventure type and status
+	    var advT = $scope.adventures[$scope.currentAdvIndex].advType;
+	    $scope.currentAdvType = $scope.advTypeOptions[advT-1];
+
+	    var advS = $scope.adventures[$scope.currentAdvIndex].advStatus;
+	    $scope.currentAdvStatus = $scope.advStatusOptions[advS-1];
 	    
 	}else{
 	    //change adventure
@@ -797,10 +807,28 @@
 	    $scope.$emit('advChangeEvent',index);
 	}
 
+	//clean up
+	$scope.advEdited=false;
     };
 
     $scope.updateAdv = function(){
-	$log.log("SEND PUT");
+	var advId = $scope.currentAdvId;
+	var advName = $scope.editAdvName;
+	var advType = $scope.currentAdvType.id;
+	var advStatus = $scope.currentAdvStatus.id;
+	//prepare json to pass
+        var updatedAdv = {'owner':$scope.userId,'name':advName,'advType':advType,'advStatus':advStatus};
+	$log.log(updatedAdv);
+        $http.put('/api/rest/adventures/'+advId,JSON.stringify(updatedAdv)).then(function(data){
+            //Need to update scope....
+	    $scope.adventures[$scope.currentAdvIndex]=data.data;
+
+	    $scope.$emit('advNameChangeEvent',advName);
+	});
+
+
+	$scope.showEditor=false;
+	$scope.advEdited=false;
     };
     
     $scope.bioDisabled = function(){

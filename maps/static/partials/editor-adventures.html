@@ -31,14 +31,14 @@
     <div ng-show="showEditor" class="ng-hide">
       <br>
       <h4>Edit Adventure: </h4>
-      <input class="form-control" ng-model="editAdvName" id="editAdvName" type="text">
+      <input class="form-control" ng-model="editAdvName" id="editAdvName" ng-keyup="advEdited=true;" type="text">
       <br>
             
-      <select class="form-control" id="editAdvType" ng-model="currentAdvType" ng-options="t.name for t in advTypeOptions"></select>
+      <select class="form-control" id="editAdvType" ng-model="currentAdvType" ng-change="advEdited=true;" ng-options="t.name for t in advTypeOptions"></select>
       <br>
-      <select class="form-control" id="editAdvStatus" ng-model="currentAdvStatus" ng-options="s.name for s in advStatusOptions"></select>
+      <select class="form-control" id="editAdvStatus" ng-model="currentAdvStatus" ng-change="advEdited=true;" ng-options="s.name for s in advStatusOptions"></select>
       <br>
-      <button class="btn btn-primary" id="addAdventureButton" ng-click="updateAdv()">Save Changes</button>
+      <button class="btn btn-primary" id="addAdventureButton" ng-disabled="!advEdited" ng-click="updateAdv()">Save Changes</button>
     </div>
 
     

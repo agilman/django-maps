@@ -127,8 +127,21 @@ def adventures(request,advId=None):
         return JsonResponse(serialized.data,safe=False)
 
     elif request.method == "PUT":
-        #update record....
-        pass
+        data = JSONParser().parse(request)
+        owner = User.objects.get(pk=int(data["owner"]))
+        
+        advName = data["name"]
+        advType = data["advType"]
+        advStatus = data["advStatus"]
+
+        #If advStatus = active, need to unset previous active.
+        
+        adv = Adventure(id=advId,name=advName,owner=owner,advType=advType,advStatus=advStatus)
+        adv.save()
+
+        serialized = AdventureSerializer(adv)
+        return JsonResponse(serialized.data,safe=False)
+
 
 @csrf_exempt
 def advsOverview(request,userId):
