@@ -281,8 +281,9 @@ def advMaps(request,advId=None):
         map = Map(name=data["name"],adv=adv)
         
         map.save()
-        
-        result = {"id":map.id,"name":map.name,"distance":0 }    
+
+        #Hmm, maybe I should just get a serializer...
+        result = {"id":map.id,"name":map.name,"features":[],"distance":0 }    
         return JsonResponse(result,safe=False)
 
 @csrf_exempt

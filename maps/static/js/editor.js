@@ -579,7 +579,8 @@
     	    geoJsonLayer.clearLayers();
 	    segmentMarkersLayer.clearLayers();
 	    selectedSegmentLayer.clearLayers();
-    	    $scope.newMapName = null;
+	    $scope.segmentsData = data.data;
+	    $scope.newMapName = null;
     	    $scope.segmentDistance = null;
 	    $scope.showSegment = false;
     	})
