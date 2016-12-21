@@ -155,8 +155,21 @@ def advsOverview(request,userId):
         for adv in advs:
             advCoordinates = []
             distance = 0
+            startTime = None
+            endTime = None
 
+            #get startTime
             advMaps = adv.maps.all()
+            if advMaps.count()>0:
+                startSegments = advMaps[0].segments.all()
+                if startSegments.count()>0:
+                    startTime = startSegments[0].startTime
+
+                endSegments = advMaps[advMaps.count()-1].segments.all()
+                if endSegments.count()>0:
+                    endTime = endSegments[endSegments.count()-1].endTime
+
+            
             for advMap in advMaps:
                 segments = advMap.segments.all()
                 for segment in segments:
@@ -184,7 +197,9 @@ def advsOverview(request,userId):
             
             advGeoJson = {'type':'Feature',
                           'properties':{'advId':adv.id,
-                                        'distance': distance },
+                                        'distance': distance,
+                                        'startTime': startTime,
+                                        'endTime': endTime},
                           'geometry':{'type':'LineString',
                                       'coordinates': advCoordinates}}
             

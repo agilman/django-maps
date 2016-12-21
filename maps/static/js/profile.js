@@ -174,6 +174,28 @@
 	}
     };
 
+    $scope.getAdvDuration = function(index){
+	if ($scope.advsOverviewData != null){
+	    var sTimeJson =$scope.advsOverviewData.features[index].properties.startTime;
+	    var eTimeJson =$scope.advsOverviewData.features[index].properties.endTime;
+	    var sTime = moment(sTimeJson);
+	    var eTime = moment(eTimeJson);
+
+	    var result = null; 
+	    var duration = moment(eTimeJson).diff(sTimeJson,'days');
+
+	    if (duration<30){
+		result = sTime.format('MMMM YYYY')
+	    }else if(duration<365){
+		result = sTime.format('MMM YYYY')
+		result +=" - -" + eTime.format('MMM YYYY')
+	    }    
+
+	    
+	    return result;
+	}
+    };
+
     $scope.mouseOnAdv = function(index){
 	var coordinates = $scope.advsOverviewData.features[index].geometry.coordinates;
 	drawSegmentHighlight(coordinates);

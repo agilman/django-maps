@@ -20,6 +20,7 @@
 	<span class="text-right advInfo" ng-cloak>
 	  <h4>{{ adventure.name| limitTo:24}}{{adventure.name.length > 24 ? '...' : ''}}</h4>
 	  <p> {{ getAdvDistance($index) }} Km</p>
+	  <p> {{ getAdvDuration($index) }}</p>
 	</span>
       </li>
     </ul>
