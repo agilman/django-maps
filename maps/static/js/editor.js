@@ -719,7 +719,7 @@
     $scope.$emit('setAdvEditorActive');
     $scope.bioEditEnabled = false;
     $scope.bioSaveEnabled = false;
-    
+    $scope.newAdvName = "";
     $scope.isAdvSelected = function(index){
 	if ($scope.currentAdvIndex ==index){
 	    return "active";
@@ -729,14 +729,17 @@
     };
     
     $scope.createAdv = function(){
-	var advName = document.getElementById("newAdvName").value;
-	//prepare json to pass                                                                                                                                       
-        var newAdv = {'owner':$scope.userId,'name':advName};
+	var advName = $scope.newAdvName;
+	var advType = document.getElementById("advType").value;
+	var advStatus = document.getElementById("advStatus").value;
+	//prepare json to pass
+        var newAdv = {'owner':$scope.userId,'name':advName,'advType':advType,'advStatus':advStatus};
 	
         $http.post('/api/rest/adventures',JSON.stringify(newAdv)).then(function(data){
             $scope.adventures.push(data.data);
             
             //clear field
+	    $scope.newAdvName = "";
             document.getElementById("newAdvName").value="";
 
 	    //change to latest

@@ -13,7 +13,7 @@
     </div>
     <br>
     <h4>New Adventure: </h4>
-    <input class="form-control" placeholder="New adventure name" id="newAdvName" type="text">
+    <input class="form-control" ng-model="newAdvName" placeholder="New adventure name" id="newAdvName" type="text">
     <br>		     
     <select class="form-control" id="advType">
       <option value="1">Bicycle Touring</option>
@@ -22,7 +22,7 @@
       <option value="4">Other</option>
     </select>		     
     <br>
-    <select class="form-control" id="statusSelect">
+    <select class="form-control" id="advStatus">
       <option value="1">In Progress</option>
       <option value="2">Completed</option>
       <option value="3">Planning</option>

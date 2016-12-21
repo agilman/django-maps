@@ -105,7 +105,14 @@ def adventures(request,advId=None):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         user = User.objects.get(pk=int(data["owner"]))
-        adv = Adventure(name=data["name"],owner=user)
+
+        advName = data["name"]
+        advType = data["advType"]
+        advStatus = data["advStatus"]
+
+        #If advStatus = active, need to unset previous active.
+        
+        adv = Adventure(name=advName,owner=user,advType=advType,advStatus=advStatus)
         adv.save()
 
         serialized = AdventureSerializer(adv)
@@ -118,6 +125,10 @@ def adventures(request,advId=None):
 
         #TODO Probably should return success code instead of object...
         return JsonResponse(serialized.data,safe=False)
+
+    elif request.method == "PUT":
+        #update record....
+        pass
 
 @csrf_exempt
 def advsOverview(request,userId):

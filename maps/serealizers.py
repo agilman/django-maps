@@ -15,7 +15,7 @@ class UserProfilePictureSerializer(serializers.ModelSerializer):
 class AdventureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Adventure
-        fields= ['id','name']
+        fields= ['id','name','advType','advStatus']
         
 class WayPointSerializer(serializers.ModelSerializer):
     class Meta:
