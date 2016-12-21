@@ -720,6 +720,13 @@
     $scope.bioEditEnabled = false;
     $scope.bioSaveEnabled = false;
     $scope.newAdvName = "";
+    $scope.showEditor=false;
+    $scope.advTypeOptions=[{name:"Bicycle Touring",'id':1},{name:"Backpacking",'id':2},{name:"Car/Van Camping",'id':3},{name:"Other",'id':4}];
+    $scope.selectedAdvType = $scope.advTypeOptions[0];
+
+    $scope.advStatusOptions=[{name:"In Progress",id:1},{name:"Completed",id:2},{name:"In Planning",id:3}];
+    $scope.selectedAdvType = $scope.advStatusOptions[0];
+    
     $scope.isAdvSelected = function(index){
 	if ($scope.currentAdvIndex ==index){
 	    return "active";
@@ -730,8 +737,8 @@
     
     $scope.createAdv = function(){
 	var advName = $scope.newAdvName;
-	var advType = document.getElementById("advType").value;
-	var advStatus = document.getElementById("advStatus").value;
+	var advType = $scope.selectedAdvType.id;
+	var advStatus = $scope.selectedAdvStatus.id;
 	//prepare json to pass
         var newAdv = {'owner':$scope.userId,'name':advName,'advType':advType,'advStatus':advStatus};
 	
@@ -740,7 +747,6 @@
             
             //clear field
 	    $scope.newAdvName = "";
-            document.getElementById("newAdvName").value="";
 
 	    //change to latest
 	    $scope.$emit('advChangeEvent', $scope.adventures.length-1);
@@ -753,6 +759,8 @@
     	    //clear entry from list
     	    $scope.adventures.splice(index,1);
 
+	    //clear out of editor mode..
+	    $scope.showEditor=false;
 	    //if after delete there are no adventures:
 	    //  deselect currentAdvItems
 	    //else
@@ -777,9 +785,24 @@
     };
 
     $scope.advClick = function(index){
-	$scope.$emit('advChangeEvent',index);
+	//if click on current adv:
+
+	if ($scope.currentAdvIndex==index){
+	    $scope.showEditor= !$scope.showEditor;
+	    $scope.editAdvName = $scope.currentAdvName
+	    
+	}else{
+	    //change adventure
+	    $scope.showEditor=false;
+	    $scope.$emit('advChangeEvent',index);
+	}
+
     };
 
+    $scope.updateAdv = function(){
+	$log.log("SEND PUT");
+    };
+    
     $scope.bioDisabled = function(){
 	return !$scope.bioEditEnabled;
     };
