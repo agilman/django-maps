@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^users/(?P<userName>[\w\-]+)/adventures/$',views.profileViewer),
     
     #Editor SPA
-    url(r'^editor$', views.editorViewer),
+    url(r'^editor/$', views.editorViewer),
     
     #API URLs
     url(r'^api/rest/userInfo/(?P<userId>\d+)$', api.userInfo), #get, post
